@@ -1,0 +1,16 @@
+#+TITLE: Notes on: Grigorieva, E. (2018): Methods of solving number theory problems
+* PREFACE
+* CHAPTER 1: PROBLEMS INVOLVING INTEGERS
+** the positive whole numbers: 1, 2, 3, ..., N, ... are called the `natural numbers`. This is the oldest defined category of numbers and the simplest in membership.
+** the second set of numbers in order of composition is the `set of integers` that include natural numbers and their negatives and 0.
+** the next set is the `set of rational numbers` ... we define a number to be rational if it can be written as a fraction m/n, where `m` is an integer and `n` is a natural number.
+** the numbers that cannot be represented as such a fraction are the `irrational numbers`
+** rational numbers and irrational numbers together form the `set of real numbers`
+** finally, there is the largest set of numbers ... the `set of complex numbers`; complex numbers geometrically are points in the plane formed by the Real and Imaginary axis
+** all natural numbers can be divided into two groups
+*** even numbers
+**** multiples of 2; every even number can be written as 2n, where n = 1, 2, 3, ...
+*** odd numbers
+**** every odd number can be written as (2n + 1), where n = 0, 1, 2, 3, .... or in the form of (2m - 1), where m = 1, 2, 3, ...
+** since 2^n is an even number, then 2^n is surrounded by (2^n - 1) and (2^n + 1) on the left and right, respectively, which are both odd numbers
+** moreover, if we consider only odd powers of 2, then (2^n + 1) will always [!] be a multiple of 3
