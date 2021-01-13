@@ -73,3 +73,157 @@
 **** Hence there is a move towards systems that can tolerate the loss of entire machines, by using software fault-tolerance techniques in preference or in additio to hardware redundancy. Such systems have operational advantages: a single-server system requires planned downtime if you need to reboot the machine [to apply operating system security patches, for example], whereas a system that can tolerate machine failure can be patches one node at a time, without downtime of the entire system [a `rolling upgrade`].
 
 *** Software Errors
+
+**** We usually think of hardware faults as being random and independent from each other: one machine's disk failing does not imply that another machine's disk is going to fail. There may be weak correlations [for example, due to a common cause, such as the temperature in the server rack], but otherwise it is unlikely that a large number of hardware components will fail at the same time. Another class of fault is a systemic error within the system. Such faults are harder to anticipate. and because they are correlated across nodes, they tend to cause many more system failures than uncorrelated hardware faults. Examples include the following:
+
+***** A software bug that causes every instance of an application server to crash when given a particular bad input. For example, consider the leap second on June 30, 2012, that caused many applications to hang simultaneously due to a bug in the Linux kernel.
+
+***** A runaway process that uses up some shared response - CPU time, memory, disk space, or network bandwidth.
+
+***** A service that the system depends on that slows down, becomes unresponsive, or starts returning corrupted responses.
+
+***** Cascading failures, where a small fault in one component triggers a fault in another component, which in turn triggers further faults.
+
+**** There is no quick solution to the problem of systematic faults in software. Lots of small things can help: carefully thinking about assumptions and interactions in the system; thorough testing; process isolation; allowing processes to crash and restart; measuring, monitoring, and analyzing system behavior in production. If a system is expected to provide some guarantee [e.g., in a message queue, that the number of incoming messages equals the number of outgoing messages], it can constantly check itself while it is running and raise an alert if a discrepancy is found.
+
+*** Human errors
+
+**** How do we make our systems reliable, in spite of unreliable humans? The best systems combine several approaches:
+
+***** Design systems in a way that minimizes opportunities for error. For example, well-designed abstractions, APIs, and admin interfaces make it easy to do the "right thing" and discourage the "wrong thing". However, if the interfaces are too restrictive, people will work around them, negating their benefit, so this is a tricky balance to get right.
+
+***** Decouple the places where people make the most mistakes from the places where they can cause failures. In particular, provide fully featured non-production `sandbox` environments where people can explore and experiment safely, using real data, without affecting real users.
+
+***** Test thoroughly at all levels, from unit tests to whole-system integration tests and manual tests. Automated testing is widely used, well understood, and especially valuable for covering corner cases that rarely arise in normal operation.
+
+***** Allow quick and easy recovery from human errors, to minimize the impact in the case of a failure. For example, make it fast to roll back configuration changes, roll out new code gradually [so that any unexpected bugs affect only a small subset of users], and provide tools to recompute data [in case it turns out that the old computation was incorrect].
+
+***** Set up detailed and clear monitoring, such as performance metrics and error rates. In other engineering disciplines this is referred to as `telemetry`. [Once a rocket has left the ground, telemetry is essential for tracking what is happening, and for understanding errors]. Monitoring can show us early warning signals and allow us to check whether any assumptions or constraints are being violated. When a problem occurs, metrics can be invaluable in diagnosing the issue.
+
+***** Implement good management practices and training - a complex and important aspect [and beyond the scope of this book].
+
+*** Scalability
+
+**** Scalability is the term we use to describe a system's ability to cope with increased load. Note, however, that it is not [!] a one-dimensional label that we can attach to a system: it is meaningless to say "X is scalable" or "Y does not scale". Rather, discussing scalability means considering questions like "If the system grows in a particular way, what are our options for coping with the growth?" and "how can we add computing resources to handle the additional load?".
+
+**** Describing load
+
+***** First, we need to succinctly describe the current load on the system; only then can we discuss growth questions. Load can be described with a few numbers which we call `load parameters`. The best choice of parameters depends on the architecture of your system: it may be requests per second to a web server, the ratio of reads to writes in a database, the number of simultaneously active users in a chat room, the hit rate on a cache, or something else. Perhaps the average case is what matters for you, or perhaps your bottleneck is dominated by a small number of extreme cases.
+
+***** `fan-out` is a term borrowed from electronic engineering, where it describes the number of logic gate inputs that are attached to another gate's output. The output needs to supply enough current to drive all the attached inputs. In a transaction processing system, we use it to describe the number of requests to other services that we need to make in order to serve one incoming request.
+
+**** Describing performance
+
+***** Once you have described the load on your system, you can investigate what happens when the load increases. You can look at it in two ways:
+
+****** When you increase a load parameter and keep the system resources [CPU, memory, network bandwidth, etc] unchanges, how is the performance of you system affected?
+
+****** When you increase a load parameter, how much do you need to increase the resources if you want to keep performance unchanged?
+
+***** Both questions require performance numbers, so let's look briefly at describing the performance of a system.
+
+***** In a batch processing system such as Hadoop, we usually care about `throughput` - the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size. In online systems, what's usually more important is the service's `response time` - that is, the time between a client's sending a request and receiving a response.
+
+****** In an ideal world, the running time of a batch job is the size of the dataset divided by the throughput. In practice, the running time is often longer, due to skew [data not being spread evenly across worker processes] and needing to wait for the slowest task to complete.
+
+***** `Latency` and `response time` are often used synonymously, but [!] they are not [!] the same. The response time is what the client sees: besides the actual time to process the request [the `service time`], it includes network delays and queuing delays. Latency is the duration [!] that a request is waiting to be handled - during which it is `latent`, awaiting service.
+
+***** Even if you only make the same request over and over again, you'll get a slightly different response time on every try [!]. In practice, in a system handling a variety of requests, the response time can vary a lot. We therefore need to think of response time not [!] as a single number, but [!] as a `distribution` of values that you can measure.
+
+***** High percentiles of response times, also known as `tail latencies`, are important because they directly affect users' experience of the service. Reducing response times at very high percentiles is difficult because they are easily affected by random events outside of your control, and the benefits are diminishing. Queuing delays often account for a large part of the response time at high percentiles. As a server can only process a small number of things in parallel [limited, for example, by its number of CPU cores], it only takes a small number of slow requests to hold up the processing of subsequent requests - an effect sometimes known as `head-of-line blocking`. Even if those subsequent requests are fast to process on the server, the client will see a slow overall response time due to the time waiting for the prior request to complete. Due to this effect, it is important to measure response times on the client side.
+
+***** When generating load artificially in order to test the scalability of a system, the load-generating client needs to keep sending requests indenpendently of the response time. If the client waits for the previous request to complete before sending the next one, that behavior has the effect of artificially keeping the queues shorter in the test than they would be in reality, thus skewing the measurements.
+
+**** Approaches for coping with load
+
+***** People often talk of a dichotomy between `scaling up` [vertical scaling, moving to a more powerful machine] and `scaling out` [horizontal scaling, distributing the load across multiple smaller machines].
+
+***** Distributing load across multiple machines is also known as a `shared-nothing` architecture. A system that can run on a single machine is often simpler, but high-end machines can become very expensive, so very intensive workloads often can't avoid scaling out. In reality, good architectures usually involve a pragmatic mixture of approaches: for example, using several fairly powered machines can still be simpler and cheaper than a large number of small virtual machines.
+
+***** Some systems are `elastic`, which means that they can automatically add computing resources when they detect a load increase, whereas other systems are scaled manually [i.e., a human analyzes the capacity and decides to add more machines to the system]. An elastic system can be useful if load is highly unpredictable, but manually scaled systems are simpler and may have fewer operational surprises.
+
+***** While distributing stateless services across multiple machines is fairly straightforward, taking stateful data systems from a single node to a distributed setup can introduce a lot of additional complexity. For this reason, common wisdom until recently was to keep your database on a single node [scale up] until scaling cost or high-availability requirements forced you to make it distributed. [!]
+
+***** As the tools and abstractions for distributed systems get better, this common wisdom may change, at least for some kinds of applications. The architecture of systems that operate at large scale is usually highly specific to the application - there is no such thing as a generic, one-size-fits-all scalable architecture [informally known as `magic scaling sauce`].
+
+*** Maintainability
+
+**** It is well known that the majority of the cost of software is not [!] in its initial development, but [!] in its ongoing maintenance - fixing bugs, keeping its systems operational, investigating failures, adapting it to new platforms, modifying it for new use cases, repaying technical debt, and adding new features.
+
+**** Yet, unfortunately, many people working on software systems dislike maintenance of so-called `legacy` systems - perhaps it involves fixing other people's mistakes, or working with platforms that are now outdated, or systems that were forced to do things they were never intended for.
+
+**** To design software in such a way that will hopefully minimize pain during maintenance, we will pay particular attention to three design principles for software systems:
+
+***** Operability
+
+****** Make it easy for operations teams to keep the systems running smoothly.
+
+***** Simplicity
+
+****** Make it easy for new engineers to understand the system, by removing as much complexity as possible from the system. [note, this is not the same as simplicity of the user interface]
+
+***** Evolvability
+
+****** Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change. Also known as `extensibility`, `modifiability`. or `plasticity`.
+
+**** Operability
+
+***** A good operations team typically is responsible for the following, and more:
+
+****** Monitoring the health of the system and quickly restoring service if it goes into a bad state
+
+****** Tracking down the cause of problems, such as system failures or degraded performance
+
+****** Keeping software and platforms up to date, including security patches
+
+****** Keeping tabs on how different systems affect each other, so that a problematic change can be avoided before it causes damage
+
+****** Anticipating future problems and solving them before they occur [e.g., capacity planning]
+
+****** Establishing good practices and tools for deployment, configuration management, and more
+
+****** Performing complex maintenance tasks such as moving applications from one platform to another
+
+****** Maintaining the security of the system as configuration changes are made
+
+****** Defining processes that make operations predictable and help keep the production environment stable
+
+****** Preserving the organization's knowledge about the system, even as individual people come and go.
+
+***** Good operability means making routine tasks easy, allowing the operations team to focus their efforts on high-value activities. Data systems can do various things to make routine tasks easy, including:
+
+****** Providing visibility into the runtime behavior and internals of the system, with good monitoring
+
+****** Providing good support for the automation and integration with standard tools
+
+****** Avoiding dependency on individual macines [allowing machines to be taken down for maintenance while the system as a whole continues running uninterrupted]
+
+****** Providing good documentation and an easy-to-understand operational model
+
+****** Providing good default behavior, but also giving administrators the freedom to override defaults when needed
+
+****** Self-healing where appropriate, but also giving administrators manual control over the system state when needed
+
+****** Exhibiting predictable behavior, minimizing suprises
+
+**** Simplicity: managing complexity
+
+***** There are various possible symptoms of complexity: explosion of state space, tight coupling of modules, tangled dependencies, inconsistent naming and terminology, hacks aimed at solving performance problems, special-casing to work around issues elsewhere, and many more.
+
+***** Making a system simpler does not [!] mean reducing its functionality; it can also mean removing accidental [!] complexity.
+
+***** One of the best tools we have for removing accidental complexity is abstraction [!]. A good abstraction can hide a great deal of implementation detail behind a clean, simple-to-understand facade. A good abstraction can also be used for a wide range of different applications. Not only is this reuse more efficient than reimplementing a similar thing multiple times, but it also leads to a higher-quality software, as quality improvements in the abstracted component benefit all applications that use it.
+
+****** For example, high-level programming languages are abstractions that hide machine code, CPU registers, and syscalls. SQL is an abstraction that hides complex on-disk and in-memory data structures, concurrent requests from other clients, and inconsistencies after crashes. Of course, when programming in a high-level language, we are still using machine code; we are just not using it directly, because the programming language abstraction saves us from having to think about it.
+
+***** However, finding good abstractions is very hard. In the field of distributed systems, although there are many good algorithms, it is much less clear how we should be packaging them into abstractions that help us make the complexity of the system at a manageable level.
+
+**** Evolvability: making change easy
+
+***** In terms of organizational processes, `Agile` working patterns provide a framework for adapting to change. The Agile community has also developed technical tools and patterns that are helpful when developing software in a frequently changing environment, such as test-driven development (TDD) and refactoring.
+
+***** Most discussions of these Agile techniques focus on a fairly small, local scale [a couple of source code files within the same application]. In this book, we search for ways of increasing agility on the level of a larger data system, perhaps consisting of several different applications on services with different characteristics.
+
+***** The ease with which you can modify a data system, and adapt it to changing requirements, is closely linked to its simplicity and its abstractions: simple and easy-to-understand systems are usually easier to modify than complex ones.
+
+***** But [!] since this is such an important idea, we will use a different word to refer to agility on a data system level: evolvability.
