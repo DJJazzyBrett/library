@@ -1,0 +1,137 @@
+#+TITLE: Notes on: Petrov, A. (2019): Database internals: a deep-dive into how distributed data systems work
+
+* PREFACE
+
+** horizontal scaling
+
+*** scaling out, improving performance and increasing capacity by running multiple database instances acting as a single logical unit
+
+**** Gamma Database Machine project
+
+**** Teradata
+
+**** Greenplum
+
+**** Parallel DB2
+
+*** today, horizontal scaling remains one of the most important properties that customers expect from databases; this can be explained by the rising popularity of cloud-based services; it is often easier to spin up a new instance and add it to the cluster than scaling vertically [i.e., scaling up] by moving the database to a larger, more powerful machine
+
+** eventually consistent
+
+*** in 2007 the Dynamo paper, published by the team at Amazon, had so much impact on the database community that within a short period if time it inspired many variants and implementations; the most prominent of which were Apache Cassandra [created at FBook], Project Voldemort [created at LinkedIn], and Riak [created by former Akamai engineers]
+
+*** in 2010, a new class of `eventually consistent` databases started appearing
+
+* PART I: STORAGE ENGINES
+
+** The primary job of any database management system is reliably storing data and making it available for users. Instead of finding a way to store and retrieve information and inventing a new way to organize data every time we create a new app, we use databases. This way we can concentrate on application logic instead of infrastructure.
+
+** Data bases are modular systems and consist of multiple parts:
+
+*** a transport layer accepting requests
+
+*** a query processor determining the most efficient way to run queries
+
+*** an execution engine carrying out the operations
+
+*** and a storage engine
+
+**** the storage engine (or database engine) is a software component of a database management system responsible for storing, retrieving. and managing data in memory [!] and on disk [!], designed to capture a persistent, long-term memory of each node.
+
+**** One perspective is that database management systems are applications built on top of storage engines, offering:
+
+***** a schema
+
+***** a query language
+
+***** indexing
+
+***** transactions
+
+***** many other useful features
+
+**** Storage engines such as BerkeleyDB were developed independently from the database management systems they're now imbedded into. Using pluggable storage engines has enabled database developers to bootstrap database systems using existing storage engines, and concentrate on the other subsystems.
+
+** When comparing databases, it is helpful to understand the use case in great detail and define the current and anticipated variables, such as the following:
+
+*** schema and record sizes
+
+*** number of clients
+
+*** types of queries and access patterns
+
+*** rates of the read and write queries
+
+*** expected changes in any of these variables
+
+** Knowing these variables can help to answer the following questions:
+
+*** Does the database support the required queries?
+
+*** Is this database able to handle the amount of data we're planning to store?
+
+*** How many read & write operations can a single node handle?
+
+*** How many nodes should the system have?
+
+*** How do we expand the cluster given the expected growth rate?
+
+*** What is the maintenance process?
+
+** One of the popular tools used for benchmarking performance evaluation and comparison is Yahoo! Cloud Serving Benchmark, or YCSB. It offers a framework and a common set of workloads that can be applied to different data stores. Just like anything generic, this tool should be used with caution, obvi.
+
+** The Transaction Processing Performance Council (TPC) has a set of benchmarks that database vendors use for comparing and advertising performance of their products. TPC-C is an online transaction processing (OLTP) benchmark, a mixture of read-only and update transactions that simulate common application workloads. The benchmark concerns itself with the performance and correctness of executed concurrent transactions. The main performance indicator is `throughput`: the number of transactions the database system is able to process per minute. Executed transactions are required to preserve ACID properties to conform to the set of properties defined by the benchmark itself.
+
+** The service-level agreement, or SLA, is a commitment by the service provider about the quality of provided services. AMong other things, the SLA can include information about latency, throughput, jitter, and the number and frequency of failures.
+
+* CHAPTER 1: INTRODUCTION & OVERVIEW
+
+** Database management systems can serve different purposes: some are used primarily for temporary `hot` data, some serve as a long-lived `cold` storage, some allow complex analytical queries, some only allow accessing values by the key, some are optimized to store time-series data, and some store large `blobs` efficiently.
+
+** DBMS architecture
+
+*** There is no common blueprint for database management system design.
+
+*** Database management systems use a `client/server model`, where database system instances, or `nodes`, take the role of servers, and application instances take the role of clients.
+
+*** Client requests arrive through the `transport` subsystem. Requests come in the form of queries, most often expresses in some query language. The transport subsystem is also responsible for communication with other nodes in the database cluster.
+
+*** Upon receipt, the transport subsystem hands the query over to a `query processor` which parses, interprets, and validates it. Later, access control checks are performed, as they can be done fully only AFTER the query is interpreted.
+
+*** The parsed query is passed to the `query optimizer` which first eliminates impossible and redundant parts of the query, and then attempts to find the most efficient way to execute it based on internal statistics [index cardinality, approximate intersection size, etc.] and data placement [which nodes in the cluster hold the data and the costs associated with its transfer]. The optimizer handles BOTH relational operations required for query resolution, usually presented as a dependency tree, AND optimization, such as index ordering, cardinality estimation, and choosing access methods.
+
+*** The query is usually presented in the form of an `execution plan` [or `query plan`]: a sequence of operations that have to be carried out for its results to be considered complete. Since the same query can be satisfied using different execution plans that can vary in efficiency, the optimizer picks the best available plan.
+
+*** The execution plan is handled by the `execution engine`, which collects the results of the execution of local and remote operations. `Remote execution` can involve writing and reading data to and from other nodes in the cluster, and replication.
+
+*** Local queries [coming directly from clients or from other nodes] are executed by the `storage engine`. The storage engine has several components with dedicated responsibilities:
+
+**** Transaction manager
+
+***** This manager schedules transactions and ensures they cannot leave the database in a logically inconsistent state.
+
+**** Lock manager
+
+***** This manager locks on the database objects for the running transactions, ensuring that concurrent operations do not violate physical data integrity.
+
+**** Access methods [storage structures]
+
+***** These manage access and organzing data on disk. Access methods include heap files and storage structures such as B-Trees.
+
+**** Buffer manager
+
+***** This manager caches data pages in memory.
+
+**** Recovery manager
+
+***** This manager maintains the operation log and restoring the system state in case of a failure.
+
+*** Together, transaction and lock managers are responsible for concurrency control: they guarantee logical and physical data integrity while ensuring that concurrent operations are executed as efficiently as possible.
+
+** Memory- Versus Disk-Based DBMS
+
+*** Database systems store data in memory AND on disk. `In-memory database management systems` [sometimes called `main memory DBMS`] store data primarily [!] in memory and use disk for recovery and logging.
+
+*** `Disk-based DBMS` hold most [!] of the data on disk and use memory for caching disk contents or as a temporary storage.
+
+*** Both types of systems use the disk to a certain extent, but main memory databases store their contents almost exclusively in RAM.
