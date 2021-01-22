@@ -70,37 +70,57 @@ n(n + 1)(n + 2)...(n + k - 1)
 
 is a multiple of /k/ and /k!/.
 
-*** Property 5
+*** Property 5 (divisibility by 2)
 
 An integer is divisible by 2 if its last digit is divisble by 2.
 
-*** Property 6
+*** Property 6 (divisibility by 4)
 
-A natural number /N/ is divisible by 4 if its last two digits form a multiple of 4.
+A natural number N is divisible by 4 if its last two digits form a multiple of 4.
 
-*** Property 7
+*** Property 7 (divisibility by 8)
 
 An integer is divisible by 8 if the number written by the last three digits is divisible by 8.
 
-*** Property 8
+*** Property 8 (divisibility by 3)
 
-An integer /N/ is divisible by 3 if the sum of its digits is divisible by 3.
+An integer N is divisible by 3 if the sum of its digits is divisible by 3.
 
-*** Property 9
+*** Property 9 (divisibility by 9)
 
 A number is divisible by 9 if the sum of its digits is divisible by 9.
 
-*** Property 10
+*** Property 10 (divisibility by 5)
 
 An integer is divisible by 5 if its last digit is either 0 or 5.
 
-*** Property 11
+*** Property 11 (divisibility by 5, 25, 125, 625, ..., 5^k)
 
-A number /N/ is divisible by 5^k if the number written by its last /k/ digits is divisible by 5^k.
+A number N is divisible by 5^k if the number written by its last /k/ digits is divisible by 5^k.
 
-*** Property 12
+*** Property 12 (divisibility by 11)
 
-A number N = a_{n}a_{n-1}...a_{2}a_{1}a_{0} is divisible by 11 iff a number |a_{0} - a_{1} + a_{2} - a_{3} + ... + (-1)^{n} a_{n}| is divisible by 11. In other words, 11 divides N iff 11 divides the alternating sum of the digits of N.
+A number N = a_{n }a_{n-1 }... a_{2 }a_{1 }a_{0 } is divisible by 11 iff a number |_{} a_{0 } - a_{1 } + a_{2 } - a_{3 } + ... + (-1)^{n} a_{n }| is divisible by 11. In other words, 11 divides N iff 11 divides the alternating sum of the digits of N.
+
+*** Property 13
+
+Any common divisor of two numbers divides their greatest common divisor.
+
+*** Property 14
+
+If two numbers a_{1} and b_{1} are *relatively prime*, then their greatest common divisor is one, i.e. (a_{1 }, b_{1}) = 1.
+
+*** Property 15 (the least common multiple)
+
+Among all common multiples of /a/ and /b/ there is the smallest one that we call the least common multiple, or /lcm/, of /a/ and /b/ abd denote it as [a , b].
+
+*** Property 16
+
+Every common multiple of two numbers is divisible by their least common multiple. The least common multiple of /a/ and /b/ is equal to their product iff they are relatively prime.
+
+*** Property 17
+
+If a number /m/ is the least common multiple of /a/ and /b/, then it must be divisible by /a/ and by /b/.
 
 ** Prime Numbers
 
@@ -113,3 +133,33 @@ a^{N-1} \equiv 1 (mod N)
 #+END_QUOTE
 
 is true, where /a/ is any prime number less than N. If this condition does _not_ hold, then N is _not_ prime.
+
+*** Lemma 2 (necessary and sufficient condition for N to be prime)
+
+A natural number N is prime iff
+
+#+BEGIN_QUOTE
+(N - 1)! + 1
+#+END_QUOTE
+
+is divisible by N.
+
+** Theorem 1
+
+Let /a/ and /b/ be two given integers, and let
+
+#+BEGIN_QUOTE
+a = p_{1}_{}^\alpha1 p_{2}^\alpha2 ... p_{r}^\alpha^{r} ,
+b = p_{1}_{}^\beta1 p_{2}^\beta2 ... p_{r}^\beta^{r}
+#+END_QUOTE
+
+be their prime factorization. The greatest common divisor and the least common multiple of the two numbers /a/ and /b/, are respectively,
+
+#+BEGIN_QUOTE
+(a , b) = \prod p_{i}^{min(\alpha{}i , \beta{}i)  } ,
+[a , b] = \prod p_{i}^{max(\alpha{}i , \beta{}i) }
+#+END_QUOTE
+
+where \prod is the product of all factors p_{i} raised to their corresponding powers.
+
+*NOTE* --- the superscripts of p_{i} are supposed to read (\alpha_{i} , \beta_{i})
