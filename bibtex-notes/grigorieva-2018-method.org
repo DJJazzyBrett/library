@@ -44,11 +44,11 @@ Since 2^n is an even number, then 2^n is surrounded by (2^n - 1) and (2^n + 1) o
 
 *** Property 1
 
-**** A product of any two consecutive integers is a multiple of 2. Therefore, n(n + 1) and (n - 1)n are divisible by 2.
+A product of any two consecutive integers is a multiple of 2. Therefore, n(n + 1) and (n - 1)n are divisible by 2.
 
 *** Property 2
 
-**** A product of any three consecutive integers is a multiple of 3, or
+A product of any three consecutive integers is a multiple of 3, or
 
 #+BEGIN_QUOTE
 n(n + 1)(n + 2)
@@ -58,11 +58,11 @@ is divisible by 3.
 
 *** Property 3
 
-**** A product of any three consecutive integers is divisible by 6.
+A product of any three consecutive integers is divisible by 6.
 
 *** Property 4
 
-**** A product of any /k/ consecutive integers, or
+A product of any /k/ consecutive integers, or
 
 #+BEGIN_QUOTE
 n(n + 1)(n + 2)...(n + k - 1)
@@ -72,41 +72,41 @@ is a multiple of /k/ and /k!/.
 
 *** Property 5
 
-**** An integer is divisible by 2 if its last digit is divisble by 2.
+An integer is divisible by 2 if its last digit is divisble by 2.
 
 *** Property 6
 
-**** A natural number /N/ is divisible by 4 if its last two digits form a multiple of 4.
+A natural number /N/ is divisible by 4 if its last two digits form a multiple of 4.
 
 *** Property 7
 
-**** An integer is divisible by 8 if the number written by the last three digits is divisible by 8.
+An integer is divisible by 8 if the number written by the last three digits is divisible by 8.
 
 *** Property 8
 
-**** An integer /N/ is divisible by 3 if the sum of its digits is divisible by 3.
+An integer /N/ is divisible by 3 if the sum of its digits is divisible by 3.
 
 *** Property 9
 
-**** A number is divisible by 9 if the sum of its digits is divisible by 9.
+A number is divisible by 9 if the sum of its digits is divisible by 9.
 
 *** Property 10
 
-**** An integer is divisible by 5 if its last digit is either 0 or 5.
+An integer is divisible by 5 if its last digit is either 0 or 5.
 
 *** Property 11
 
-**** A number /N/ is divisible by 5^k if the number written by its last /k/ digits is divisible by 5^k.
+A number /N/ is divisible by 5^k if the number written by its last /k/ digits is divisible by 5^k.
 
 *** Property 12
 
-**** A number N = a_{n}a_{n-1}...a_{2}a_{1}a_{0} is divisible by 11 iff a number |a_{0} - a_{1} + a_{2} - a_{3} + ... + (-1)^{n} a_{n}| is divisible by 11. In other words, 11 divides N iff 11 divides the alternating sum of the digits of N.
+A number N = a_{n}a_{n-1}...a_{2}a_{1}a_{0} is divisible by 11 iff a number |a_{0} - a_{1} + a_{2} - a_{3} + ... + (-1)^{n} a_{n}| is divisible by 11. In other words, 11 divides N iff 11 divides the alternating sum of the digits of N.
 
 ** Prime Numbers
 
 *** Lemma 1 (necessary condition for N to be prime)
 
-**** For a natural number N to be prime, it is necessary that
+For a natural number N to be prime, it is necessary that
 
 #+BEGIN_QUOTE
 a^{N-1} \equiv 1 (mod N)
