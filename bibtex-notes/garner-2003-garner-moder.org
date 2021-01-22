@@ -1,0 +1,451 @@
+#+TITLE: Notes on: Garner, B. A. (2003): Garner's Modern American Usage
+
+
+* ABBREVIATIONS
+
+** Acronyms and Initialisms
+
+Six points merit attention here.
+
+*** First, we should be aware of the technical difference between the types of abbreviated names. An *acronym* is made from the first letters or parts of a compound term. It's read or spoken as a single word, not letter by letter (e.g., /awol/ = absent without official leave, /radar/ = radio detection and ranging, /scuba/ = self-contained underwater breathing apparatus). An *initialism* is also made from the first letters or parts of a compound term, but it's sounded letter by letter, not (!) as one word (e.g., /r.p.m./ = revolutions per minute).
+
+*** Second, the question often arises whether to place a period after each letter in an acronym or initialism. Searching for consistency on this point is futile. The trend nowadays is to omit the periods. Including them is the more conservative and traditional approach. Yet because an acronym is spoken as a single word (e.g., /UNESCO/), periods are meaningless. If an initialism is made up of lowercase letters, periods are often preferable: /rpm/ looks odd as compared with /r.p.m./, and /am/ (as opposed to /a.m./) looks like the verb. But with initialisms made of uppercase letters, the unpunctuated forms are likely to prevail (as in /ABC/, /ATM/, /HIV/, /IRA/, /SUV/, /URL/, etc.).
+
+*** Third, the best practice is to give the reader some warning of an uncommon acronym by spelling out the words and enclosing the acronym in parentheses when the term is first used.
+
+*** Fourth, capitalization raises various questions. In AmE there is a tendency to print initialisms in all capitals (e.g., FMLA, NJDEP) and acronyms in small capitals. Some publications, however, use all capitals for both kinds. But in BrE the tendency is to uppercase only the first letter.
+
+*** Fifth, don't use abbreviations that have already been taken. The language doesn't easily embrace dual-meaning acronyms.
+
+*** Sixth, when an indefinite article is needed before an abbreviation, the choice between /a/ and /an/ depends simply on how the first syllable is sounded. A vowel sound takes /an/, a consonant /a/.
+
+** Resulting Redundancies
+
+Some acronyms and initialisms often appear as part of a two-word phrase in which the second word is what one of the acronym's letters stands for. Thus, a bank customer withdraws cash from an /ATM machine/, using a /PIN number/ as a password. The problem with these phrases, of course, is that they are technically redundant. And while the redundancies may be passable in speech - especially with unfamiliar acronyms - they should be avoided in edited writing.
+
+** Initialese
+
+One of the most irritating types of pedantry in modern writing is the overuse of abbreviations, especially abbreviated names. Originally, to be sure, abbreviations were intended to serve the convenience of the reader by shortening names so that cumbersome phrases would not have to be repeated in their entirety. The purported simplifications actually simplified. But many writers - especially technical writers - seem to have lost sight of this goal: they allow abbreviated terms to proliferate, and their prose quickly becomes a hybrid-English system of hieroglyphs requiring the reader to refer constantly to the original uses of terms to grasp the meaning. This kind of writing might be thought more scholarly than ordinary, straightforward prose. *It isn't.* Rather, it's tiresome and inconsiderate writing; it betrays the writer's thoughtlessness toward the reader and a puerile fascination with the insubstantial trappings of scholarship.
+
+* ADVERBS
+
+** Placement of Adverbs
+
+Many writers fall into awkward, unidiomatic sentences when they misguidedly avoid splitting up verb phrases. Although most authorities squarely say that the best place for the adverb is in the midst of the verb phrase, many writers nevertheless harbor a misplaced aversion, probably because they confuse a split verb phrase with the /split infinitive/. H.W. Fowler explained long ago what writers still have problems understanding:
+
+#+BEGIN_QUOTE
+When an adverb is to be used with [a compound] verb, its normal place is between the auxiliary (or sometimes the first auxiliary if there are two or more) and the rest. Not only is there no objection to thus splitting a compound verb..., but any other position for the adverb requires special justification.
+#+END_QUOTE
+
+But confusion on this point is all but ubiquitous. The result is an unidiomatic, unnatural style - e.g.:
+
+*** "Circuit judges /currently are elected/ [read /are currently elected/\] in countrywide races."
+
+*** "Capitalistic economies /easily can adjust/ [read /can easily adjust/\] to more unequal distributions of purchasing power."
+
+In the following example, the first adverb is awkwardly placed and the second is right: "If you're doing serious research, possibly for a college course, then you /already have/ [read /have already/\] begun (or will /soon/ begin to involve yourself in) Internet research."
+
+A few general adverbs of time occur between subject and verb - "I usually play golf on Saturday," "We never do much in that room," "He always takes the credit for himself."
+
+Yet adverbs of place don't appear between subject and verb, and people never say, "I there saw her standing," "We here will stake our claim," "She anywhere loves to travel."
+
+The linguist W.F. Twaddell first noticed this point about adverbs of time as opposed to adverbs of place. He calls it "a rather complicated rule of English grammar," adding that "speakers of English are largely unaware of it, but the English they speak is consistent in conforming to it."
+
+** Never Split a Verb Phrase [a superstition]
+
+*** "In a compound verb (/have seen/) with an adverb, that adverb comes between the auxiliary and the participle ('I have /never/ seen her'); or, if there are two or more auxiliaries, immediately after the first auxiliary ('I have /always/ been intending to go to Paris'); that order is changed only to obtain emphasis, as in 'I never have seen her' (with stress on'have') ... There is, however, a tendency to move an adverb from its rightful and natural position for inadequate reasons, as in 'Oxford must /heartily/ be congratulated.'"
+
+*** "Because of their misconception as to what a split infinitive really is, some have reached the erroneous conclusion that an adverbial modifier must never be placed between parts of a compound verb phrase, with the result that they write in such an eccentric style as 'I greatly have been disappointed' instead of writing naturally 'I have been greatly disappointed."
+
+*** "With a compound verb - that is, one made with an auxiliary and a main verb - the adverb comes between the auxiliary and main verb (/He will probably telephone before starting/ / /I have often had that thought myself/ / /The clock is consistently losing five minutes a day/)."
+
+* /Affect/ & /effect/
+
+In ordinary usage, /affect/ is always a verb; it means "to influence; to have an effect on." /Effect/, as suggested by its use in that definition, is primarily a noun meaning "result" or "consequence". To /affect/ something is to have an /effect/ on it. But as a verb, /effect/ means "to bring about; produce".
+
+Using /affect/ (= to influence) for /effect/ (= to bring about) is an old error that looks as if it will be increasingly difficult to stamp out. The mistake is especially common in the phrase /to effect change(s)/ - e.g.:
+
+** "By /affecting/ [read /effecting/\] changes the limited partners can reap specified rewards."
+
+** "Throughout the book her winning personality /affects/ [read /effects/\] changes in the drab and pitiful 'sad' people she encounters."
+
+** "[It is] a good example of an environmentalists working with corporations to /affect/ [read /effect/\] change."
+
+* /Aggravate/ for /irritate/
+
+Though documented as existing since the 1600s and today an ingrained casualism, /aggravate/ for /annoy/ or /irritate/ has never gained the approval of stylists and should be avoided in formal writing. Strictly speaking, /aggravate/ means "to make worse; exacerbate" <writing a second apology might just aggravate the problem>.
+
+Even Oliver Wendell Holmes Jr. nodded once, using /aggravate/ for /irritate/ in one of his letters to Sir Frederick Pollock in 1895: "Our two countries /aggravate/ each other from time to time."
+
+The lapse is common in modern writing - e.g.: "It has /aggravated/ [read /irritated/\] me when I have seen billboards that contained misspelled words, punctuation errors and other things that are fundamental to the English language."
+
+Often when one word is commonly misused for a second word, part of the blame can go to a third word (!) that sounds like the first but means something close to the second. Perhaps /exasperate/ contributes to the misuse of /aggravate/ (which sounds a bit like /exasperate/) in the sense of /irritate/ (which is close in meaning to /exasperate/). Also, when /aggravate/ is used in this sense it often implies something more intense than merely /irritate/. It is closer in meaning to /exasperate/.
+
+* /ALOT/ for /a lot/
+
+** *a lot* (= many) is the standard spelling. /Alot/ is a nonstandard form -e.g.:
+
+*** "/Alot/ [read /A lot/\] of people have noticed that the two teams playing in the World Series have one very important thing in common."
+
+*** "/Alot/ [read /A lot/\] of kids found out yesterday that the easiest thing to do on ice skates is fall down."
+
+*** "Dalmations are active and require /alot/ [read /a lot/\] of exercise and attention."
+
+* APOSTROPHE
+
+** This punctuation mark does three things:
+
+*** First, it often indicates the possessive case <Charles Alan Wright's treatise> <Jane Ortiz's appointment>.
+
+*** Second, it frequently marks the ommission of one or more elements and the contracting of the remaining elements into a word (or figure) - e.g.: /never/ into /ne'er/; /will not/ into /won't/; /1997/ into /'97/.
+
+*** Third, it is sometimes used to mark the plural of an acronym, number, or letter - e.g.: /CPA's/ (now more usually /CPAs/), /1990's/ (now more usually /1990s/), and /p's and q's/ (still with the apostrophes because of the single letters).
+
+** Two contradictory trends - both bad - are at work with apostrophes.
+
+*** First, careless writers want to form plurals with wayward apostrophes - e.g.: "The /bishop's/ [read /bishops/\] of the United Methodist Church have issued an urgent appeal for funds." The same problem occurs in third-person-singular verbs. And a distressing number of signs on mailboxes and entryways are printed, e.g., /The Smith's/ [read /The Smiths/\].
+
+*** The second unfortunate trend is to drop necessary apostrophes: there is a tendency to write /the hotels many shops/ or /Martins Pub/. The only possible cure is increased literacy.
+
+* /As/ & /like/
+
+** *as*. Causal Words: /as/; /because/; /since/; /for/
+
+In the causal sense, /as/ should generally be avoided because (not /as/!) it may be misunderstood as having its more usual meaning "while," especially when it is placed anywhere but at the beginning of the sentence. H.W. Fowler states: "To causal or explanatory /as/-clauses, if they are placed before the main sentence ... there is no objection".
+
+As Fowler suggested, however, the reverse order is infelicitous unless the reader necessarily knows what is to be introduced by the /as/-clause. So don't use it in midsentence - e.g.: "Indeed, some jurors confirmed later that they wished they had been given the manslaughter option /as/ [read /because/\] they didn't believe the au pair intended to harm the baby."
+
+Given the syntactic restrictions on /as/, we are left with three general-purpose causal conjunctions.
+
+*** /Because/ is the strongest and most logically oriented of these.
+
+*** /Since/ is less demonstratively causal and frequently has temporal connotations. But using /since/ without reference to time is not, despite the popular canard, incorrect.
+
+*** /For/, the most subjective of the three, is the least used. If /because/ points out a direct cause-and-effect relationship, /for/ signals a less direct relationship, adding independent explanation or substantiation. Moreover, /for/ is a coordinating conjunction and not, like /because/ and /since/, a subordinating conjunction; hence, it can properly begin a sentence - that is, one consisting only of an independent clause <I want to go home now. /For/ I am tired>.
+
+** *like*. As a preposition.
+
+The object of a preposition should be in the objective case - you say "They are very much like /us/," not "They are very much like /we/." When the second-person pronoun is used, no problem arises: "I, like you, believe that Mozart was the greatest composer of all time." But apart from the second person (in which the form remains the same), writers often get confused on this point, as with first-person pronouns - e.g.:
+
+*** "She, like /I/ [read /me/\], instantly fell in love with his gentle disposition." (A suggested improvement: /Like me, she instantly fell .../.)
+
+*** "He, like /I/ [read /me/\], just can't find any proof about their complaints that unhelmeted motorcyclists truly are an undue burden on society." (A suggested improvement: /Like me, he just can't find .../.)
+
+ The same problem afflicts the third-person pronouns - e.g.:
+
+**** "We, like /they/ [read /them/\], thought we were the coolest things on the floor." (A suggested improvement: /Like them, we thought .../.)
+
+As all the parenthetical revisions suggest, the most natural solution is to open the clause with /like/ and keep the subject and verb together (/Like me, he agrees/). The awkwardness in the original results from the odd pairing of a nominative and an objective pronoun in what looks like a parallel construction (/He, like me, agrees./)
+
+** */Like/ as a Conjunction.*
+
+In traditional usage, /like/ is a preposition that governs nouns and noun phrases, not (!) a conjunction that governs verbs or clauses. Its function is adjectival, not (!) adverbial. Hence on does not write, properly, "The story ended /like/ it began," but "The story ended /as/ it began." If we change the verbs to nouns, /like/ is correct: "The story's ending was /like/ its beginning." Frequently, then, /like/ needs to be replaced by the proper conjunction /as/ (or /as if/) - e.g.:
+
+*** "It looks /like/ [read /as if/\] the sales clerks are ahead of the hitters so far."
+
+*** "/Like/ [read /As/\] I said: so far, so good."
+
+*** "Star-crossed lovers, they are - /like/ [read /as/\] in the play - sprung from two households, both alike in dignity."
+
+** */As/ for /like/.**
+
+This is a form of hypercorrection - trying so hard to avoid error that you end up falling into an opposite error. Ernest Growers saw the problem: "A fashion seems to be growing, even among some good writers, to prefer /as/ to /like/ not only, rightly, as a conjunction, but also, ill-advisedly, as a prepositional adjective." E.g.: "/As/ [read /Like/\] most people, I have been fortunate to have many mentors in my life."
+
+** *Overused.*
+
+Like any other word, /like/ can entangle a sentence if used indiscriminately - e.g.: "I have been buying most of my books from Barnes & Noble, whose two new superstores have come down on my old neighborhood shop /like/ the Assyrians who came down /like/ the wolf on the fold." The two /like/ phrases are especially jarring because they come at the end of an already involved sentence.
+
+** *The likes of.*
+
+Is /the likes of/ (= people or things of the same type as) disparaging? The linguist Dwight Bolinger calls it "dysphemistic". Sometimes it's disparaging, but not (!) always. In fact, it's more commonly positive than negative:
+
+*** Positive: "We may be able to ring in the new year with a fireworks show /the likes of/ which nobody's seen for a century."
+
+*** Positive: "The country vocalist evoke the spirits of powerhouses past as well as the present-day /likes of/ Patty Loveless and Mandy Barnett."
+
+*** Neutral or Ambiguous: "They'll do floor exercises, uneven bars, rings and other things to songs by /the likes of/ Christina Aguilera and the Backstreet Boys."
+
+*** Negative: "This is similar to putting /the likes of/ David Duke and Pat Buchanan in charge of affirmative action or anti-discrimination."
+
+*** Negative: "The GIC buys health coverage for all state employees, retirees and their families, while occasionally fending off politically charged attacks by /the like of/ Joe Kennedy and Mark Montigny."
+
+But variations of the phrase, /so-and-so and his/ [or /her/\] /like/ or /something-or-something and the like/, often have a more discernible tinge of negativity - e.g.:
+
+**** "Supporters of private accounts ... mistakenly count Moynihan /and his like/ as true allies in this cause."
+
+**** "Jonathan Sacks /and his like/ stand for exclusivity."
+
+**** "Steve Drowne /and his like/, the middle-of-the-road jockeys who take work where they can get it, can afford no such protest."
+
+* /Assure/ & /ensure/ & /insure/
+
+** */Assure/ for /ensure/.*
+
+A person /assures/ (make promises to, convinces) other people <our hosts assured us that we would have comfortable room>; a person /ensures/ (makes certain) that things occur or that events take place <our hosts ensured that we had comfortable rooms>. To put it a little technically, if the verb is in the active voice, a predicate beginning with /that/ should be introduced by the ver /ensure/.
+
+/Assure/ takes a personal object - e.g.: "Davis /assured/ residents they can help decide which trees are to be cut."
+
+/Assure/ frequently appears where /ensure/ would be the better verb - e.g.: "That would defeat the entire purpose of the legislation, which is to /assure/ [read /ensure/\] public perception of total independence."
+
+The following sentences illustrate the correct use of /ensure/:
+
+*** "There used to be an Eastern Idaho Sailing Association with more than 100 people, but the members' independent-minded personalities eventually /ensured/ its demise."
+
+*** "The suspension of talks until midmorning /ensured/ another gridlocked rush-hour throughout the San Francisco Bay area."
+
+** */Insure/ and /ensure/.*
+
+/Insure/ should be restricted to financial contexts involving indemnification; it should refer to what insurance companies do. /Ensure/ should be used in all other senses of the word. Intransitively, /insure/ is commonly followed by the preposition /against/ <insure against loss>; it may also be used transitively <insure one's valuables>.
+
+* /As to/
+
+** *Defensible Uses.*
+
+First, it must be said that /as to/ is an all-purpose preposition to be avoided (!) whenever a more specific preposition will do. But /as to/ isn't always indefensible. The phrase is most justifiable when introducing something previously mentioned only cursorily: "/As to/ concerns the fair might lose on-track business if it offered its signal to the OTBs, ...."
+
+In beginning sentences this way, /as to/ is equivalent to the more colloquial /as for/. In effect, the phrase is a passable shorthand form of /regarding/, /with regard to/, or /on the question of/.
+
+The phrase is also (minimally) defensible when used for /about/, but that word is stylistically preferable in most contexts. /As to/ smells of jargon - e.g.: "The bill carries no presumptions /as to/ [read /about/\] the effect of incorporation."
+
+** *Poor Uses.*
+
+The main problem with /as to/ is that it doesn't clearly establish syntactic or conceptual relationships, so it can hamper comprehensibility. In each of the following examples, another preposition would more directly and forcefully express the thought:
+
+*** For /about/: "There's no rule /as to/ [read /about/\] how long you have to wait before you can enjoy your creation."
+
+*** For /on/: "It is always possible that your neighbor is not aware of how disturbing his or her behavior is and that he or she can be more sensitive to your concerns, or you can agree /as to/ [read /on/\] certain time /parameters/ [read /limits/\]."
+
+*** For /of/: "The same is true /as to/ [read /of/\] other cases finding for leaders by applying the regulation."
+
+*** For /for/: "There is no change in the prior IRA rules with regard to an individual's participation in other qualifying retirement plans. /As such/ [read /Therefore/\], the rules remain the same /as to/ [read /for/\] the maximum amount of adjusted gross income a taxpayer can have before the IRA deduction begins to phase out."
+
+*** For /by/ or /at/: "Some people are a little surprised /as to/ [read /by/ or /at/\] how quickly Veniard has gotten to his present level."
+
+*** For /into/: "During a trip to the Mars Pathfinder Mission Control Center in Pasadena this summer, House Aeronautics and Space Subcommittee member Sheila Jackson-Lee, D-Texas, inquired /as to/ [read /into/\] whether the Pathfinder Mission had taken pictures of the American flag planted by Neil Armstrong in 1969." (Another wording, /asked whether/, would work even better in that sentence.)
+
+*** Superfluous: "Another equally important question is /as to/ [delete /as to/\] whether technical efficiency improvements were completed."
+* /But/
+
+** *Beginning Sentences with.*
+
+It is a gross canard that beginning a sentence with /but/ is stylistically slipshod. In fact, doing so is highly desirable in any number of contexts, as many stylebooks have said (many correctly pointing out that /but/ is more effective than /however/ at the beginning of a sentence) - e.g.:
+
+*** "Objection is sometimes taken to the employment of /but/ or /and/ at the beginning of a sentence; but for this there is much good usage."
+
+*** "/But/ (not followed by a comma) always heads its turning sentence; /Nevertheless/ usually does (followed by a comma). I am sure, however, that /however/ is always better buried in the sentence between commas; /But/ is for the quick turn; the inlaid /however/ for the more elegant sweep."
+
+*** "A student writer will almost invariably give /however/ first position in a sentence ... In any case, /however/ works best if it is inside the sentence. Just exactly why this position is best is one of those stylistic mysteries that can't really be explained. It simply sounds better that way. And the importance of sound (!) can't (!) be dismissed, even in silent reading."
+
+* PUNCTUATION
+
+** COMMA
+
+This punctuation mark, the least emphatic of them all, is the one used in the greatest variety of circumstances. Two style result in different treatments. The *close* style of punctuation results in fairly heavy uses of commas; the *open* style results in fairly light uses of commas. In the 20th century, the movement was very much toward the open style. The byword was, "When in doubt, leave it out." Indeed, some writers and editors went too far in omitting commas that would aid clarity. What follows is an explanation tending slightly toward the open style, but with a steady view toward enhancing clarity.
+
+*** Essentially, the comma has nine uses.
+
+1. First, the comma separates items (including the last from next-to-last) in a list of more than two - e.g.: "The Joneses, the Smiths, and the Nelsons." In this position, it's called, variously, the *serial comma*, the *Oxford comma*, or the *Harvard comma*. Whether to include the serial comma has sparked many arguments. But it's easily answered in favor of inclusion because omitting the final comma may cause ambiguities, whereas including it never (!) will - e.g.: "A and B, C and D, E and F[,] and G and H." When the members are compound, calling for /and/ within themselves, clarity demands the final comma. Although newspaper journalists typically omit the serial comma as a space-saving device, virtually all writing authorities outside that field recommend keeping it.
+
+2. Second, the comma separates coordinated main clauses - e.g.: "Cars will turn here[,] and coaches will go straight." There are two exceptions: (1) when the main clauses are closely linkd <Do as I tell you [no comma] and you won't regret it>; and (2) when the subject of the second independent clause, being the same as in the first, is not repeated <Policies that help prevent crime are often better for the public [no comma] and are closer to the ideal of effective public administration>. (Another way of referring to the construction in that sentence is is that it contains a "compound predicate.") Omitting the comma before the /and/ in a compound sentence often causes an ambiguity or miscue:
+
+- "I would love to see her and the baby and I will be here all day." (insert comma after /baby/; otherwise, it might appear that the baby and the writer will be there all day.)
+
+- "No one claimed responsibility for the attack nor for once were Chechen guerrillas seen as the prime suspects." (Insert a comma after /attack/; otherwise, it looks like as if /for once/ is parallel to /for the attack/.)
+
+3. Third, the comma separates most introductory matter from the main clause, often to prevent misunderstanding. The introductory matter may be a word <Moreover,>, a phrase <In the meantime,>, or a subordinate clause <If everything goes as planned,>. Matter that is very short may not need this comma <On Friday we leave for Florida>, but phrases of three or more words usually do - and even the shortest of subordinate clauses always do <That said,>. On the other hand, a comma may prove helpful for clarity even with shorter phrases <For now, we must assume the worst>. It may even be imperative <Outside, the world goes on>.
+
+4. Fourth, the comma marks the beginning and end of a parenthetical word or phrase, an appositive, or a nonrestrictive clause - e.g.: "I am sure[,] however[,] that it will not happen." Some writers mistakenly omit the second comma (!) - e.g.: "After graduating from Rosemary Hall, an exclusive Greenwich girls' school in 1965, Ms. Close began touring with Up With People, the squeaky-clean pop group." (Insert a comma after /school/ or, better, put /in 1965/ after /graduating/.) Still others omit both commas, often creating a miscue: "Our customers must be at a minimum priority concerns of everyone." (Insert a comma after /be/ and after /minimum/.)
+
+5. Fifth, the comma separates adjectives that each qualify a noun in the same way <a cautious[,] reserved person>. If you could use /and/ between the adjectives, you'll need a comma - e.g.: "Is there to be one standard for the  /old, repulsive/ laws that preferred whites over blacks, and a /different, more forgiving/ standard for new laws that give blacks special benefits in the name of historical redress?" But when adjectives qualify the noun in different ways, or when one adjective qualifies a noun phrase containing another adjective, no comma is used. In these situations, it would sound wrongto use /and/ - e.g.: "a distinguished [no comma] foreign journalist"; "a bright [no comma] red tie." Writers often include the comma when it isn't necessary - e.g.: "The centerpiece of the Senate GOP package, which could be presented to the Senate Finance Committee for a vote as early as next week, is a /permanent, $500-per-child/ [read /permanent $500-per-child/\] tax credit for families ... Effective in 1996, families would be granted a /new,/ $500 [read /new $500/\] tax credit for each child."
+
+6. Sixth, the comma separates a direct quotation from its attribution <"Honey, I'm home," Desi said>, but it is not (!) used to separate quoted speech that is woven into the syntax of the sentence <TV loves catchphrases such as "Honey, I'm home">.
+
+7. Seventh, the comma separates a participial phrase, a verbless phrase, or a vocative - e.g.: "Having had breakfast[,] I went for a walk"; "The sermon /over/ [or /being over/\], the congregation filed out."; "Fellow priests[,] the clergy must unite in reforming the system of electing bishops." Note, however, that no comma is needed within an absolute construction - e.g.: "The sermon [no comma] being over, we all left." Nor is a comma needed with restrictive expressions such as "my friend Professor Wright" or "my son John" (assuming that the writer has at least one other son).
+
+8. Eighth, in informal letters the comma marks at the end of the salutation <Dear Mr. Crosthwaite[,]> <Dear Rebecca[,]> and the complimentary close <Very truly yours[,]> <Yours sincerely[,]>. In formal letters, the salutation is separated from the body by a colon <Dear Sir[:]> <Dear Madam[:]>.
+
+9. Finally, the comma separates parts of an address <#8 Country Club Dr., Amherst, Massachusetts> or a date <March 2, 1998>. Note that in these examples, the state in the address and the year in the date are parenthetical, so each would ordinarily take a comma or some other punctuation after it (unless the place name or date were used as an adjective). Note also that no comma is needed between the month and year in dates written "December 1984" or "18 December 1984"; a comma is required only when the date is written "December 18, 1984."
+
+*** Writers cause needless confusion or distraction for their readers when they insert commas erroneously. This typically happens in one of four ways.
+
+1. Some writers insert a comma before the verb - something that was once standard. But the practice has been out of fashion since the early 20th century, and today it's considered incorrect - e.g.: "Whether or not the shoes were bought at our store, [omit the comma] is not something we have yet been able to ascertain." "Only if this were true, [omit comma] could it be said that JFK was a great president." Even those who are familiar with this principle are sometimes tempted to place a comma after a compound element that doesn't require one. Avoid the temptation - e.g.: "Teachers who do not have a Ph.D., a D.M.A., or an M.A., [omit the comma] do not qualify for the pay raise."
+
+2. Commas frequently set off an adverb that doesn't need setting off. The result is a misplaced emphasis - e.g.: "We, /therefore/, [read /therefore/ without the embracing commas] conclude that the mummy could not be authentic." Note that if the emphasis in that sentence is intended for some reason to fall on /We/ - as clearly spearated from some other group and its thinking - the commas should (!) stand; but if the emphasis is to fall on /therefore/ as a simple consequence of reasoning from the evidence, then the commas should be omitted.
+
+3. In compound sentences, an unnecessary comma is sometimes inserted before a second independent clause when the subject is the same as in the first clause. (As some grammarians put it, a comma shouldn't appear before the second part of a "compound predicate.") As explained above in the second rationale for using this mark, no comma appears before the conjunction when the second clause has an understood subject - e.g.: "They did their spring cleaning, and then had a picnic." (Delete the comma.) Sometimes, though, a comma is needed for clarity - e.g.: "We like to have wine and ham it up on weekends." (Insert a comma after /wine/.)
+
+4. Some writers (even some otherwise excellent ones) mistakenly use a comma as if it were a stronger mark - a semicolon or a period. The result is a comma splice - e.g.: "He said he didn't want to look, he wanted to remember her as she was in life." (Replace the comma with a semicolon.) This also occurs in series of phrases or clauses that themselves contain commas. Semicolons rather than commas are often needed to separate the elements in a complex series - e.g.: "We celebrate the Fourth by flying the red, white, and blue; honoring baseball, Mom, and apple pie; and shouting hip, hip, hooray as the fireworks burst."
+
+** QUOTATION MARKS
+
+*** Reserve quotation marks for five situations:
+
+1. when you're quoting someone;
+
+2. when you're referring to a word as a word <the word "that">, unless you're using italics for that purpose;
+
+3. when you mean so-called-but-not-really <if he's a "champion", he certainly doesn't act like one>;
+
+4. when you're creating a new word for something - and then only on its first appearance <I'd call him a "mirb," by which I mean ... >; and
+
+5. when you're marking titles of TV and radio programs, magazine articles, book chapters, poems, short stories, and songs <having been put on the spot, she sang "Auld Lang Syne" as best she could>.
+
+*** In marking quotations, writers and editors of AmE and BrE have developed different conventions for quotation marks (or "inverted commas," as the British call them). In AmE, double quotation marks are used for a first quotation; single marks for a quotation within a quotation; double again for a further quotation inside that; etc. In BrE, the practice is exactly the reverse at each step.
+
+*** With a closing quotation mark, practices vary. In AmE, it is usual to place a period or comma within the closing quotation mark, whether or not the punctuation so placed is actually a part of the quoted matter. In BrE, by contrast, the closing quotation mark comes before any punctuation marks, unless these marks form a part of the quotation itself (or what is quoted is /less/ than a full sentence in its own right). Thus:
+
+**** AmE
+
+1. "Joan pointedly said, 'We won't sing "God Save the Queen."'"
+
+2. "She looked back on her school years as being 'unmitigated misery.'"
+
+**** BrE
+
+1. 'Joan pointedly said, "We won't sing 'God Save the Queen'."'
+
+2. 'She looked back on her school years as being "unmitigated misery".'
+
+*** In both sets of examples, the outermost quotation marks indicate that a printed source is being quoted directly.
+
+*** With respect to question marks and exclamation marks, AmE and BrE practice is the same. They're either inside or outside the ending quotation mark depending on whether they're part of what's being quoted - e.g.: (AmE) "Did Nelson really say 'Kiss me, Hardy'?"; (BrE) 'Did Nelson really say "Kiss me, Hardy"?' And: (AmE) "Banging her fist on the table, she exclaimed, 'And that's that!'"; (BrE) 'Banging her fist on the table, she exclaimed, "And that's that!"'
+
+(!) Note that when the end of an interrogatory or an exclamatory sentence coincides with the end of another sentence that embraces it, the stronger mark of punctuation is sufficient to end *both* sentences. A period need not also be included.
+
+*** Colons and semicolons are placed outside quotation marks - e.g.: "John didn't shout 'Fire!'; he did, however, say that he smelled smoke."
+
+*** As to quotations that are interrupted to indicate a speaker, AmE and BrE again show different preferences. In AmE, the first comma is placed within the quotation mark <"Sally," he said, "is looking radiant today">; in BrE, the first comma (usually) remains outside the inverted comma, just as though the attribution could be lifted neatly out of the speaker's actual words <'Sally', he said, 'is looking radiant today'>.
+
+*** Finally, be cautious about using gratuitous quotation marks. The emphatic use is a sign of amateurish writing (and advertising). Don't use them for phrasal adjectives, don't use them to be cute, and don't (!) use them to suggest that the marked word or phrase is somehow informal or slangy - it usually isn't. If you mean what you say, say it without hesitation. If you don't, then use other words.
+
+* /Continual/ & /continuous/
+
+** /Continual/ = frequently recurring; intermittent. E.g.: "And [the police are] removing [the homeless] - by police rides to the edge of town, by /continual/ issuing of citations for camping, by mass towing of vehicles and by routine discarding of people's belongings."
+
+** /Continuous/ = occurring without interruption; unceasing. E.g.: "Crow Canyon archaeologists want to study the village to determine exactly when it was inhabited and whether is was occupied /continuously/ or intermittently."
+
+A good mnemonic device is to think of the /-ous/ ending as being short for "one uninterrupted sequence."
+
+** The phrase /almost continuous/ indicates that /continual/ is the right word - e.g.: "The antidepressant Prozac has been in the news /almost continuously/ [read /continually/\] since it was introduced in Belgium in 1986."
+
+** Another mistake is to use /continuous/ for something that happens at regular (e.g., annual) intervals - e.g.: "The White House tree-lighting ceremony has been held /continuously/ [read /continually/\] since 1923."
+
+* DANGLERS
+
+** *Generally.*
+
+So-called danglers are ordinarily unattached participles - either present participles (ending in /-ing/) or past participles (ending usually in /-ed/) - that do not relate syntactically to the nouns they are supposed to modify. That is, when the antecedent of a participle doesn't appear where it logically should, the participle is said to "dangle" - e.g.: "/Watching/ from the ground below, the birds flew ever higher until they disappeared." In effect, the participle tries to sever its relationship with its noun or pronoun and thus to become functionally a preposition. Gerunds may also dangle precariously - e.g.: "By /watching/ closely, the birds became visible." Usually, recasting the sentence will remedy the ambiguity, illogic, or incoherence: "Watching from the ground below, we saw the birds fly higher until they disappeared."; "By watching closely, we were able to see the birds."
+
+** *Present-Participial Danglers.*
+
+In the sentences that follow, mispositioned words have caused grammatical blunders. The classic example occurs when the wrong noun begins the main clause - that is, a noun other than the one expected by the reader after digesting the introductory participial phrase. E.g.: "The newspaper said that /before being treated/ for their injuries, /General Mladic/ forced them to visit the wards of the wounded at the Pale hospital." That wording has General Mladic being treated for others' injuries. Thus, danglers reflect a type of bad thinking.
+
+Another manifestation of this error is to begin the main clause with an expletive (e.g., /it/ or /there/) after an introductory participial phrase:
+
+*** "/Applying/ those principles to the present situation, /it/ is clear that the company must reimburse its employee." (A possibly revision: /If we apply these principles to the present situation, it becomes clear that..../ Or better: /Given those principles, the company must ..../)
+
+*** "/Turning/ to England, /it/ ought to be noted first that that country, though late in doing so, participated fully in the medieval development sketched above." (A possible revision: /Although England was late in doing so, it participated fully in the medieval development sketched above./)
+
+*** "/After reviewing/ the aforementioned strategies, /it/ becomes clear that there is no conclusive evidence regarding their success." (A possible revision: /Even a detailed review of those strategies provides no conclusive evidence about how successful they are./)
+
+** *Past-Participial Danglers.*
+
+These are especially common when the main clause begins with a possessive - e.g.: "/Born/ on March 12, 1944, in Dalton, Georgia, Larry Lee Simms's qualifications ...." (Simms's qualifications were not born on March 12 - /he/ was.)
+
+** *Dangling Gerunds.*
+
+These are close allies to dangling participles, but here the participle acts as a noun rather than as an adjective when it is the object of a preposition:
+
+*** "/By instead examining/ the multigenerational ethnic group, /it/ becomes clear that the Irish had fully adjusted to American society by that time." (A possible revision: /By instead examining the multigenerational ethnic group, we see that the Irish ..../)
+
+*** "/Without belaboring/ the point, /the central premise/ of this article is that the average pharmacist does not have the adequate time." (A possible revision: /In brief, the central premise of this article ..../)
+
+** *Acceptable Danglers, or Disguised Conjunctions.*
+
+Any number of present participles have been used as conjunctions or prepositions for so long that they have lost the participial duty of modifying specific nouns. In effect, the clauses they introduce are adverbial, standing apart from and commenting on the content of the sentence. Among th commonest of these are /according, assuming, barring, concerning, considering, given, judging, owing to, regarding, respecting, speaking, taking/ (usu. /account of, into account/). Thus:
+
+*** "Horticulturally /speaking/, the best way to prune the tree is probably to remove the some of the lowest branches by cutting them off at the trunk."
+
+*** "/Assuming/ everyone shows up who's supposed to (not a given in this sport of last-minute scratches), this could be the finest assemblage of talent for a Long Island road race in a decade."
+
+*** "/Considering/ how hated Belichick was in Cleveland, it's incredible that another owner would want him as a head coach."
+
+** *Ending Sentences with Danglers.*
+
+*** Traditionally, grammarians frowned on /all/ danglers, but during the 20th century they generally loosened the strictures for a participial construction at the end of a sentence. Some early-20th-century grammarians might have disapproved of the following sentences, but such sentences have long been considered acceptable:
+
+**** "Sarah stepped to the door, looking for her friend."
+
+**** "Tom's arm hung useless, broken by the blow."
+
+*** Usually, as in the first example, the end-of-the-sentence dangler is introduced by a so-called coordinating participle: /looking/ is equivalent to /and looked/. Similarly:
+
+**** "Vexed by these frequent demands on her time, she finally called upon her friend, /imploring/ him to come to her aid." (/Imploring/ = /and implored/.)
+
+**** "The New Orleans-bound steamer rammed and sank the freightor ten miles from its destination, /sending/ her to the bottom in ten minutes." (/Sending/ = /and sent/.)
+
+**** "She died before her brother, /leaving/ a husband and two children." (/Leaving/ = /and left/.)
+
+*** A few editors would consider each of those participles misattached, but in fact they are acceptable as coordinating participles.
+
+* /Disinterested/ & /uninterested/
+
+** Given the overlapping nouns, writers have found it difficult to keep the past-participial adjectives entirely separate, and many have given up the fight to preserve the distinction between them.
+
+** But the distinction is still best recognized and followed because /disinterested/ captures a nuance that no other word quite does. Many influential writers have urged the preservation of its traditional sense.
+
+** A /disinterested/ observer is not merely "impartial" but has nothing to gain from taking a stand on the issue in question. Yet /disinterested/ is frequently used (or, in traditionalists' eyes, misused) for /uninterested/.
+
+* /Either/
+
+** *Number of elements.*
+
+terb terb terb.
+
+** *Faulty Parallelism with /either ... or/.*
+
+terb terb terb.
+
+** *Singular or Plural.*
+
+terb terb terb.
+
+** */Not ... either/.*
+
+terb terb terb.
+
+** */Either or both/.*
+
+terb terb terb.
+
+** *Meaning "each of two" or "both."*
+
+terb terb terb.
+
+* /Farther/ and /further/
+
+** Both are comparative degrees of /far/, but they have undergone different differentiaion. In the best usage, /farther/ refers to physical distances, /further/ to figurative distances.
+
+** The superlatives - /farthest/ and /furthest/ - follow the same patterns.
+
+** /Furthermost/ is a fairly rare equivalent of /farthest/ (not (!) /furthest/).
+
+* /Infer/ for /imply/
+
+** *Infer*
+
+Properly used, /infer/ means "to deduce; to reason from premises to a conclusion."
+
+** *Imply*
+
+Writers frequently misuse /infer/ when /imply/ (= to hint at; suggest) would be the correct word.
+
+** Remember: a speaker or writer /implies/ something without putting it expressly. A listener or reader /infers/ beyond what has been literally expressed. Or, as Theodore Bernstein put it, "The /implier/ is the pitcher; the /inferrer/ is the catcher."
+
+* /Lay/ and /lie/
+
+** *The Distinction.*
+
+Very simply, /lie/ (= to recline, be situated) is intransitive - it can't take a direct object <he lies on his bed>. But (!) /lay/ (= to put down, arrange) is always (!) transitive - it needs a direct object <please lay the book on my desk>.
+
+* /Neither/ ... /nor/
