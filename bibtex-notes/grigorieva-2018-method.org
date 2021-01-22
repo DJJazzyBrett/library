@@ -148,13 +148,13 @@ is divisible by N.
 
 Let /a/ and /b/ be two given integers, and let
 
-a = p_{1}_{}^\alpha1 p_{2}^\alpha2 ... p_{r}^\alpha^{r} ,
-b = p_{1}_{}^\beta1 p_{2}^\beta2 ... p_{r}^\beta^{r}
+a = p_{1}^{\alpha1} p_{2}^{\alpha2} ... p_{r}^{\{\alpha}r} ,
+b = p_{1}^{\beta1} p_{2}^{\beta2} ... p_{r}^{\betar}
 
 be their prime factorization. The greatest common divisor and the least common multiple of the two numbers /a/ and /b/, are respectively,
 
-(a , b) = \prod p_{i}^{min(\alpha{}i , \beta{}i)  } ,
-[a , b] = \prod p_{i}^{max(\alpha{}i , \beta{}i) }
+(a , b) = \prod p_{i}^{min(\alpha{i} , \beta{i})} ,
+[a , b] = \prod p_{i}^{max(\alpha{i} , \beta{i})}
 
 where \prod is the product of all factors p_{i} raised to their corresponding powers.
 
