@@ -1,16 +1,91 @@
 #+TITLE: Notes on: Grigorieva, E. (2018): Methods of solving number theory problems
-* PREFACE
-* CHAPTER 1: PROBLEMS INVOLVING INTEGERS
-** the positive whole numbers: 1, 2, 3, ..., N, ... are called the `natural numbers`. This is the oldest defined category of numbers and the simplest in membership.
-** the second set of numbers in order of composition is the `set of integers` that include natural numbers and their negatives and 0.
-** the next set is the `set of rational numbers` ... we define a number to be rational if it can be written as a fraction m/n, where `m` is an integer and `n` is a natural number.
-** the numbers that cannot be represented as such a fraction are the `irrational numbers`
-** rational numbers and irrational numbers together form the `set of real numbers`
-** finally, there is the largest set of numbers ... the `set of complex numbers`; complex numbers geometrically are points in the plane formed by the Real and Imaginary axis
-** all natural numbers can be divided into two groups
+
+* INTRODUCTION
+
+** Basic definitions
+
+*** natural numbers
+
+the positive whole numbers: 1, 2, 3, ..., N, ... are called the /natural numbers/. This is the oldest defined category of numbers and the simplest in membership.
+
+*** integers
+
+the second set of numbers in order of composition is the /set of integers/ that include natural numbers and their negatives and 0.
+
+*** rational numbers
+
+the next set is the /set of rational numbers/ ... we define a number to be rational if it can be written as a fraction m/n, where m is an integer and n is a natural number.
+
+*** irrational numbers
+
+the numbers that cannot be represented as such a fraction are the /irrational numbers/
+
+*** real numbers
+
+rational numbers and irrational numbers together form the /set of real numbers/
+
+*** complex numbers
+
+finally, there is the largest set of numbers ... the /set of complex numbers/; complex numbers geometrically are points in the plane formed by the Real and Imaginary axis
+
+** Classification of natural numbers
+
 *** even numbers
+
 **** multiples of 2; every even number can be written as 2n, where n = 1, 2, 3, ...
+
 *** odd numbers
-**** every odd number can be written as (2n + 1), where n = 0, 1, 2, 3, .... or in the form of (2m - 1), where m = 1, 2, 3, ...
-** since 2^n is an even number, then 2^n is surrounded by (2^n - 1) and (2^n + 1) on the left and right, respectively, which are both odd numbers
-** moreover, if we consider only odd powers of 2, then (2^n + 1) will always [!] be a multiple of 3
+
+**** every odd number can be written as (2n + 1), where n = 0, 1, 2, 3, ... or in the form of (2m - 1), where m = 1, 2, 3, ...
+
+Since 2^n is an even number, then 2^n is surrounded by (2^n - 1) and (2^n + 1) on the left and right, respectively, which are both odd numbers. Moreover, if we consider only odd powers of 2, then (2^n + 1) will always [!] be a multiple of 3.
+
+** Properties of Divisibility
+
+1. A product of any two consecutive integers is a multiple of 2. Therefore, n(n + 1) and (n - 1)n are divisible by 2.
+
+2. A product of any three consecutive integers is a multiple of 3, or
+
+#+BEGIN_QUOTE
+n(n + 1)(n + 2)
+#+END_QUOTE
+
+is divisible by 3.
+
+3. A product of any three consecutive integers is divisible by 6.
+
+4. A product of any /k/ consecutive integers, or
+
+#+BEGIN_QUOTE
+n(n + 1)(n + 2)...(n + k - 1)
+#+END_QUOTE
+
+is a multiple of /k/ and /k!/.
+
+5. An integer is divisible by 2 if its last digit is divisble by 2.
+
+6. A natural number /N/ is divisible by 4 if its last two digits form a multiple of 4.
+
+7. An integer is divisible by 8 if the number written by the last three digits is divisible by 8.
+
+8. An integer /N/ is divisible by 3 if the sum of its digits is divisible by 3.
+
+9. A number is divisible by 9 if the sum of its digits is divisible by 9.
+
+10. An integer is divisible by 5 if its last digit is either 0 or 5.
+
+11. A number /N/ is divisible by 5^k if the number written by its last /k/ digits is divisible by 5^k.
+
+12. A number N = a_{n}a_{n-1}...a_{2}a_{1}a_{0} is divisible by 11 iff a number |a_{0} - a_{1} + a_{2} - a_{3} + ... + (-1)^{n} a_{n}| is divisible by 11. In other words, 11 divides N iff 11 divides the alternating sum of the digits of N.
+
+** Prime Numbers
+
+*** Lemma 1 (necessary condition for N to be prime)
+
+For a natural number N to be prime, it is necessary that
+
+#+BEGIN_QUOTE
+a^{N-1} \equiv 1 (mod N)
+#+END_QUOTE
+
+is true, where /a/ is any prime number less than N. If this condition does _not_ hold, then N is _not_ prime.
