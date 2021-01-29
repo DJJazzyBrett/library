@@ -159,3 +159,13 @@ be their prime factorization. The greatest common divisor and the least common m
 where \prod is the product of all factors p_{i} raised to their corresponding powers.
 
 *NOTE* --- the superscripts of p_{i} are supposed to read (\alpha_{i} , \beta_{i})
+
+** test
+
+
+#+BEGIN_SRC latex
+\begin{equation}
+\label{eq:1}
+\frac{}{}
+\end{equation}
+#+END_SRC
