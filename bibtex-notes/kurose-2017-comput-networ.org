@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-20 19:08:08 boxx>
+#+Time-stamp: <2021-05-20 19:18:53 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -29,4 +29,18 @@ Importantly, internet applications run on end systems - they do *not* run in the
 
 How does one program running on one send system instruct the internet to deliver data to another program running on another end system?
 
-End systems attached to the internet provide a *socket interface* that specifies how a program running on one end system asks the internet infrastructure to deliver data to a specific destination program running on another end system.
+End systems attached to the internet provide a *socket interface* that specifies how a program running on one end system asks the internet infrastructure to deliver data to a specific destination program running on another end system. This internet socket interface is a set of rules that the sending program /must/ follow so that the internet can deliver the data to the destination program.
+
+** What is a Protocol?
+
+Note that in our human protocol example, /there are specific messages we send, and specific actions we take in response to the received reply messages or other events/. ... . The same is true of networking - it takes two (or more) communicating entities running the same protocol in order to accomplish a task.
+
+*** Network Protocol
+
+A network protocol is similar to a human protocol, except that the entities exchanging messages and taking actions are hardware or software components of some device. *All activity in the Internet that involves two or more communicating remote entities is governed by a protocol.*
+
+Given the human and networking examples given previously, the exchange of messages and the actions taken when these messages are sent/received are the key defining elements of a protocol:
+
+#+BEGIN_QUOTE
+A *protocol* defines the format and the order of messages exchanged between two or more communicating entities, as well as the actions taken on the transmission and/or receipt of a message or other event.
+#+END_QUOTE
