@@ -1,3 +1,0 @@
-#+TITLE: Notes on: Wickham, H. (2015): Advanced R
-
-derp derp derp
