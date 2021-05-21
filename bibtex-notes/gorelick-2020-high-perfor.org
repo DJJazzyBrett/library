@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-21 18:25:57 boxx>
+#+Time-stamp: <2021-05-21 18:40:42 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -44,4 +44,29 @@ Let's analyze this code using our abstract model of computation and then draw co
 
 *** Idealized computing
 
-When the code starts, we have the value of ~number~ stored in RAM. To calculate ~sqrt_number~ we need to send the value of ~number~ to the CPU.
+When the code starts, we have the value of ~number~ stored in RAM. To calculate ~sqrt_number~ we need to send the value of ~number~ to the CPU. ideally, we could send the value once; it would get stored inside the CPU's L1/L2 cache, and the CPU would do the calculations and then send the values back to RAM to get stored. This scenario is ideal because we have minimized the number of reads of the value of ~number~ from RAM, instead opting for reads from the L1/L2 cahce, which are much faster. Furthermore, we have minimized the number of data transfers through the frontside bus, by using the L1/L2 cache which is connected directly to the CPU.
+
+#+begin_quote
+This theme of keeping data where it is needed and moving it as little as possible is very important when it comes to optimization. The concept of "heavy data" refers to the time and effort required to move data around, which is something we would like to avoid.
+#+end_quote
+
+For the loop in the code, rather than sending one value of ~i~ at a time to the CPU, we would like to send both ~number~ and /several/ values of ~i~ to the CPU to check at the same time. This is possible because the CPU vectorizes operations with *no* additional time cost, meaning it can do multiple independent computations at the same time. So we want to send ~number~ to the CPU cache, in addition to as many values of ~i~ as the cache can hold. For each of the ~number/i~ pairs, we will divide them and check if the result is a whole number; then we will send a signal back indicating whether any of the values was indeed an integer (!). If so, the function ends. If not, we repeat. In this way, we need to communicate back only one result for many values of ~i~, rather than depending on the slow bus for every value. This takes advantage of a CPU's ability to /vectorize/ a calculation, or run one instruction on multiple data in one clock cycle.
+
+The concept of vectorization is illustrated by the following code:
+
+#+begin_src python
+  import math
+
+  def check_prime(number):
+      sqrt_number = math.sqrt(number)
+      numbers = range(2, int(sqrt_number)+1)
+      for i in range(0, len(numbers), 5):
+        # the following line is not valid Python code
+        result = (number / numbers[i:(i + 5)]).is_integer()
+        if any(result):
+            return False
+      return True
+#+end_src
+
+#+RESULTS:
+: None
