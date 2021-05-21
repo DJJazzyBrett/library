@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-21 17:32:46 boxx>
+#+Time-stamp: <2021-05-21 17:35:55 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -9,7 +9,7 @@
 
 * TODO Topics
 
-#+BEGIN_SRC python :results output :noexport
+#+BEGIN_SRC python :results output :exports both
 import random
 random.seed(1)
 print("Hello World! Here's a random number: %f" % random.random())
