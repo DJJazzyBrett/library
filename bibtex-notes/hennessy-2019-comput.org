@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer architecture: a quantitative approach by Hennessy, J. L. (2019)
-#+Time-stamp: <2021-05-21 10:33:26 boxx>
+#+Time-stamp: <2021-05-21 14:53:48 boxx>
 
 - source :: cite:hennessy-2019-comput
 
@@ -16,4 +16,35 @@ Advancements in technology / costs/ etc made it possible to develop successfully
   1. the exploitation of /instruction-level parallelism/ (initially through pipelining and later through multiple instruction issue)
   2. the use of caches (initially in simple forms and later using more sophisticated organizations and optimizations)
 
-The RISC-based computers raised the preformance bar, forcing prior architecture to keep up or disappear.
+The RISC-based computers raised the preformance bar, forcing prior architecture to keep up or disappear. The Digital Equipment Vax could not, and so it was replaced by a RISC architecture. Intel rose to the challenge, primarily by translating 80x86 instructions into RISC-like instructions internally, allowing it to adopt many of the innovations first pioneered in the RISC designs. As transistor counts soared in the late 1990s, the hardware overhead of translating the more complex x86 architecture became negligible. In low-end applications, such as cell phones, the cost in power and silicon area of the x86-translation overhead helped lead to a RISC architecture, ARM, becoming dominant.
+
+** Classes of Parallelism and Parallel Architectures
+
+Parallelism at multiple levels is now the driving force of computer design across all four classes of computers, with energy and cost being the primary constraints. There are basically two (2) kinds of parallelism in applications:
+
+  1. /Data-level parallelism (DLP)/ arises because there are many data items that can be operated on at the same time.
+  2. /Task-level parallelism (TLP)/ arises because tasks of work are created that can operate independently and largely in parallel.
+
+Computer hardware in turn can exploit these two (2) kinds of application parallelism in four (4) major ways:
+
+  1. /Instruction-level parallelism/ exploits data-level parallelism at modest levels with compiler help using ideas like pipelining and at medium levels using ideas like speculative execution.
+  2. /Vector architectures, graphic processor units (GPUs), and multimedia instruction sets/ exploit data-level parallelism by applying a single instruction to a collection of data in parallel.
+  3. /Thread-level parallelism/ exploits either data-level parallelism or task-level parallelism in a tightly coupled hardware model that allows for interaction between parallel threads.
+  4. /Request-level parallelism/ exploits parallelism among largely decoupled tasks specified by the programmer or the operating system.
+
+When Flynn (1966) studied the parallel computing efforts in the 1960s, he found a simple classification whose abbreviations we still use today. They target data-level parallelism and task-level parallelism. He looked at the parallelism in the instruction and data streams called for by the instructions at the most constrained component of the multiprocessor and placed all computers in one of four (4) categories:
+
+  1. /Single instruction stream, single data stream/ (SISD) - This category is the uniprocessor. The programmer thinks of it as the standard sequential computer, but it can exploit ILP. Chapter 3 covers SISD architectures that use ILP techniques such as superscalar and speculative execution.
+  2. /Single instruction stream, multiple data streams/ (SIMD) - The same instruction is executed by multiple processors using different data streams. SIMD computers exploit /data-level parallelism/ by applying the same operations to multiple items of data in parallel. Each processor has its own data memory (hence, the MD of SIMD), but there is a single instruction memory and control processor, which fetches and dispatches instructions. Chapter 4 covers DLP and three (3) different architectures that exploit it: vector architectures, multimedia extensions to standard instruction sets, and GPUs.
+  3. /Multiple instruction streams, single data stream/ (MISD) - No commercial multiprocessor of this type has been built to date, but it rounds out this simple classification.
+  4. /Multiple instruction streams, multiple data streams/ (MIMD) - Each processor fetches its own instructions and operates on its own data, and it targets task-level parallelism. In general, MIMD is more flexible than SIMD and thus more generally applicable, but it is inherently more expensive than SIMD. For example, MIMD computers can also exploit data-level parallelism, although the overhead is likely to be higher than would be seen in an SIMD computer. This overhead means that grain size must be sufficiently large to exploit parallelism efficiently. Chapter 5 covers tightly coupled MIMD architectures, which exploit /thread-level parallelism/ because multiple cooperating threads operate in parallel. Chapter 6 covers loosely coupled MIMD architectures - specifically, /clusters/ and /warehouse-scale computers/ - that exploit /request-level parallelism/, where many independent tasks can proceed in parallel naturally with little need for communication or synchronization.
+
+This taxonomy is a coarse model, as many parallel processors are hybrids of the SIS, SIMD, and MIMD classes. Nonetheless, it is useful to put a framework on the design space for computers we will see in this book.
+
+** Defining Computer Architecture
+
+The task the computer designer faces is a complex one: determine what attributes are important for a new computer, then design a computer to maximize performance and energy efficiency while staying within cost, power, and availability constraints. This task has many aspects, including instruction set design, functional organization, logic design, and implementation. The implementation may encompass integrated circuit design, packaging, pwer, and cooling.
+
+A few decades ago, the term /computer architecture/ generally referred to only instruction set design. Other aspects of computer design were called /implementation/, often insinuating that implementation is uninteresting or less challenging. *We believe this view is incorrect*. The architect's or designer's job is much more than instruction set design, and the technical hurdles in the other aspects of the project are likely more challenging than those encountered in instruction set design.
+
+*** Instruction Set Architecture: The Myopic View of Computer Architecture
