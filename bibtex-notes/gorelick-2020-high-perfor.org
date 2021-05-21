@@ -1,0 +1,54 @@
+#+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
+#+Time-stamp: <2021-05-21 17:29:16 boxx>
+
+- source :: cite:gorelick-2020-high-perfor
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
+
+#+BEGIN_SRC python :results output
+import random
+random.seed(1)
+print("Hello World! Here's a random number: %f" % random.random())
+#+END_SRC
+
+#+RESULTS:
+: Hello World! Here's a random number: 0.134364
+
+#+BEGIN_SRC bash :dir ~/Desktop
+pwd
+#+END_SRC
+
+#+RESULTS:
+: /home/boxx/Desktop
+
+** Idealized Computing Versus the Python Virtual Machine
+
+To better understand the components of high performance programming, let's look at a simple code sample that checks whether a number is prime:
+
+#+BEGIN_SRC python :results output
+  import math
+
+  def check_prime(number):
+      sqrt_number = math.sqrt(number)
+      for i in range(2, int(sqrt_number) + 1):
+          if (number / i).is_integer():
+              return False
+      return True
+
+  print(f"check_prime(10,000,000) = {check_prime(10_000_000)}")
+  print(f"check_prime(10,000,019) = {check_prime(10_000_019)}")
+#+END_SRC
+
+#+RESULTS:
+: check_prime(10,000,000) = False
+: check_prime(10,000,019) = True
+
+Let's analyze this code using our abstract model of computation and then draw comparisons to what happens when Python runs this code. As with any abstraction, we will neglect many of the subtleties in both the idealized computer and the way that Python runs the code. However, this is generally a good exercise to perform before solving a problem: think about the general components of the algorithm and what would be the best way for the computing components to come together to find a solution. By understanding this ideal situation and having knowledge of what is actually happening under the hood in Python we can iteratively bring our Python code closer to the optimal code.
+
+*** Idealized computing
+
+When the code starts, we have the value of :number stored in RAM.
