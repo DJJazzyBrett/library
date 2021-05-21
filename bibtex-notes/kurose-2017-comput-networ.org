@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-21 10:22:40 boxx>
+#+Time-stamp: <2021-05-21 10:24:47 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -116,4 +116,4 @@ Physical media fall into two (2) categories:
   1. *guided media* - the waves are guided along a solid medium, such as fiber-optic cable, a twister-paid copper wire, or coaxial cable
   2. *unguided media* - the waves propogate in the atmosphere and in outer space, such as in a wireless LAN or a digital satellite channel
 
-*** Twisted-Paid Copper Wire
+*** Twisted-Pair Copper Wire
