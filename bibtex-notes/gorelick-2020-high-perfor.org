@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-21 17:29:16 boxx>
+#+Time-stamp: <2021-05-21 17:32:46 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -9,7 +9,7 @@
 
 * TODO Topics
 
-#+BEGIN_SRC python :results output
+#+BEGIN_SRC python :results output :noexport
 import random
 random.seed(1)
 print("Hello World! Here's a random number: %f" % random.random())
@@ -17,10 +17,6 @@ print("Hello World! Here's a random number: %f" % random.random())
 
 #+RESULTS:
 : Hello World! Here's a random number: 0.134364
-
-#+BEGIN_SRC bash :dir ~/Desktop
-pwd
-#+END_SRC
 
 #+RESULTS:
 : /home/boxx/Desktop
