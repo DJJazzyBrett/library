@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-21 17:38:45 boxx>
+#+Time-stamp: <2021-05-21 18:17:13 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -44,4 +44,4 @@ Let's analyze this code using our abstract model of computation and then draw co
 
 *** Idealized computing
 
-When the code starts, we have the value of ~number~ stored in RAM.
+When the code starts, we have the value of ~src_python[:exports code]{number}~ stored in RAM.
