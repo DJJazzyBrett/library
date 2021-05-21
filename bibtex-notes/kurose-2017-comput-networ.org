@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-20 19:18:53 boxx>
+#+Time-stamp: <2021-05-21 10:22:40 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -44,3 +44,76 @@ Given the human and networking examples given previously, the exchange of messag
 #+BEGIN_QUOTE
 A *protocol* defines the format and the order of messages exchanged between two or more communicating entities, as well as the actions taken on the transmission and/or receipt of a message or other event.
 #+END_QUOTE
+
+** The Network Edge
+
+Recall from the previous section that in computer networking jargon, the computers and other devices connected to the internet are often referred to as end systems. The internet's end systems include desktop computers, servers, mobile devices, and an increasing number of non-traditional "things" being attached to the internet as end systems. End systems are alos referred to as /hosts/ because they host (i.e., "run") application programs such as a Web browser program, a Web server program, an e-mail client program, or an e-mail server program. The terms /hosts/ and /end systems/ are often used interchangeably; that is, /host = end system/.
+
+Hosts are sometimes further divided into two categories:
+
+  1. *clients* - informally, these tend to be desktop and mobile PCs, smartphones, and so on
+  2. *servers* - informally, these tend to be more powerful machines that store and distribute Web pages, stream video, relay e-mail, etc.
+
+** Access Networks
+
+A network that physically connects an end system to any other distant end system can be categorized as an access network.
+
+*** Home Access: DSL, Cable, FTTH, Dial-Up, and Satellite
+
+Today, the two most prevalent types of broadband residential access are *digital subscriber line (DSL)* and cable. A residence typically obtains DSL internet access from the same local telephone company (telco) that provides its wired local phone access. Thus, when DSL is used, a customer's telco is also its ISP. Each customer's DSL modem uses the existing telephone line (twisted-pair copper wire) to exchange data with a digital subscriber line access multiplexer (DSLAM) located in the telco's local central office (CO). The home's DSL modem takes digital data and translates it to high-frequency tones for transmission over telephone wires to the CO; the analog signals from many such houses are translated back into digital format at the DSLAM.
+
+The residential telephone line carries both data and traditional telephone signals simultaneaously, which are encoded in different frequencies:
+
+  - a high-speed downstream channel, in the 50 kHz to 1 MHz band
+  - a medium-speed upstream channel, in the 4 kHz to 50 kHz band
+  - an ordinary two-way telephone channel, in the 0 to 4 kHz band
+
+This approach makes the single DSL link appear as if there were three (3) separate links, so that a telephone call and an internet connection can share the DSL link at the same time. On the customer side, a splitter separates the data and telephone signals arriving to the home and forwards the data signal to the DSL modem. On the telco side, in the CO, the DSLAM separates the data and phone signals and sends the data into the internet. Hundreds or even thousands of households connect to a single DSLAM.
+
+The DSL standards define multiple transmission rates, including 12 Mbps downstream and 1.8 Mbps upstream [ITU 1999], and 55 Mbps downstream and 15 Mbps upstream [ITU 2006]. Because the downstream and upstream rates are different, the access is said to be /asymmetric/. The actual downstream and upstream transmission rates achieved may be less than the rates noted above, as the DSL provider may purposefully limit a residential rate when tiered services are offered. The maximum rate is also limited by the distance between the home and the CO, the gauge of the twisted-pair line and the degree of electrical interference.
+
+While DSL makes use of the telco's existing local telephone infrastructure, *cable internet access* makes use of the cable television company's existing cable television infrastructure. A residence obtains cable internet access from the same company that provides its cable television. Fiber optics connect the cable head end to the neighborhood-level junctions, from which traditional coaxial cable is then  used to reach individual houses and apartments. Each neighborhood junction typically supports 500 to 5,000 homes. Because both /fiber/ and /coaxial/ cable are employed in this system, it is often referred to as /hybrid fiber coax (HFC)/.
+
+Cable internet access requires special modems, call cable modems. As with a DSL modem, the cable modem is typcially an external device that connects to the home PC through an Ethernet port. At the cable head end, the cable modem termination system, or CMTS, serves a similar function as the DSL network's DSLAM - turning the analog signal sent from the cable modems in many downstream homes back into digital format. Cable modems divide the HFC network into two (2) channels, a downstream channel and an upstream channel. As with DSL, access is typcially /asymmetric/, with the downstream channel typically allocated a higher transmission rate than the upstream channel.
+
+The DOCSIS (Data-Over-Cable Service Interface Specifications) 2.0 standard defines downstream rates up to 42.8 Mbps and upstream rates of up to 30.7 Mbps. As in the case of DSL networks, the maximum achievable rate may not be realized due to lower contracted data rates or media impairments.
+
+One important characteristic of cable internet access is that it is a /shared broadcast medium/. In particular, every packet sent by the head end travels downstream on every link to every home and every packet sent by a home travels on the upstream channel to the head end. For this reason, if several users are simultaneously downloading a video file on the downstream channel, the actual rate at which each user received its video file will be significantly lower than the aggregate cable downstream rate. On the other hand, if there are only a few active users and they are all Web surfing, then each of the users may actually receive Web pages at the full cable downstream rate, because the users will rarely request a Web page at exactly the same time. Because the upstream channel is also shared, a distributed multiple access protocol is needed to coordinate transmissions and avoid collisions.
+
+Although DSL and cable networks currently represent more than 85 percent of residential broadband access in the United States, an up-and-coming technology that provides even higher speeds is the *fiber to the home (FTTH)*. As the name suggests, the FTTH concept is simple - provide an optical fiber path from the CO directly to the home.
+
+There are several competing technologies for optical distribution from the CO to the homes. The simplest optical distribution network is called /direct fiber/, with one fiber leaving the CO for each home. More commonly, each fiber leaving the central office is actually shared by many homes; it is not until the fiber gets relatively close to the homes that it is split into individual customer-specific fibers.
+
+There are two (2) competing optical-distribution network architectures that perfrom this splitting:
+
+  1. *active optical networks (AONs)* - essentially switched Ethernet .... more on this later
+  2. *passive optical networks (PONs)* - each home has an optical network terminator (ONT) which is connected by dedicated optical fiber to a neighborhood splitter; the splitter combines a number of individual ONTs onto a single, shared optical fiber which connects to an optical line terminator (OLT) in the telco's CO; the OLT, providing conversion between optical and electrical signals connects to the internet via a telco router; in the home, users connect a home router (typically a wireless router) to the ONT and access the internet via this home router; in the PON architecture, all packets sent from OLT to the splitter are replicated at the splitter (similar to a cable head end)
+
+Two other access network technologies are also used to provide internet access to the home. In locations where DSL, cable, and FTTH are not available (e.g., some rural settings), a satellite link can be used to connect a residence to the internet. Dial-up access over traditional phone lines is based on the same model as DSL - a home modem connects over a phone line to a modem in the ISP.
+
+*** Access in the Enterprise (and the Home): Ethernet and WiFi
+
+On corporate and university campuses, and increasingly in home settings, a local area network, or LAN, is used to connect an end system to the edge router. Although there are many types of LAN technologies, Ethernet is by far the most prevalent access technology in corporate, university, and home networks. Ethernet users use twisted-pair copper wire to connect to an Ethernet switch. The Ethernet switch, or a network of interconnected switches, is then in turn connected into the larger internet.
+
+Increasingly, however, people are accessing the internet wirelessly from laptops, phones, tablets, and other "things". In a wireless LAN setting, wireless users transmit/receive packets to/from an access point that is connected into the enterprise's network (most likely using wired Ethernet), which in turn is connected to a wired internet. A wireless LAN user must typcially be within a few tens of meters of the access point. Wireless LAN access based on IEEE 802.11 technology, more colloquially known as *WiFi*, is now just about everywhere. As discussed in detail in Chapter 7, 802.11 today provides a shared transmission rate of up to more than 100 Mbps.
+
+Even though Ethernet and WiFi access networks were initially deployed in enterprise (sorporate, university) settings, they have recently become relatively common components of home networks. Many homes compbine broadband residential access (that is, cable modems or DSL) with these inexpensive wireless LAN technologies to create powerful home networks.
+
+Figure 1.9 on page 18 shows a typical home network. This home network consists of a roaming laptop as well as a wired PC; a base station (the wireless access point), which communicates with the wireless PC and other wireless devices in the home; a cable modem, providing broadband access to the internet; and a router, which interconnects the base station and the stationary PC with the cable modem.
+
+Telecommunications companies have made enormous investments in so-called third-generation (3G) wireless, which provides packet-switched wide-area wireless internet access at speeds in excess of 1 Mbps. But even higher-speed wide-area access technologies - a fourth-generation (4G) of wide-area wireless networks - are already being deployed. LTE (for "Long-Term Evolution") has its roots in 3G technology, and can achieve rates in excess of 10 Mbps.
+
+** Physical Media
+
+In order to define what is meant by a physical medium, let us reflect on the brief life of a bit.
+
+Consider a bit traveling from one end system, through a series of links and routers, to another end system. This poor bit gets kicked around and transmitted many, many times! The source end system first transmits the bit, and shortly thereafter the first router in the series receives the bit; the first router then transmits the bit, and shortly thereafter the second router receives the bit; and so on. Thus our bit, when traveling from source to destination, passes through a series of /transmitter-receiver pairs/. For each transmitter-receiver pair, the bit is sent by propogating electromagnetic waves or optical pulses across a *physical medium*. The physical medium can take many shapes and forms and does /not/ have to be of the same type for each transmitter-receiver pair along the path.
+
+Examples of physical media include twisted-pair copper wire, coaxial cable, multimode fiber-optic cable, terrestrial radio spectrum,and satellite radio spectrum.
+
+Physical media fall into two (2) categories:
+
+  1. *guided media* - the waves are guided along a solid medium, such as fiber-optic cable, a twister-paid copper wire, or coaxial cable
+  2. *unguided media* - the waves propogate in the atmosphere and in outer space, such as in a wireless LAN or a digital satellite channel
+
+*** Twisted-Paid Copper Wire
