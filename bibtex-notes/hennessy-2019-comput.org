@@ -1,0 +1,19 @@
+#+TITLE: Notes on: Computer architecture: a quantitative approach by Hennessy, J. L. (2019)
+#+Time-stamp: <2021-05-21 10:33:26 boxx>
+
+- source :: cite:hennessy-2019-comput
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
+
+** RISC-Based Machines
+
+Advancements in technology / costs/ etc made it possible to develop successfully a new set of architectures with simpler instructions, called RISC (Reduced Instruction Set Computer) architectures in the early 1980s. The RISC-based machines focused the attention of designers on two (2) critical performance techniques:
+
+  1. the exploitation of /instruction-level parallelism/ (initially through pipelining and later through multiple instruction issue)
+  2. the use of caches (initially in simple forms and later using more sophisticated organizations and optimizations)
+
+The RISC-based computers raised the preformance bar, forcing prior architecture to keep up or disappear.
