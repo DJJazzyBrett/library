@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-21 18:40:42 boxx>
+#+Time-stamp: <2021-05-23 16:34:28 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -11,18 +11,18 @@
 
 #+BEGIN_SRC python :results output :exports both
 import random
-random.seed(1)
+random.seed()
 print("Hello World! Here's a random number: %f" % random.random())
 #+END_SRC
 
 #+RESULTS:
-: Hello World! Here's a random number: 0.134364
+: Hello World! Here's a random number: 0.867466
 
 ** Idealized Computing Versus the Python Virtual Machine
 
 To better understand the components of high performance programming, let's look at a simple code sample that checks whether a number is prime:
 
-#+BEGIN_SRC python :results output
+#+BEGIN_SRC python :results output :exports both
   import math
 
   def check_prime(number):
@@ -70,3 +70,84 @@ The concept of vectorization is illustrated by the following code:
 
 #+RESULTS:
 : None
+
+Here, we set up the processing such that the division and the checking for integers are done on a set of five values of ~i~ at a time. If properly vectorized, the CPU can do this line in one step as opposed to doing a separate calculation for every ~i~. Ideally, the ~any(result)~ operation would also happen in the CPU without having to transfer the results back to RAM.
+
+*** Python's virtual machine
+
+The Python interpreter does a lot of work to try to abstract away the underlying computing elements that are being used. At no point does a programmer need to worry about allocating memory for arrays, how to arrange that memory, or in what sequence it is being sent to the CPU. This is a benefit of Python, since it lets you focus on the algorithms that are being implemented. However, it comes at a huge performance cost.
+
+It is important to realize that at its core, Python is indeed running a set of very optimized instructions. The trick, however, is getting Python to perform them in the correct sequence to achieve better performance. For example. it is quite easy to see that, in the following example, ~search_fast~ will run faster than ~search_slow~ simply because it skips the unnecessary computations that result from not terminating the loop early, /even though both solutions have runtime O(n)/. However, things can get complicated when dealing with derived types, special Python methods, or third-party modules. For example, can you immediately tell which function will be faster: ~search_unknown1~ or ~search_unknown2~?
+
+#+begin_src python
+  def search_fast(haystack, needle):
+      for item in haystack:
+          if item == needle:
+              return True
+      return False
+
+  def search_slow(haystack, needle):
+      return_value = False
+      for item in haystack:
+          if item == needle:
+              return_value = True
+      return return_value
+
+  def search_unknown1(haystack, needle):
+      return any((item == needle for item in haystack))
+
+  def search_unknown2(haystack, needle):
+      return any([item == needle for item in haystack])
+#+end_src
+
+#+RESULTS:
+: None
+
+Identifying slow regions of code through profiling and finding more efficient ways of doing the same calculations is similar to finding these useless operations and removing them; the end result is the same, but the number of computations and data transfers is reduced drastically.
+
+*One of the impacts of this abstraction layer is that vectorization is not immediately achievable.* Out initial prime number routine will run one iteration of the loop per value of ~i~ instead of combining several iterations. However, looking at the abstracted vectorization example, we see that it is *not* valid Python code, since we cannot divide a float by a list. External libraries such as ~numpy~ will help with this situation by adding the ability to do vectorized mathematical operations.
+
+Furthermore, Python's abstraction hurts any optimizations that rely on keeping the L1/L2 cache filled with the relevant data for the next computation. This comes from many factors, the first being that Python objects are not laid out in the most optimal way in memory. This is a consequence of Python being a garbage-collected language - memory is automatically allocated and freed when needed. This creates memory fragmentation that can hurt the transfers to the CPU caches. In addition, at no point is there an opportunity to change the layout of a data structure directly in memory, which means that one transfer on the bus may not contain all the relevant information for a computation, even though it might have all fit within the bus width.
+
+*A second, more fundamental problem comes from Python's dynamic types and the language not being compiled.* As many C programmers have learned throughout the years, the compiler is often smarter than you are. When compiling code that is static, the compiler can do many tricks to change the way things are laid out and how the CPU will run certain instructions in order to optimize them. *Python, however, is not compiled: to make matters worse, it has dynamic types, which means that inferring any possible opportunities for optimization algorithmically is drastically harder since code functionality can be changed during runtime*. There are many ways to mitigate this problem, foremost being the use of Cython, which allows Python code to be compiled and allows the user to create "hints" to the compiler as to how dynamic the code actually is.
+
+Finally, the previously mentioned GIL can hurt performance if trying to parallelize this code. For example, let's assume we change the code to use multiple CPU cores such that each core gets a chunk of the numbers from 2 to ~srtN~. Each core can do its calculation for its chunk of numbers, and then, when the calculations are all done, the cores can compare their calculatons. Although we lose the early termination of the loop since each core doesn't know if a solution has been found, we can reduce the number of checks each core has to do (if we had ~M~ cores, each core would have to do ~sqrtN / M~ checks). However, because of the GIL, only one core can be used at a time. This means that we would effectively be running the same code as the unparalleled version, but we no longer have early termination. We can avoid this problem by using multiple processes (with the ~multiprocessing~ module) instead of multiple threads, or by using Cython or foreign functions.
+
+** So Why Use Python?
+
+Python is highly expressive and easy to learn - new programmers quickly discover that they can do quite a lot in a short space of time. Many Python libraries wrap tools written in other languages to make it easy to call other systems; for example, the scikit-learn machine learning system wraps LIBLINEAR and LIBSVM (both of which are written in C), and the ~numpy~ library includes BLAS and other C and Fortran libraries. As a result, Pyhton code that properly utilizes these modules can be indeed as fast as comparable C code.
+
+Python is described as "batteries included", as many important tools and stable libraries are built in. These include the following:
+
+  - ~unicode~ and ~bytes~ --- baked into the core language
+  - ~array~ --- memory-efficient arrays for primitive types
+  - ~math~ --- basic mathematical operations, including some simple statistics
+  - ~sqlite3~ --- a wrapper around the prevalent SQL file-based storage engine SQLite3
+  - ~collections~ --- a wide variety of objects, including a deque, counter, and dictionary variants
+  - ~asyncio~ --- concurrent support for I/O-bound tasks using async and await syntax
+
+A huge variety of libraries can be found outside the core language, including these:
+
+  - ~numpy~ --- a numerical Python library (a bedrock for anything to do with matrices)
+  - ~scipy~ --- a very large collection of trusted scientific libraries, often wrapping highly respected C and Fortran libraries
+  - ~pandas~ --- a library for data analysis, similar to R's data frames or an Excel spreadsheet, built on ~scipy~ and ~numpy~
+  - /scikit-learn/ --- rapidly turning into the default machine learning library, built on ~scipy~
+  - ~tornado~ --- a library that provides easy bindings for concurrency
+  - /PyTorch/ and /TensorFlow/ --- deep learning frameworks from Facebook and Google with strong Python and GPU support
+  - ~NLTK~, ~SpaCy~, and ~Gensim~ --- natural-language processing libraries with deep Python support
+  - /Database bindings/ --- for communicating with virtually all databases, including Redis, MongoDB, HDF5, and SQL
+  - /Web development frameworks/ --- performant systems for creating websites, such as ~aiohttp~, ~django~, ~pyramid~, ~flask~, and ~tornado~
+  - ~OpenCV~ --- bindings for computer vision
+  - /API bindings/ --- for easy access to popular web APIs such as Google, Twitter, and LinkedIn
+
+A large selection of managed environments and shells is available to fit various deployment scenarios, including the following:
+
+  - the standard distribution, available at http://python.org
+  - ~pipenv~, ~pyenv~, and ~virtualenv~ for simple, lightweight, and portable Python environments
+  - Docker for simple-to-start-and-reproduce environments for development or production
+  - Anaconda Inc.'s Anaconda, a scientifically-focused environment
+  - Sage, a Matlab-like environment that includes an IDE
+  - IPython, an interactive Python shell heavily used by scientists and developers
+  - Jupyter Notebook, a browser-based extension to IPython, heavily used for teaching and demonstrating
+
+One of Python's main strengths is that it enables fast prototyping of an idea. Because of the wide variety of supporting libraries, it is easy to test whether am idea is feasible, even if the first implementation might be rather flaky. If you want to make your mathematical routines faster, look to ~numpy~. If you want to experiement with machine learning, try ~scikit-learn~. If you are cleaning and manipulating data, then ~pandas~ is a good choice.
