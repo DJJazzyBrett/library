@@ -1,5 +1,6 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 16:35:20 boxx>
+#+OPTIONS: tex:t
+#+Time-stamp: <2021-05-24 16:37:12 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
