@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-23 16:34:28 boxx>
+#+Time-stamp: <2021-05-24 16:13:11 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -151,3 +151,15 @@ A large selection of managed environments and shells is available to fit various
   - Jupyter Notebook, a browser-based extension to IPython, heavily used for teaching and demonstrating
 
 One of Python's main strengths is that it enables fast prototyping of an idea. Because of the wide variety of supporting libraries, it is easy to test whether am idea is feasible, even if the first implementation might be rather flaky. If you want to make your mathematical routines faster, look to ~numpy~. If you want to experiement with machine learning, try ~scikit-learn~. If you are cleaning and manipulating data, then ~pandas~ is a good choice.
+
+#+begin_quote
+When you're developing your tests, think about following a test-driven development methodology. When you know exactly what you need to develop and you have testable examples at ahnd - this method becomes very efficient.
+
+You write your tests, run them, watch them fail, and /then/ add the functions and the necessary minimum logic to support the tests that you've written. When your tests all work, you're done. By figuring out the expected input & output of a function ahead of time, you'll find implementing the logic of the function relatively straightforward.
+
+If you can't define your tests ahead of time, it naturally raises the question, do you really understand what your function needs to do? If not, can you write it correctly in an efficient manner? This method doesn't work so well if you're in a creative process and researching data that you don't yet understand well.
+#+end_quote
+
+** Profiling to Find Bottlenecks
+
+/Profiling/ let's us find bottlenecks so we can do the least amount of work to get the biggest practical performance gain. Any measurable resource can be profiled (*not* just the CPU!).
