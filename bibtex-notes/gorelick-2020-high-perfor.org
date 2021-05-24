@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 16:48:42 boxx>
+#+Time-stamp: <2021-05-24 19:25:52 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -169,3 +169,102 @@ We will analyze a block of code that produces both a false grayscale and a pure 
 We define a set of /z/ coordinates that we'll test. The function that we calculate squares the complex number ~z~ and adds ~c~:
 
 f(z) = z^{2} + c
+
+We iterate on this function while testing to see if the escape condition holds using ~abs~. If the escape function is ~False~, we break out of the loop and record the number of iterations performed at this coordinate. If the escape function is never ~False~, we stop after ~maxiter~ iterations. We will later turn ~z~'s result into a colored pixel representing this complex location.
+
+#+begin_src python :session :results output :exports both
+"""Julia set generator without optional PIL-based image drawing"""
+import time
+import array
+
+# area of complex space to investigate
+x1, x2, y1, y2 = -1.8, 1.8, -1.8, 1.8
+c_real, c_imag = -0.62772, -0.42193
+#+end_src
+
+#+RESULTS:
+
+To generate the plot, we create two lists of input data. The first is ~zs~ (complex ~z~ coordinates), and the second is ~cs~ (a complex initial condition). Neither list varies, and we could optimize ~cs~ to a single ~c~ value as a constant. The rational for building two input lists is so that we have some reasonable-looking data to profile when we profile RAM usage later in this chapter.
+
+To build the ~zs~ and ~cs~ lists, we need to know the coordinates for each ~z~. In the following snippet, we build up these coordinates using ~xcoord~ and ~ycoord~ and a specified ~x_step~ and ~y_step~. This somewhat verbose nature of this setup is useful when porting the code to other tools (such as ~numpy~) and to other Python environments, as it helps to have everything /very/ clearly defined for debugging.
+
+#+begin_src python :session :results output :exports both
+def calc_pure_python(desired_width, max_iterations):
+    """Create a list of complex coordinates (zs) and complex parameters (cs),
+    build a Julia set"""
+    x_step = (x2 - x1) / desired_width
+    y_step = (y1 - y2) / desired_width
+    x = []
+    y = []
+    ycoord = y2
+    while ycoord > y1:
+        y.append(ycoord)
+        ycoord += y_step
+    xcoord = x1
+    while xcoord < x2:
+        x.append(xcoord)
+        xcoord += x_step
+    # build a list of coordinates and the initial condition for each cell.
+    # Note that our initial condition is a constant and could easily be removed,
+    # we use it to simulate a real-world scenario with several inputs to our
+    # function
+    zs = []
+    cs = []
+    for ycoord in y:
+        for xcoord in x:
+            zs.append(complex(xcoord, ycoord))
+            cs.append(complex(c_real, c_imag))
+
+    print("Length of x: ", len(x))
+    print("Total elements: ", len(zs))
+    start_time = time.time()
+    output = calculate_z_serial_purepython(max_iterations, zs, cs)
+    end_time = time.time()
+    secs = end_time - start_time
+    print(calculate_z_serial_purepython.__name__ + " took", secs, "seconds")
+
+    # This sum is expected for a 1000^2 grid with 300 iterations.
+    # It ensures that our code evolves exactly as we'd intended
+    assert sum(output) == 33219980
+#+end_src
+
+#+RESULTS:
+
+Having built the ~zs~ and ~cs~ lists, we output some information about the size of the lists and calculate the output list via ~calculate_z_serial_purepython~. Finally, we ~sum~ the contents of ~output~ and ~assert~ that it matches the expected output value.
+
+As the code is deterministic, we can verify that the function works as we expect by summing all the calculated values. This is useful as a sanity check - when we make changes to numerical code, it is /very/ sensible to check that we haven't broken the algorithm. Ideally, we would use unit tests and test more than one configuration of the problem.
+
+In the following snippet we define the ~calculate_z_serial_purepython~ function, which expands on the previously discussed algorithm. Notably, we also define an ~output~ list at the start that has the same length as the input ~zs~ and ~cs~ lists.
+
+#+begin_src python :session :results output :exports both
+def calculate_z_serial_purepython(maxiter, zs, cs):
+     """Calculate output list using Julia update rule"""
+     output = [0] * len(zs)
+     for i in range(len(zs)):
+         n = 0
+         z = zs[i]
+         c = cs[i]
+         while abs(z) < 2 and n < maxiter:
+             z = z * z + c
+             n += 1
+         output[i] = n
+     return output
+#+end_src
+
+#+RESULTS:
+
+Now we call the calculation routine. By wrapping it in a ~__main__~ check, we can safely import the module without starting the calculations for some of the profiling methods.
+
+#+begin_src python :session :results output :exports both
+if __name__ == "__main__":
+    # Calculate the Julia set using a pure Python solution with
+    # reasonable defaults for a laptop
+    calc_pure_python(desired_width=1000, max_iterations=300)
+#+end_src
+
+#+RESULTS:
+: Length of x:  1000
+: Total elements:  1000000
+: calculate_z_serial_purepython took 5.2188544273376465 seconds
+
+*** Simple Approaches to Timing - print and a Decorator
