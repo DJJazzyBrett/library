@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 16:42:19 boxx>
+#+Time-stamp: <2021-05-24 16:43:05 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -168,6 +168,4 @@ We will analyze a block of code that produces both a false grayscale and a pure 
 
 We define a set of /z/ coordinates that we'll test. The function that we calculate squares the complex number ~z~ and adds ~c~:
 
-\[
 f(z) = z^{2} + c
-\]
