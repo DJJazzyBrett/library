@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 16:13:11 boxx>
+#+Time-stamp: <2021-05-24 16:35:20 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -162,4 +162,15 @@ If you can't define your tests ahead of time, it naturally raises the question, 
 
 ** Profiling to Find Bottlenecks
 
-/Profiling/ let's us find bottlenecks so we can do the least amount of work to get the biggest practical performance gain. Any measurable resource can be profiled (*not* just the CPU!).
+/Profiling/ let's us find bottlenecks so we can do the least amount of work to get the biggest practical performance gain. Any measurable resource can be profiled (*not* just the CPU!). The first aim of profiling is to test a representative system to identify what's slow, or using too much RAM, or causing too much disk I/O or netowrk I/O. Profiling typically adds an overhead (10x to 100x slowdowns can be typical), and you still want your code to be used in as similar to a real-world situation as possible. Extract a test case and isolate the piece of the system that you need to test. Preferably, it will have been written to be in its own set of modules already.
+
+We will analyze a block of code that produces both a false grayscale and a pure grayscale variant of the Julia set, at the complex point ~c = -0.62772-0.42193j~. A Julia set is produced by calculating each pixel in isolation; this is an "embarassinly parallel problem," as no data is shared between points. The problem is interesting because we calculate each pixel by applying a loop that could be applied an indeterminate number of times. On each iteration we test to see if this coordinate's value escapes toward infinity, or if it seems to be held by an attractor. Coordinates that cause few iterations are colored darkly, and those that cause a high number of iterations are colored white. White regions are more complex to calculate and so take longer to generate.
+
+We define a set of /z/ coordinates that we'll test. The function that we calculate squares the complex number ~z~ and adds ~c~:
+
+#+NAME: eqn:1
+\begin{equation}
+    f(x) =  \sum\limits_0^\infty(f^{(n)}(x)|_{x=0} \cdot x)
+\end{equation}
+
+And this is equation [[eqn:1]]
