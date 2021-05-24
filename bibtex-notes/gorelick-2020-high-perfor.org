@@ -1,5 +1,5 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 16:46:32 boxx>
+#+Time-stamp: <2021-05-24 16:47:46 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -168,12 +168,6 @@ We will analyze a block of code that produces both a false grayscale and a pure 
 
 We define a set of /z/ coordinates that we'll test. The function that we calculate squares the complex number ~z~ and adds ~c~:
 
+#+begin_center
 f(z) = z^{2} + c
-
-
-\begin{equation}                        % arbitrary environments,
-x=\sqrt{b}                              % even tables, figures
-\end{equation}                          % etc
-
-If $a^2=b$ and \( b=2 \), then the solution must be
-either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
+#+end_center
