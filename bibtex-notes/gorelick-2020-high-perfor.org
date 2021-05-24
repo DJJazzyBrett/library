@@ -1,6 +1,6 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
 #+OPTIONS: tex:t
-#+Time-stamp: <2021-05-24 16:37:12 boxx>
+#+Time-stamp: <2021-05-24 16:40:15 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
@@ -169,9 +169,6 @@ We will analyze a block of code that produces both a false grayscale and a pure 
 
 We define a set of /z/ coordinates that we'll test. The function that we calculate squares the complex number ~z~ and adds ~c~:
 
-#+NAME: eqn:1
-\begin{equation}
+\[
     f(x) =  \sum\limits_0^\infty(f^{(n)}(x)|_{x=0} \cdot x)
-\end{equation}
-
-And this is equation [[eqn:1]]
+\]
