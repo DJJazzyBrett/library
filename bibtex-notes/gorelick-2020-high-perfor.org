@@ -1,11 +1,18 @@
 #+TITLE: Notes on: High Performance Python by Gorelick, M., & Ozsvald, I. (2020)
-#+Time-stamp: <2021-05-24 19:25:52 boxx>
+#+Time-stamp: <2021-05-25 10:53:34 boxx>
 
 - source :: cite:gorelick-2020-high-perfor
 
 * TODO Summary
 
 * TODO Comments
+
+#+BEGIN_SRC shell
+  echo $SHELL
+#+END_SRC
+
+#+RESULTS:
+: /bin/bash
 
 * TODO Topics
 
@@ -268,3 +275,35 @@ if __name__ == "__main__":
 : calculate_z_serial_purepython took 5.2188544273376465 seconds
 
 *** Simple Approaches to Timing - print and a Decorator
+
+In the ~calc_pure_python~ definition, we can see several ~print~ statements. This is the simplest way to measure the execution time of a piece of code /inside/ a function. It is a basic approach, but despite being quick and dirty, it can be very useful when you're first looking at a piece of code.
+
+Using ~print~ statements is commonplace when debugging and profiling code. It quickly becomes unmanageable but is useful for short investigations. Try to tidy up the ~print~ statements~ when you're done with them, or they will clutter your ~stdout~.
+
+A slightly cleaner approach is to use a /decorator/ - here, we add one line of code above the function that we care about. Our decorator can be very simple and just replicate the effect of the ~print~ statements. Later, we can make it more advanced.
+
+In the following snippet, we define a new function, ~timefn~, which takes a function as an argument: the inner function,~measure_time~, takes ~*args~ (a variable number of positional arguments) and ~**kwargs~ (a variable number of key/value arguments) and passes them through to ~fn~ for execution. Around the execution of ~fn~, we capture ~time.time()~ and then ~print~ the result along with ~fn.__name__~. The overhead might become noticeable. We use ~@wraps(fn)~ to expose the function name and docstring to the caller of the decorated function (otherwise, we would see the function name and docstring for the decoration, not the function it decorates).
+
+#+begin_src python :session :results output :exports both
+  from functools import wraps
+
+  def timefn(fn):
+      @wraps(fn)
+      def measure_time(*args, **kwargs):
+          t1 = time.time()
+          result = fn(*args, **kwargs)
+          t2 = time.time()
+          print(f"@timefn: {fn.__name__} took {t2 - t1} seconds")
+          return results
+      return measure_time
+#+end_src
+
+#+RESULTS:
+
+When we run this version (we keep the ~print~ statements from before), we can see that the execution time in the decorated version is ever-so-slightly quicker than the call from ~cal_pure_python~. This is due to the overhead of calling a function (the difference is very tiny).
+
+We can use the ~timeit~ module as another way to get a coarse measurement of the execution speed of our CPU-bound function. More typically, you would use this when timing different types of simple expressions as you experiement with ways to solve a problem.
+
+#+begin_quote
+The ~timeit~ module temporarily disables the garbage collector. This might impact the speed you'll see with real-world operations if the garbage collector would normally be invoked by your operations.
+#+end_quote
