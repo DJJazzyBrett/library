@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Commonsense reasoning: an event calculus based approach by Mueller, E. T. (2015)
-#+Time-stamp: <2021-05-26 16:28:53 boxx>
+#+Time-stamp: <2021-05-26 17:10:58 boxx>
 
 - source :: cite:mueller-2015-common
 
@@ -91,3 +91,54 @@ Recall that the commonsense law of inertia states that things stay the same unle
 In order to reason about this scenario, we must also be able to represent and reason about triggered events. The water level does not increase endlessly. When a sink is filling and the water reaches the rim of the sink, the sink will overflow. We should be able to represent and reason that, when a sink overflows, the water starts spilling onto the floow and the water level stops increasing. At this point, the water level will again be subject to the commonsense law of inertia.
 
 *** Default reasoning
+
+When we perform commonsense reasoning, we rarely have complete information. We are unlikely to know the state of affairs down to the last detail, everything about the events that are occurring, or everything about the way the world works. Therefore, when we perform commonsense reasoning, we must jump to conclusions. Yet, if new information becomes available that invalidates those conclusions, then we must also be able to take them back. Reasoning in which we reach conclusions and retract those conclusions (when warranted) is known as /default reasoning/.
+
+*** Mental states
+
+We must represent the piece of commonsense knowledge that, if an agent has an unsatisfied goal, then the agent will form a plan to achieve that goal. We must further represent that agents act on their plans.
+
+*** Reasoning types
+
+A method for automated commonsense reasoning must support several types of commonsense reasoning. The first is /temporal projection/ or /prediction/, in which we start with an initial state and some events and then reason about the state the results from the events. The second type of reasoning is /abduction/, in which we start with an initial state and a final state and then reason about the events that lead from the initial state to the final state. The third type of reasoning is /postdiction/, in which we start with some events that lead to a state and then reason about the state prior to the events.
+
+*** SUMMARY
+
+Any method for commonsense reasoning must address the following:
+
+  - /Representation/. The method must represent scenarios in the world and must represent commonsense knowledge about the world.
+  - /Commonsense entities/. The method must represent objects, agents, time-varying properties, events, and time.
+  - /Commonsense domains/. The method must represent and reason about time, space, and mental states.
+  - /Commonsense phenomena/. The method must address the commonsense law of inertia, release from the commonsense law of inertia, concurrent events with cumulative and canceling effects, context-sensitive effects, continuous change, delayed effects, indirect effects, nondeterministic effects, preconditions, and triggered events.
+  - /Reasoning/. The method must specify processes for reasoning using representations of scenarios and representations of commonsense knowledge. The method must support default reasoning, temporal projection, abduction, and postdiction.
+
+** The Event Calculus
+
+The event calculus addresses all the key issues of commonsense reasoning described in the previous section. Using the event calculus we can represent commonsense knowledge, represent scenarios, and use the knowledge to reason about the scenarios.
+
+*** Events, Fluents, and Timepoints
+
+The basic notions of the event calculus are as follows:
+
+  - an /event/ represents an event or action that may occur in the world, such as a person picking up a glass; we use the words /event/ and /action/ interchangeably
+  - a /fluent/ represents a time-varying property of the world, such as the location of a physical object
+  - a /timepoint/ represents an instant of time, such as 9:30 AM Greenwich Mean Time on November 13, 2017; the event calculus uses /linear time/, in which time is considered to be a line, rather than the /branching time/ of the situation calculus, in which time is considered to be a tree
+
+An event may occur or happen at a timepoint. A fluent has a truth value at a timepoint or over a timepoint interval; the possible truth values are true and false. After an event occurs, the truth values of the fluents may change. We have commonsense knowledge about the effects of events on fluents. Specifically, we have knowledge about events that initiate fluents and events that terminate fluents.
+
+For example, we know that the event of picking up a glass initiates the fluent of holding the glass and that the event of setting down a glass terminates the fluent of holding the glass. We represent these notions in first-order logic as follows:
+
+   /HoldsAt(f,t)/ represents that fluent /f/ is true at timepoint /t/.
+   /Happens(e,t)/ represents that event /e/ occurs at timepoint /t/.
+   /Initiates(e,f,t)/ represents that, if event /e/ occurs at timepoint /t/, then fluent /f/ will be true after /t/.
+   /Terminates(e,f,t)/ represents that, if event /e/ occurs at timepoint /t/, then fluent /f/ will be false after /t/.
+
+**** A simple example
+
+Here is a simple example of how the event calculus works. We use a simplified version of the event calculus, consisting of the following single axiom:
+
+#+begin_center
+(Happens(e, t_1) \wedge Initiates(e, f, t_1) \wedge t_1 < t_2 \wedge
+\neg\exists e, t (Happens(e, t) \wedge t_1 < t \wedge t < t_2 \wedge Terminates(e, f, t))) \Rightarrow
+HoldsAt(f, t_2)
+#+end_center
