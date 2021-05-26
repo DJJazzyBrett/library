@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer architecture: a quantitative approach by Hennessy, J. L. (2019)
-#+Time-stamp: <2021-05-21 15:38:26 boxx>
+#+Time-stamp: <2021-05-26 11:01:47 boxx>
 
 - source :: cite:hennessy-2019-comput
 
@@ -62,3 +62,22 @@ RISC-V is a modern RISC instruction set developed at the University of Californi
 7. /Encoding an ISA/ - There are two (2) basic choices on encoding: /fixed length/ and /variable length/. *All ARMv8 and RISC-V instructions are 32 bits long, which simplifies instruction decoding*. The 80x86 encoding is variable length, ranging from 1 to 18 bytes. Variable-length instructions can take less space than fixed-length instructions, soa program compiled for the 80x86 is usually smaller than the same program compiled for RISC-V. /Note that choices mentioned previously will affect how the instructions are encoded into a binary representation/. For example, the number of registers and the number of addressing modes both have a significant impact on the size of instructions, because the register field and addressing mode field can appear many times in a single instruction. (Note that ARMv8 and RISC-V later offered extensions, called Thumb-2 and RV64IC, that provide a mix of 16-bit and 32-bit length instructions, respectively, to reduce program size. Code size for these compact versions of RISC architectures are smaller than that of the 80x86.)
 
    The other challenges facing the computer architect beyond ISA design are particularly acute at the present, when the difference among instruction sets are small and when there are distinct application areas. Therefore, starting with the fourth edition of this book, beyond this quick review, the bulk of the instruction set material is found in the appendices (see Appendices A and K).
+
+*** Genuine Computer Architecture: Designing the Organization and Hardware to Meet Goals and Functional Requirements
+
+The implementation of a computer has two (2) components: organization and hardware. The terms /organization/ includes the high-level aspects of a computer's design, such as the memory system, the memory interconnect, and the design of the internal processor or CPU (Central Processing Unit .... where arithmetic, logic, branching, and data transfer are implemented). The term /microarchitecture/ is also used instead of /organization/. For example, two (2) processors with the same instruction set architecture but different organizations are the AMD Opteron and the Intel Core i7. Both processors implement the 80x86 instruction set, but they have very different pipeline and cache organizations.
+
+The switch to multiple processors per microprocessor led to the term /core/ also being used for processors. Instead of saying multiprocessor microprocessor, the term /multicore/ caught on. Given that virtually all chips have multiple processors, the term central processing unit, or CPU, is fading in popularity.
+
+/Hardware/ refers to the specifics of a computer, including the detailed logic design and the packaging technology of the computer.  Often a line of computers contains computers with identical instruction set architectures and very similar organizations, but they differ in the detailed hardware implementation. For example, the Intel Core i7 and the Intel Xeon E7 are nearly identical but offer different clock rates and different memory systems, making the Xeon E7 more effective for server computers.
+
+In this book, the word /architecture/ covers all three (3) aspects of computer design:
+
+  1. instruction set architecture
+  2. organization or microarchitecture
+  3. hardware
+
+To plan for the evolution of a computer, the designer must be aware of rapid changes in implementation technology. Five (5) implementation technologies, which change at a dramatic pace, are critical (!) to modern implementations:
+
+  1. /Integrated circuit logic technology/ - Historically, transistor density increased by about 35% per year, quadrupling somewhat over four years. Increases in die size are less predictable and slower, ranging from 10% to 20% per year. The combined effect was a traditional growth rate in transistor count on a chip of about 40% to 55% per year, or doubling every 18-24 months. This trend is popularly known as Moore's Law. Device speed scales more slowly, as we discuss below. Shockingly (!), Moore's Law is no "moore" (!). The number of devices per chip is still increasing, but at a decelerating rate. Unlike in the Moore's Law era, we expect the doubling time to be stretched with each new technology generation.
+  2.
