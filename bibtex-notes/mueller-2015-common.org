@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Commonsense reasoning: an event calculus based approach by Mueller, E. T. (2015)
-#+Time-stamp: <2021-05-26 15:57:10 boxx>
+#+Time-stamp: <2021-05-26 16:28:53 boxx>
 
 - source :: cite:mueller-2015-common
 
@@ -10,3 +10,84 @@ This book is concerned with understanding and describing commonsense reasoning t
 * TODO Comments
 
 * TODO Topics
+
+** What Is Commonsense Reasoning?
+
+/Commonsense reasoning/ is a process that involves taking information about certain aspects of a scenario in the world and making inferences about other aspects of the scenario based on our /commonsense knowledge/, or knowledge of how the world works. Commonsense reasoning is essential to intelligent behavior and thought. It allows us to fill in the blanks, to reconstruct missing portions of a scenario, to figure out what happened, and to predict what might happen next. Commonsense reasoning stands in contrast to various types of expert reasoning such as economic, legal, mathematical, medical, and scientific reasoning.
+
+** Key Issues of Commonsense Reasoning
+
+Although commonsense reasoning comes naturally to us and appears to be simple, it is actually a complex process. In this section, we examine the previously mentioned examples of commonsense reasoning in detail. We introduce fundamental concepts and point out some of the key issues that must be addressed by any method for commonsense reasoning.
+
+*** Representation
+
+A /representation/ is something that resembles something else. For the purpose of automating commonsense reasoning, the representation should be a data structure or a sentence of a language defined by a formal syntax, and the representation should facilitate automated reasoning.
+
+*** Objects, properties, events, and time
+
+Several fundamental entities must be represented. First, we must represent objects in the world and agents such as persons and animals. Second, we must represent properties of the world that change over time. Third, we must represent events or actions that occur in the world. Fourth, we must represent time.
+
+*** Object identity
+
+We must represent the identities of objects.
+
+*** Reasoning
+
+Having formed a representation of a scenario, we can then perform commonsense /reasoning/ or /inference/. Because our goal is automation, the method of reasoning should be expressed as an algorithm or formal rule that takes representations as input and produces representations as output.
+
+*** Representations of commonsense knowledge
+
+We must construct representations of commonsense knowledge that can be used by the reasoning method to reason about a particular scenario.
+
+*** Effects of events
+
+We must be able to represent and reason about the effects of events on world properties. We must be able to reason from a specific event and general knowledge about the effects of events to the specific effects of the specific event.
+
+*** Context-sensitive effects
+
+We must be able to represent and reason about the context-sensitive effects of events. We should be able to represent that, if a person picks up a slippery object and is not careful, then the person will not be holding the object.
+
+*** Nondeterministic effects
+
+We must also be able to represent and reason about events with nondeterministic effects. We should be able to represent that, if a person picks up a slippery object, then the person may or may not be holding the object.
+
+*** Concurrent events
+
+We must be able to represent and reason about concurrent events. We should be able to represent that certain concurrent events are impossible; for example, a person cannot walk into two (2) rooms simultaneously. We must be able to reason about concurrent events with cumulative or canceling effects. For example, if a shopping cart is pushed, it moves forward. If it is pulled, it moves backwards. But, if it is simultaneously pulled and pushed, then it moves neither forward nor backward; instead, it spins around.
+
+*** Space
+
+In order to automate commonsense reasoning, we must be able to deal with space. We must represent the knowledge that, after a person walks into a room, the person will be in that room.
+
+*** Indirect effects
+
+We must be able to reason about the indirect effects or ramifications of events. For instance, we know that if a person is holding an object, then the object moves along with the person.
+
+*** Preconditions
+
+We must be able to represent and reason about the preconditions of actions or events. We need to represent two (2) preconditions of a person placing an object onto a surface:
+
+  1. the person must be holding the object, and
+  2. the person must be near the surface.
+
+*** Commonsense law of inertia
+
+This property of the commonsense world, that things tend to stay the same unless affected by some event, is known as the /commonsense law of inertia/.
+
+*** Delayed effects and continuous change
+
+We have so far seen that it is necessary for us to be able to represent and reason about the immediate effects of events, such as putting a topper in a drain and turning on the faucet. Thus, we should be able to infer that the stopper is in the drain, the faucet is running, and the sink is filling. In addition, we should be able to represent and reason about the delayed effects of events:
+
+#+begin_quote
+What will happen as a result? The water level will increase until it reaches the rim of the sink. Then the water will start spilling onto the floor.
+#+end_quote
+
+*** Release from the commonsense law of inertia
+
+Recall that the commonsense law of inertia states that things stay the same unless affected by some event. But notice that the water level continues to change after the event of turning on the faucet. Therefore we must be able to represent that, after the faucet is turned on, the water level is released from the commonsense law of inertia and is permitted to vary. We must further represent that the water level is proportional to the time elapsed since the faucet was turned on.
+
+*** Triggered events
+
+In order to reason about this scenario, we must also be able to represent and reason about triggered events. The water level does not increase endlessly. When a sink is filling and the water reaches the rim of the sink, the sink will overflow. We should be able to represent and reason that, when a sink overflows, the water starts spilling onto the floow and the water level stops increasing. At this point, the water level will again be subject to the commonsense law of inertia.
+
+*** Default reasoning
