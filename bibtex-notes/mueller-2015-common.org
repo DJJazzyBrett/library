@@ -1,0 +1,12 @@
+#+TITLE: Notes on: Commonsense reasoning: an event calculus based approach by Mueller, E. T. (2015)
+#+Time-stamp: <2021-05-26 15:57:10 boxx>
+
+- source :: cite:mueller-2015-common
+
+* TODO Summary
+
+This book is concerned with understanding and describing commonsense reasoning to such a level of detail that it can be /automated/, or performed automatically by a machine such as a computer. It reviews methods for commonsense reasoning and describes in detail a method for commonsense reasoning using the *event calculus*, which is based on classical predicate logic.
+
+* TODO Comments
+
+* TODO Topics
