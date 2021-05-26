@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer architecture: a quantitative approach by Hennessy, J. L. (2019)
-#+Time-stamp: <2021-05-26 11:01:47 boxx>
+#+Time-stamp: <2021-05-26 11:58:39 boxx>
 
 - source :: cite:hennessy-2019-comput
 
@@ -80,4 +80,29 @@ In this book, the word /architecture/ covers all three (3) aspects of computer d
 To plan for the evolution of a computer, the designer must be aware of rapid changes in implementation technology. Five (5) implementation technologies, which change at a dramatic pace, are critical (!) to modern implementations:
 
   1. /Integrated circuit logic technology/ - Historically, transistor density increased by about 35% per year, quadrupling somewhat over four years. Increases in die size are less predictable and slower, ranging from 10% to 20% per year. The combined effect was a traditional growth rate in transistor count on a chip of about 40% to 55% per year, or doubling every 18-24 months. This trend is popularly known as Moore's Law. Device speed scales more slowly, as we discuss below. Shockingly (!), Moore's Law is no "moore" (!). The number of devices per chip is still increasing, but at a decelerating rate. Unlike in the Moore's Law era, we expect the doubling time to be stretched with each new technology generation.
-  2.
+
+  2. /Semiconductor DRAM/ (dynamic random-access memory) - This technology is the foundation of main memory. The growth of DRAM has slowed dramatically, from quadrupling every three (3) years as in the past. The 8-gigabit DRAM was shipping in 2014, but the 16-gigabit DRAM won't reach that state until 2019, and it looks like there will be no 32-gigabit DRAM.
+
+  3. /Semiconductor Flash/ (electrically erasable programmable read-only memory) - This nonvolatile semiconductor memory is the standard storage device in PMDs, and its rapidly increasing popularity has fueled its rapid growth rate in capacity. In recent years, the capacity per Flash chip increased by about 50% to 60% per year, doubling roughly every two (2) years. Currently, the Flash memory is 8 to 10 times cheaper per bit than DRAM.
+
+  4. /Magnetic disk technology/ - Prior to 1990, density increased by about 30% per year, doubling in three (3) years. It rose to 60% per year thereafter, and increased to 100% per year in 1996. Between 2004 and 2011, it dropped back to about 40% per year, or doubled every two (2) years. Recently, disk improvement has slowed to less than 5% per year. One way to increase disk capacity is to add more platters at the same areal density, but there are already seven (7) platters within the one-inch depth of the 3.5-inch form factor disks. There is room for at most one or two more platters. The last hope for real density increase is to use a small laser on each disk read-write head to heat a 30 nm spot to 400^o C so that it can be written magnetically before it cools. It is unclear whether Heat Assisted Magnetic Recording can be manufactured economically and reliably, although Seagate announced plans to ship HAMR in limited production in 2018. HAMR is the last chance for continued improvement in areal density of hard disk drives, which are now 8 to 10 times cheaper per bit than Flash and 200 to 300 times cheaper per bit than DRAM. This technology is central to server- and warehouse-scale storage.
+
+*** Performance Trends: Bandwidth Over Latency
+
+/Bandwidth/ or /throughput/ is the total amount of work done in a given time, such as megabytes per second for a disk transfer. In contrast, /latency/ or /response time/ is the time between the start and the completion of an event, such as milliseconds for a disk access.
+
+Performance is the primary differentiator for microprocessors and networks, so they have seen the greatest gains: 32,000 to 40,000 x in bandwidth and 50 to 90 x in latency. Capacity is generally more important than performance for memory and disks, so capacity has improved more, yet bandwidth advances of 400 to 2400 x are still much greater than gains in latency of 8 to 9 x.
+
+Clearly, bandwidth has outpaced latency across these technologies and will likely continue to do so. *A simple rule-of-thumb is that the bandwidth grows by at least the square of the improvement in latency*. Computer designers should plan accordingly.
+
+*** Scaling of Transistor Performance and Wires
+
+Integrated circuit processes are characterized by the /feature size/, which is the minimum size of a transistor or a wire in either the /x/ or /y/ dimension. Feature sizes devreased from 1971 to 2017. *Since the transistor count per square millimeter of silicon is determined by the surface area of a transistor, the density of transistors increases quadratically with a linear decrease in feature size.*
+
+The increase is transistor performance, however, is more complex. As feature sizes shrink, devices shrink quadratically in the horizontal dimension and also shrink in the vertical dimension. The shrink in the vertical dimension requires a reduction in operating voltage to maintain correct operation and reliability of the transistors. This combination of scaling factors leads to a complex interrelationship between transistor performance and process feature size. To a first approximation, in the past the transistor performance improved linearly with decreasing feature size.
+
+The fact that transistor count improves quadratically with a linear increase in transistor performance is both the challenge and the opportunity for which computer architects were created! In the early days of microprocessors, the higher rate of improvement in density was used to move quickly from 4-bit, to 8-bit, to 16-bit, to 32-bit, to 64-bit microprocessors. More recently, density improvements have supported the introduction of multiple processors per chip, wider SIMD units, and many of the innovations in speculative execution and caches found in Chapters 2-5.
+
+Although transistors generally improve in performance with decreased feature size, wires in an integrated circuit do *not*. *In particular, the signal delay for a wire increases in proportion to the product of its resistance and capacitance*. Of course, as feature size shrinks, wires get shorter, but the resistance and capacitance per unit length get worse. This relationship is complex, since both resistance and capacitance depend on detailed aspects of the process, the geometry of a wire, the loading on a wire, and even the adjacency to other structures. There are occasional process enhancements, such as the introduction of copper, which provide one-time improvements in wire delay.
+
+*In general, however, wire delay scales poorly compared to transistor performance, creating additional challenges for the designer*. In addition to the power dissipation limit, wire delay has become a major design obstacle for large integrated circuits and is often more critical than transistor switching delay. Larger and larger fractions of the clock cycle have been consumed by the propagation delay of signals on wires, but power now plays an even greater role than wire delay.
