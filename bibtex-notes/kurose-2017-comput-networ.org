@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-27 10:13:37 boxx>
+#+Time-stamp: <2021-05-27 10:19:13 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -169,7 +169,7 @@ Most packet switches use *store-and-forward transmission* at the inputs to the l
 
 Let's now consider the general case of sending one packet from source to destination over a path consisting of /N/ links each of rate /R/ (thus, there are /N-1/ routers between source and destination). Applying the same logic as from the (not included) example, we see that the end-to-end delay is:
 
-#+begin_src latex :exports both
+#+begin_src latex
 \[ d_{end-to-end} = N \frac{L}{R} \]
 #+end_src
 
