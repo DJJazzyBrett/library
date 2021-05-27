@@ -1,0 +1,18 @@
+#+TITLE: Notes on: Phonology: a formal introduction by Bale, A., & Reiss, C. (2018)
+#+Time-stamp: <2021-05-27 11:39:49 boxx>
+
+- source :: cite:bale-2018-phonol
+
+* TODO Summary
+
+Perhaps you have no idea what the words /pangolin/ and /maypop/ mean. However, if we told you that both words are nouns - the first is a kind of animal (also called a /scaly anteater/) and the second a kind of flower (alos called a /purple passionflower/) - you would have no problem creating plural forms for each word. In writing, you would probably guess /pangolins/ and /maypops/. One noteworthy fact about these words is that the plural markers, writtern as /-s/ in both forms, sound different. If you say /pangolins/, you will notice that the sound at the end of the word sounds like the beginning of /zinc/, whereas if you say /maypops/, the sound at the end of the word sounds like the beginning of /sink/. This distinction is an example of a phonological fact about your language. *In this book we take the position that the study of such facts, the study of phonology, is a branch of cognitive science that ultimately can serve as a form of theoretical neuroscience*.
+
+This suggestion, that /phonology/ is relevant to theoretical neuroscience, might strike you as outrageous. However, once we consider that you had to use your mind to come up with the plural forms for those previously unknown words, and that the mind is somehow closely related to the brain, our apparently controversial characterization of phonology becomes a platitude; /our linguistic behavior, like all of our behavior, is highly dependent on our mind/brain and thus ultimately has to be compatible with the correct theory of our brains/.
+
+Prior to figuring out how the brain works at the (sub-)neurological level, we must first understand what the brain does: What kind of information does it store and process, and what kind of operations does it perform on this information? Our focus will be on the information structures that are stored - the /representations/ - and the operations that are performed - the /rules/ - in the domain of phonology.
+
+* TODO Comments
+
+* TODO Topics
+
+** Language as Knowledge
