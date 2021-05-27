@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-27 11:09:13 boxx>
+#+Time-stamp: <2021-05-27 11:10:48 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -204,7 +204,7 @@ When two (2) hosts want to communicate, the network established a dedicated *end
 
 In contrast, consider what happens when one host wants to send a packet to another host over a packet-switched network, such as the internet. As with circuit-switching, the packet is transmitted over a series of communication links. But different from circuit switching, the packet is sent into the network without reserving any links whatsoever. If one of the links is congested because other packets need to be transmitted over the link at the same time, then the packet will have to wait in a buffer at the sending side of the transmission link and suffer a delay. *The internet makes its best effort to deliver packets in a timely manner, but it does not make any guarantee*.
 
-*** Multiplexing in Circuit-Switched Networksz
+*** Multiplexing in Circuit-Switched Networks
 
 A circuit in a link is implemented with either *frequency-division multiplexing (FDM)* or *time-division multiplexing (TDM)*. With FDM, the frequency spectrum of a link is divided up among the connections established across the link. Specifically, the link dedicates a frequency band to each connection for the duration of the connection. In telephone networks, this frequency band typically has a width of 4 kHz (that is, 4,000 hertz or 4,000 cycles per second). The width of the band is called, not surprisingly, the *bandwidth*. FM radio stations also use FDM to share the frequency spectrum between 88 MHz and 108 MHz, with each station being allocated a specific frequency band.
 
