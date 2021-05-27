@@ -1,0 +1,20 @@
+#+TITLE: Notes on: Elements of causal inference: foundations and learning algorithms by Peters, J., Janzing, D., & Sch\"olkopf, Bernhard (2017)
+#+Time-stamp: <2021-05-27 11:53:14 boxx>
+
+- source :: cite:peters-2017-elemen
+
+* TODO Summary
+
+Causality is a fascinating topic of research. Its mathematization has only relatively recently started, and many conceptual problems are still being debated - often with considerable intensity.
+
+First, the present book represents a bias toward a subproblem of causality that may be considered both the most fundamental and the least realistic. This is the *cause-effect problem*, where the system under analysis contains only two observables.
+
+And second, our treatment is motivated and influenced by the fields of /machine learning/ and /computational statistics/. We are interested in how methods thereof can help with the inference of causal structures, and even more so whether causal reasoning can inform the way we should be doing machine learning. Indeed, we feel that some of the most profound open issues of machine learning are best understood if we do *not* take a random experiment described by a probability distribution as our starting point, but instead we consider causal structures underlying the distribution.
+
+Our book has a number of shortcomings. Some of them are inherited from the field, such as the tendency that theoretical results are often restricted to the case where we have infinite amounts of data. Although we do provide algorithms and methodology for the finite data case, we do not discuss statistical properties of such methods. Additionally, at some places we neglect measure theoretic issues, often by assuming the existence of densities. We find all of these questions both relevant and interesting but made these choices to keep the book short and accessible to a broad audience.
+
+Another disclaimer is in order. Computational causality methods are still in their infancy, and in particular, learning causal structures from data is only doable in rather limited situations. We have tried to include concrete algorithms wherever possible, but we are acutely aware that many of the problems of causal inference are harder than typical machine learning problems, and we thus make no promises as to whether the algorithms will work on the reader's problems. Please do not feel discouraged by this remark - causal learning is a fascinating topic and we hope that reading this book may convince you to start working on it.
+
+* TODO Comments
+
+* TODO Topics
