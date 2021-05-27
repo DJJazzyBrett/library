@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-26 15:40:43 boxx>
+#+Time-stamp: <2021-05-27 10:13:37 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -162,3 +162,18 @@ Having examined the internet's edge, let us now delve more deeply inside the net
 In a network application, end systems exchange *messages* with each other. Messages can contain anything the application designer wants. Messages may perform a control function (for example, the "Hi" messages in our handshaking example from earlier) or can contain data, such as an e-mail message, a JPEG image, or an MP3 audio file. To send a message from a source end system to a destination end system, the source breaks long messages into smaller chunks of data known as *packets*. Between source and destination, each packet travels through communication links and *packet switches* (for which there are two (2) predominant types, *routers* and *link-layer switches*). Packets are transmitted over each communication link at a rate equal to the /full/ transmission rate of the link. So, if a source end system or a packet switch is sending a packet of /L/ bits over a link with transmission rate /R/ bits/sec, then the time to transmit the packet is /L/R/ seconds.
 
 **** Store-and-Forward Transmission
+
+Most packet switches use *store-and-forward transmission* at the inputs to the links. Store-and-forward transmission means that the packet switch must receive the entire packet before it can begin to transmit the first bit of the packet onto the outbound link. To explore store-and-forward transmission in more detail, consider a simple network consisting of two (2) end systems connected by a single router. A router will typically have many incident links, since its job is to switch an incoming packet onto an outgoing link; in this simple example, the router has the rather simple task of transferring a packet from one (input) link to the only other attached link.
+
+...
+
+Let's now consider the general case of sending one packet from source to destination over a path consisting of /N/ links each of rate /R/ (thus, there are /N-1/ routers between source and destination). Applying the same logic as from the (not included) example, we see that the end-to-end delay is:
+
+#+begin_src latex :exports both
+\[ d_{end-to-end} = N \frac{L}{R} \]
+#+end_src
+
+#+RESULTS:
+#+begin_export latex
+\[ d_{end-to-end} = N \frac{L}{R} \]
+#+end_export
