@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-27 10:19:13 boxx>
+#+Time-stamp: <2021-05-27 10:19:45 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -172,8 +172,3 @@ Let's now consider the general case of sending one packet from source to destina
 #+begin_src latex
 \[ d_{end-to-end} = N \frac{L}{R} \]
 #+end_src
-
-#+RESULTS:
-#+begin_export latex
-\[ d_{end-to-end} = N \frac{L}{R} \]
-#+end_export
