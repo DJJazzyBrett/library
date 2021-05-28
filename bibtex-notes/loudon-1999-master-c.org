@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Mastering algorithms with C by Loudon, K. (1999)
-#+Time-stamp: <2021-05-28 12:19:49 boxx>
+#+Time-stamp: <2021-05-28 15:15:49 boxx>
 
 - source :: cite:loudon-1999-master-c
 
@@ -346,3 +346,61 @@ A recursive function is said to be /tail recursive/ if all recursive calls withi
 When a compiler detects a call that is tail recursive, it overwrites the current activation record instead of pushing a new one onto the stack. The compiler can do this because the recursive call is the last statement to be executed in the current activation; thus, there is nothing left to do in the activation when the call returns. Consequently, there is *no* reason to keep the current activation record instead of stacking another one on top of it, stack usage is greatly reduced, which leads to better performance in practice. Thus, we should make recursive functions tail recursive whenever we can.
 
 ** Analysis of Algorithms
+
+Whether we are designing an algorithm or applying one that is widely accepted, it is important to understand how the algorithm will perform. There are a number of ways we can look at an algorithm's performance, but usually the aspect of most interest is how fast the algorithm will run. In some cases, if an algorithm uses significant storage, we may alos be interested in its space requirement as well. Whatever the case, determining how an algorithm performs requires a formal and deterministic method.
+
+There are many reasons to understand the performance of an algorithm. For example, we often have a choice of several algorithms when solving problems. Understanding how each performs helps us to differentiate between them. Understanding the burden an algorithm places on an application also helps us plan how to use the algorithm more effectively. For instance, /garbage collection algorithms,/ algorithms that collect dynamically allocated storage to return to the heap require considerable time to run. Knowing this, we can be careful to run them only at opportune moments, just as LISP and Java do, for example.
+
+** Worst-Case Analysis
+
+Most algorithms do not perform the same in all cases; normally an algorithm's performance varies with the data passed to it. Typically, three (3) cases are recognized: /best case/, /worst case/, and /average case/. For any algorithm, understanding what constitutes each of these cases is an important part of analysis because performance can vary significantly between them. Consider even a simple algorithm such as /linear search/. Linear search is a natural but inefficient search technique in  which we look for an element simply by traversing a set from one end to the other. In the best case, the element we are looking for is the first element we insoect, so we end up traversing only a single element. In the worst case, however, the desired element is the last one we inspect, in which case we end up traversing all of the elements. On average, we can expect to find the element somewhere in the middle.
+
+*** Reasons for Worst-Case Analysis
+
+A basic understanding of how an algorithm performs in all cases is important, but usually we are most interested in how an algorithm performs in the /worst case/. There are four (4) reasons why algorithms are generally analyzed by their worst case:
+
+  - Many algorithms perform to their worst case a large part of the time. For example, the worst case in searching occurs when we do not find what we are looking for at all. Imagine how frequently this takes place in some database applications.
+
+  - The best case is not very informative because many algorithms perform exactly the same in the best case. For example, nearly all searching algorithms can locate an element in one inspection at best, so analyzing this case does not tell us much.
+
+  - Determining average-case performance is not always easy. Often it is difficult to determine exactly what the "average case" even is. Since we can seldom guarantee precisely how an algorithm will be exercised, usually we cannot obtain an average-case measurement that is likely to be accurate.
+
+  - The worst case gives us an upper bound on performance. Analyzing an algorithm's worst case guarantees that it will /never/ perform worse than what we determine. Therefore, we know that the other cases /must/ perform at least as well.
+
+Although worst-case analysis is the metric for many algorithms, it is worth noting that there are exceptions. Sometimes special circumstances let us base performance on the average case. For example, randomized algorithms such as quicksort use principles of probability to virtually guarantee average-case performance.
+
+*** /O/-Notation
+
+/O/-notation is the most common notation used to express an algorithm's performance in a formal manner. *Formally, /O/-notation expresses the upper bound of a function within a constant factor*. Specifically, if /g(n)/ is an upper bound of /f(n)/, then for some constant /c/ it is possible to find a value of /n/, call it n_0, for which any value of n \ge n_0 will result in /f(n) \le cg(n)/.
+
+Normally we express an algorithm's performance as a function of the size of the data it processes. That is, for some data of size /n/, we describe its performance with some function /f(n)/. However, while in many cases we can determine /f/ exactly, usually it is not necessary to be this precise. *Primarily we are interested only in the /growth rate/ of /f/, which describes how quickly the algorithm's performance will degrade as the size of the data it processes becomes arbitrarily large*. An algorithm's growth rate, or /order of growth/, is significant because ultimately it describes how efficient the algorithm is for arbitrary inputs. /O/-notation reflects an algorithm's order of growth.
+
+*** Simple Rules for /O/-Notation
+
+When we look at some function /f(n)/ in terms of its growth rate, a few things become apparent. First, we can ignore constant terms because as the value of /n/ becomes larger and larger, eventually constant terms will become insignificant. Second, we can ignore constant multipliers of terms because they too will become insignificant as the value of /n/ increases. Finally *(!)*, we need only consider the highest-order term because, again, as /n/ increases, higher-order terms quickly outweigh the lower-order terms.
+
+These ideas are formalized in the following simple rules for expressing functions in /O/-notation.
+
+  - Constant terms are expressed as O(1). When analyzing the running time of an algorithm, apply this rule when you have a task that you know will execute in a certain amount of time regardless of the size of the data it processes. Formally states, for some constant /c/, /O(c) = O(1)/.
+
+  - Multiplicative constants are omitted. When analyzing the running time of an algorithm, apply this rule when you have a number of tasks that all execute in the same amount of time. For example, if three (3) tasks each run in time /T(n) = n/, the result is /O(3n)/, which simplifies to /O(n)/. Formally stated, for some constant /c/, /O(cT) = cO(T) = O(T)/.
+
+  - Addition is performed by taking the maximum. When analyzing the running time of an algorithm, apply this rule when one task is executed after another. For example, if T_1(n) = /n/ and T_2(n) = n^2 describe the two tasks executed sequentially, the result is O(n) + O(n^2), which simplifies to O(n^2). Formally stated, O(T_1) + O(T_2) = O(T_1 + T_2) = max(O(T_1), O(T_2)).
+
+  - Multiplication is not changed but often is rewritten more compactly. When analyzing the running time of an algorithm, apply this rule when one task causes another to be executed some number of times for each iteration of itself. For example, in a nested loop whose outer iterations are described by T_1 and whose inner iterations by T_2, if T_1(n) = /n/ and T_2(n) = /n/, the result is O(n)O(n), or O(n^2). Formally stated, O(T_1)O(T_2) = O(T_1 T_2).
+
+** Computational Complexity
+
+When speaking of the performance of an algorithm, usually the aspect of interest is its /complexity/, which is the growth rate of the resources (usually time) it requires with respect to the size of the data it processes. /O/-notation describes an algorithm's complexity. Using /O/-notation, we can frequently describe the worst-case complexity of an algorithm simply by inspecting its overall structure. Other times, it is more helpful to employ techniques involving recurrences and summation formulas, and statistics.
+
+To understand complexity, let's look at one way to surmise the resources an algorithm will require. It should seem reasonable that if we look at an algorithm as a series of /k/ statements, each with some cost (usually time) to execute, c_i, we can determine the algorithm's total cost by summing the costs of all statements from c_1 to c_k in whatever order each is executed. Normally statements are executed in a more complicated manner than simply in sequence, so this has to be taken into account when totaling the costs.
+
+When inspecting the overall structure of an algorithm, only two (2) steps need to be performed: (1) we must determine which parts of the algorithm depend on data whose size is not constant, and (2) then derive functions that describe the performance of each part. All other parts of the algorithm execute with a constant cost and can be ignored in figuring its overall complexity.
+
+Assume that an algorithm's running time can be represented as T(n). It is important to realize that /O(n)/, its complexity, *says little about the /actual/ time the algorithm will take to run*. In other words, just because an algorithm has a low growth rate does not necessarily mean it will execute in a small amount of time. In fact, *complexities have no real units of measurement at all*. They describe only how the resource being measured will be affected by a /change/ in data size *(!)*. For example, saying that /T(n)/ is /O(n)/ conveys only that the algorithm's running time varies proportionally to /n/, and that /n/ is an upper bound for /T(n)/ within a constant factor. Formally, we say that /T(n) \le cn/, where /c/ is a constant factor that accounts for various costs *not* associated with the data, such as the type of computer on which the algorithm is running, the compiler used to generate the machine code, and constants in the algorithm itself.
+
+Just as the complexity of an algorithm says little about its actual running time, *it is important to understand that no measure of complexity is necessarily efficient or inefficient*. Although complexity is an indication of the efficiency of an algorithm, whether a particular complexity is considered efficient or inefficent depends on the problem. Generally, an efficient algorithm is one in which we know we are doing the best we can do given certain criteria. Typically, an algorithm is said to be efficient if there are no algorithms with lower complexities to solve the same problem and the algorithm does not contain excessive constants. Some problems are intractable. so there are no "efficient" solutions without settling for an approximation. This is true of a special class of problems called /NP-complete problems/.
+
+Although an algorithm's complexity is an important starting point for determining how well it will perform, often there are other things to consider in practice. For example, when two algorithms are of the same complexity, it may be worthwhile to consider their less significant terms and factors. If the data on which the algorithms' performances depend is small enough, even an algorithm of greater complexity with small constants may perform better in practice than one that has a lower order of complexity and larger constants. Other factors worth considering are how complicated an algorithm will be to develop and maintain, and how we can make the actual implementation of an algorithm more efficient. An efficient implementation does not always affect an algorithm's complexity, but it can reduce constant factors, which makes the algorithm run faster in practice.
+
+** Linked Lists
