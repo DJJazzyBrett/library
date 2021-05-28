@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Natural language semantics by Gillon, B. S. (2019)
+#+Time-stamp: <2021-05-28 16:07:12 boxx>
+
+- source :: cite:gillon-2019-natur
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics

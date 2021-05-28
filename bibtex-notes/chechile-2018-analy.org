@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Analyzing memory: the formation, retention, and measurement of memory by Chechile, R. A. (2018)
-#+Time-stamp: <2021-05-28 16:05:38 boxx>
+#+Time-stamp: <2021-05-28 16:06:14 boxx>
 
 - source :: cite:chechile-2018-analy
 

@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Introduction to natural language processing by Eisenstein, J. (2019)
+#+Time-stamp: <2021-05-28 16:08:13 boxx>
+
+- source :: cite:eisenstein-2019-introd-natur
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics

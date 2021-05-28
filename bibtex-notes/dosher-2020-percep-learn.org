@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Perceptual learning: how experience shapes visual perception by Dosher, B., & Lu, Z. (2020)
+#+Time-stamp: <2021-05-28 16:08:48 boxx>
+
+- source :: cite:dosher-2020-percep-learn
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
