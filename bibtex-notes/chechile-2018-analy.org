@@ -1,0 +1,18 @@
+#+TITLE: Notes on: Analyzing memory: the formation, retention, and measurement of memory by Chechile, R. A. (2018)
+#+Time-stamp: <2021-05-28 15:42:15 boxx>
+
+- source :: cite:chechile-2018-analy
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
+
+** Building Memory Representations
+
+#+begin_quote
+If any one faculty of our nature may be called more wonderful than the rest, I do think it is memory. There seems something speakingly incomprehensible in the powers, the failures, the inequalities of memory, than in any other of our intelligences. The memory is sometimes so retentive, so serviceable, so obedient; at others, so bewildered and so weak; and at others again, so tyrannic, so beyond control! We are, to be sure, a miracle every way; but our powers of recollecting and of forgetting do seem peculiarly past finding out. (Jane Austen, 1814, /Mansfield Park/, p. 141)
+#+end_quote
+
+This volume is my attempt to begin the description of how human memory works, how it is organized, and how it dynamically changes. The broad architecture of the approach is developed from a number of perspectives or levels of analysis. Each framework contributes to the overall picture about memory. But before describing the organization of part I of the book, it is helpful to first clarify what is meant by levles of analysis and to discuss the role of modeling in memory research.
