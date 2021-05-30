@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Computer networking: a top-down approach by Kurose, J. F., & Ross, K. W. (2017)
-#+Time-stamp: <2021-05-30 18:04:46 boxx>
+#+Time-stamp: <2021-05-30 19:30:53 boxx>
 
 - source :: cite:kurose-2017-comput-networ
 
@@ -259,3 +259,47 @@ The time required to examine the packet's header and determine where to direct t
 At the queue, the packet experiences a *queuing delay* as it waits to be transmitted onto the link. The length of the queuing delay of a specific packet will depend on the number of earlier-arriving packets that are queued and waiting for transmission onto the link. If the queue is empty and no other packet is currently being transmitted, then our packet's queuing delay will be zero. On the other hand, if the traffic is heavy and many other packets are also waiting to be transmitted, the queuing delay will be long. We will see shortly that the number of packets than an arriving packet might expect to find is a function of the intensity and nature of the traffic arriving at the queue. Queuing delays can be on the order of microseconds to milliseconds in practice.
 
 **** Transmission Delay
+
+Assuming that packets are transmitted in a first-come-first-served manner, as is common in packet-switched networks, our packet can be transmitted only after all the packets that have arrived before it have been transmitted. Denote the length of the packet by /L/ bits, and denote the transmission rate of the link from router A to router B by /R/ bits/sec. The *transmission delay* is L/R. This is the amount of time required to push (that is, /transmit/) all of the packet's bits into the link. Transmission delays are typically on the order of microseconds to milliseconds in practice.
+
+**** Propagation Delay
+
+Once a bit is pushed into the link, it needs to propagate to router B. The time required to propagate from the beginning of the link to router B is the *propagation delay*. The bit propagates at the propagation speed of the link. The propagation speed depends on the physical medium of the link (that is, fiber optics, twisted-pair copper wire, and so on) and is in the range og 2 \cdot 10^8 meters/sec to 3 \cdot 10^8 meters/sec which is equal to, or a little less than, the speed of light. *The propagation delay is the distance between two routers divided by the propagation speed*. In wide-area networks, propagation delays are on the order of milliseconds.
+
+*** Comparing Transmission and Propagation Delay
+
+Newcomers to the field of computer networking sometimes have difficulty understanding the difference between transmission delay and propagation delay *(!)*. The difference is subtle but important. The transmission delay is the amount of time required for the router to push out the packet; it is a function of the packet's length and the transmission rate of the link, but has *nothing* to do with the distance between the two routers. The propagation delay, on the other hand, is the time it takes a bit to propagate from one router to the next; it is a function of the distance between two routers, but has *nothing* to do with the packet's length or the transmission rate of the link.
+
+If we let d_proc, p_queue, d_trans, and d_prop denote the processing, queuing, transmission, and propagation delays, then the total nodal delay is given by their sum. The contribution of these delay components can very significantly. The processing delay, d_proc, is often negligible; however, it strongly influences a router's maximum throughput, which is the maximum rate at which a router can forward packets.
+
+*** Queuing Delays and Packet Loss
+
+The most complicated and interesting component of nodal delay is the queuing delay, or d_queue. Unlike the other three delays, the queuing delays can vary from packet to packet *(!)*. Therefore, when characterizing queuing delay, one typically uses statistical measures, such as average queuing delay, variance of queuing delay, and the probability that the queuing delay exceeds some specified value.
+
+/When is the queuing delay large and when is it insignificant?/
+
+The answer to this question depends on the rate at which traffic arrives at the queue, the transmission rate of the link, and the nature of the arriving traffic, that is, whether the traffic arrives periodically or arrives in bursts. The ration La/R is called the *traffic intensity* and often plays an important role in estimating the extent of the queuing delay. If La/R \gt 1, then the average rate at which bits arrive at the queue exceeds the rate at which the bits can be transmitted from the queue. In this unfortunate situation, the queue will tend to increase without bound and the queuing delay will approach infinity! Therefore, one of the golden rules in traffic engineering is:
+
+/Design your system so that the traffic intensity is no greater than 1/.
+
+Now consider the case La/R \le 1. Here, the nature of the arriving traffic (e.g., periodically or all at once) impacts the queuing delay. Typically, the arrival process to a queue is /random/; that is, the arrivals do not follow any pattern and the packets are spaced apart by random amounts of time. In this more realistic case, the quantity La/R is not usually sufficient to fully characterize the queuing delay statistics. Nevertheless, it is useful in gaining an intuitive understanding of the extent of the queuing delay. In particular, if the traffic intensity is colse to zero, then packet arrivals are few and far between and it is unlikely that an arriving packet will find another packet in the queue. Hence, the average queuing delay will be close to zero. On the other hand, when the traffic intensity is close to 1, there will be intervals of time when the arrival rate exceeds the transmission capacity (due to variations in the packet arrival rate), and a queue will form during these periods of time; when the arrival rate is less than the transmission capacity, the length of the queue will shrink. Nevertheless, as the traffic intensity approaches 1, the average queue length gets larger and larger.
+
+*** Packet Loss
+
+In our discussion above, we have assumed that the queue is capable of holding an infinite number of packets. In reality a queue preceding a link has finite capacity, although the queuing capacity greatly depends on the router design and cost. Because the queue capacity is finite, packet delays do *not* really approach infinity as the traffic intensity approaches 1. Instead, a packet can arrive to find a full queue. With no place to store such a packet, the router will *drop* that packet; that is, the packet will be *lost*.
+
+From an end-system viewpoint, a packet loss will look like a packet having been transmitted into the network core but *never* emerging from the network at the destination. The fraction of lost packets increases as the traffic intensity increases. *Therefore, performance at a node is often measured not only in terms of delay, but also in terms of the probability of packet loss*.
+
+*** End-to-End Delay
+
+Our discussion up to this point has focused on the nodal delay, that is, the delay at a single router. Let's now consider the total delay from source to destination. To get a handle on this concept, suppose there are /N - 1/ routers between the source host and the destination host. Let's also suppose for the moment that the network is uncongested (so that queuing delays are negligible), the processing delay at each router and at the source host is d_proc, the transmission rate out of each router and out of the source host is /R/ bits/sec, and the propagation on each link is d_prop. The nodal delays accumulate and give an end-to-end delay,
+
+d_{end-end} = /N/ (d_proc + d_trans + d_prop)
+
+where, once again d_trans = L/R, where L is the packet size.
+
+*** End System, Application, and Other Delays
+
+In addition to processing, transmission, and propagation delays, there can be additional significant delays in the end systems. For example, an end system wanting to transmit a packet into a shared medium (e.g., as in a WiFi or cable modem scenario) may /purposefully/ delay its transmission as a part of its protocol for sharing the medium with other end systems; we'll consider such protocols in detail in Chapter 6. Another important delay is media packetization delay *(!)*, which is present in Voice-over-IP (VoIP) applications. In VoIP, the sending side must first fill a packet with encoded digitized speech before passing the packet to the internet. This time to fill a packet - called the packetization delay - can be significant and can impact the user-perceived quality of a VoIP call.
+
+*** Throughput in Computer Networks
