@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to algorithms by T. H. Cormen (2009)
-#+Time-stamp: <2021-06-02 19:36:09 boxx>
+#+Time-stamp: <2021-06-02 20:02:17 boxx>
 
 - source :: cite:cormen-2009-introd
 
@@ -99,3 +99,11 @@ Our ~MERGE~ procedure takes time \Theat(n), where n = r - p + 1 is the total num
 The following pseudocode implements the above idea, but *(!)* with an additional twist that avoids having to check whether either pile is empty in each basic step. We place on the bottom of each pile a *sentinel* card, which contains a special value that we use to simplify our code. Here, we use \infty as the sentinel value, so that whenever a card with \infty is exposed, it cannot be the smaller card unless both piles have their sentinel cards exposed. But once that happens, all the nonsentinel cards have already been placed onto the output pile. Since we know in advance that exactly r - p + 1 cards will be placed onto the output pile, we can stop once we have performed that many basic steps.
 
 ** Section 3.1: Asymptotic notation
+
+The order of growth of the running time of an algorithm, defined in Chapter 2, gives a simple characterization of the algorithm's efficiency and also allows us to compare the relative performance of alternative algorithms. Once the input size /n/ becomes large enough, merge sort, with its \Theta(n lg n) worst-case running time, beats insertion sort, whose worst-case running time is \Theta(n^2). Although we can sometimes determine the exact running time of an algorithm, as we did for insertion sort in Chapter 2, the extra precision is *not* usually worth the effort of computing it. For large enough inputs, the multiplicative constants and lower-order terms of an exact running time are dominated by the effects of the input size itself.
+
+When we look at input sizes large enough to make only the order of growth of the running time relevant, we are studying the *asymptotic* efficiency of algorithms. That is, we are concerned with how the running time of an algorithm increases with the size of the input /in the limit/, as the size of the input increases without bound. Usually, an algorithm that is asymptotically more efficient will be the best choice for all but very small inputs.
+
+The notations we use to describe the asymptotic running time of an algorithm are defined in terms of function whose domains are the set of natural numbers \mathbb{N} = {0, 1, 2, ...}. Such notations are convenient for describing the worst-case running-time function /T(n)/, which usually is defined only on integer input sizes. We sometimes find it convenient, however, to /abuse/ asymptotic notation in a variety of ways. For example, we might extend the notation to teh domain of real numbers or, alternatively, restrict it to a subset of the natural numbers. We should make sure, however, to understand the precise meaning of the notation so that when we abuse, we do not /misuse/ it. This section defines the basic asymptotic notations and also introduces some common abuses.
+
+*** Asymptotic notation, functions, and running times
