@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to algorithms by T. H. Cormen (2009)
-#+Time-stamp: <2021-06-02 20:02:17 boxx>
+#+Time-stamp: <2021-06-03 15:36:57 boxx>
 
 - source :: cite:cormen-2009-introd
 
@@ -107,3 +107,155 @@ When we look at input sizes large enough to make only the order of growth of the
 The notations we use to describe the asymptotic running time of an algorithm are defined in terms of function whose domains are the set of natural numbers \mathbb{N} = {0, 1, 2, ...}. Such notations are convenient for describing the worst-case running-time function /T(n)/, which usually is defined only on integer input sizes. We sometimes find it convenient, however, to /abuse/ asymptotic notation in a variety of ways. For example, we might extend the notation to teh domain of real numbers or, alternatively, restrict it to a subset of the natural numbers. We should make sure, however, to understand the precise meaning of the notation so that when we abuse, we do not /misuse/ it. This section defines the basic asymptotic notations and also introduces some common abuses.
 
 *** Asymptotic notation, functions, and running times
+
+We will use asymptotic notation primarily to describe the running times of algorithms, as when we wrote that insertion sort's worst-case running time is \Theta(n^2). Asymptotic notation actually applies to functions, however. Recall that we characterized insertion sort's worst-case running time as (an^2 + bn + c), for some constants a, b, and c. By writing that insertion sort's running time is \Theta(n^2), we abstracted away some details of this function. Because asymptotic notation applies to functions, what we were writing as \Theta(n^2) was the function (an^2 + bn + c), which in that case happened to characterize the worst-case running time of insertion sort.
+
+In this book, the functions to which we apply asymptotic notation will usually characterize the running times of algorithms. But asymptotic notation can apply to functions that characterize some other aspects of algorithms (the amount of space they use, for example), or even to functions that have nothing whatsoever to do with algorithms.
+
+Even when we use asymptotic notation to apply to the running time of an algorithm, we need to understand /which/ running time we mean. Sometimes we are interested in the worst-case running time. Often, however, we wish to characterize the running time no matter what the input. In other words, we often wish to make a blanket statement that covers all inputs, not just the worst case. We shall see asymptotic notations that are well suited to characterizing running times no matter what the input.
+
+*** \Theta-Notation
+
+In Chapter 2, we found that the worst-case running time of insertion sort is T(n) = \Theta(n^2). Let us define what this notation means. For a given function g(n), we denote by \theta(g(n)) the /set of functions/
+
+\Theta(g(n)) = {f(n) : there exist positive constants c_{1}, c_{2}, and n_{0} such that 0 \le c_{1} g(n) \le f(n) \le c_{2} g(n) for all n \ge n_{0}}.
+
+A function ~f(n)~ belongs to the set ~\Theta(g(n))~ if there exist positive constants c_{1} and c_{2} such that it can be "sandwiched" between c_{1}g(n) and c_{2}g(n), for sufficiently large /n/. Because \Theta(g(n)) is a *set*, we could write "f(n) \in \Theta(g(n))" to indicate that f(n) is a member of \Theta(g(n)). Instead, we will usually write "f(n) = \Theta(g(n))" to express the same notion. You might be confused because we abuse equality in this way, but we shall see later in this section that doing so has its advantages *(!)*.
+
+Figure 3.1(a) on page 45 gives an intuitive picture of functions f(n) and g(n), where f(n) = \Theta(g(n)). For all values of /n/ at and to the right of n_0, the value of f(n) lies at or above c_{1}g(n) and at or below c_{2}g(n). In other words, for all n \ge n_{0}, the function f(n) is equal to g(n) within a constant factor. We say that g(n) is an *asymptotically tight bound* for f(n).
+
+The definition of \Theta(g(n)) requires that every member f(n) \in \Theta(g(n)) be *asymptotically nonnegative*, that is, that f(n) be nonnegative whenever /n/ is sufficiently large. (An *asymptotically positive* function is one that is positive for all sufficiently large /n/.) Consequently, the function g(n) itself must be asymptotically nonnegative, or else the set \Theta(g(n)) is empty. We shall therefore assume that every function used within \Theta-notation is asymptotically nonnegative. This assumption holds for the other asymptotic notations defined in this chapter as well.
+
+In Chapter 2, we introduced an informal notion of \Theta-notation that amounted to throwing away lower-order terms and ignoring the leading coefficient of the highest-order term. Intuitively, the lower-order terms of an asymptotically positive function can be ignored in determining asymptotically tight bounds because they are insignificant for large /n/. When /n/ is large, even a tiny fraction of the highest-order term suffices to dominate the lower-order terms. Thus, setting c_{1} to a value that is slightly smaller than the coefficient of the highest-order term and setting c_{2} to a value that is slightly larger permits the inequalities in the definition of \Theta-notation to be satisfied. The coefficient of the highest-order term can likewise be ignored, since it only changes c_{1} and c_{2} by a constant factor equal to the coefficient.
+
+Since any constant is a degree-0 polynomial, we can express any constant function as \Theta(n^0), or \Theta(1). This latter notation is a minor abuse, however, because the expression does *not* indicate what variable is tending to infinity. We shall often use the notation \Theta(1) to mean either a constant or a constant function with respect to some variable.
+
+*** /O/-notation
+
+The \Theta-notation asymptotically bounds a function /from above and below/. When we have only an *asymptotic upper bound*, we use /O/-notation. For a given function g(n), we denote O(g(n)) (pronounced "big-oh of g of n" or sometimes just "oh of g of n") the set of functions
+
+O(g(n)) = { f(n) : there exist positive constants c and n_{0} such that 0 \le f(n) \le cg(n) for all n \ge n_{0 }}.
+
+We use /O/-notation to give an upper bound on a function, to within a constant factor *(!)*. Figure 3.1(b) on page 45 shows the intuition behind /O/-notation. For all values /n/ at and to the right of n_{0}, the value of the function f(n) is on or below cg(n).
+
+We write f(n) = O(g(n)) to indicate that a function f(n) is a member of the set O(g(n)). Note that f(n) = \Theta(g(n)) implies f(n) = O(g(n)), since \Theta-notation is a stronger notation than /O/-notation. Thus, our proof that any quadratic function (an^{2} + bn + c, where a > 0), is in \Theta(n^{2}) also shows that any such quadratic function is in O(n^{2}). What may be more surprising is that when /a/ \gt 0, any  /linear/ function (an + b) is in O(n^{2}).
+
+If you have seen /O/-notation before, you might find it strange that we should write, for example, (n = O(n^{2})). In the literature, we sometimes find /O/-notation informally describing asymptotically tight bounds, that is, what we have defined using \Theta-notation. In this book *(!)*, however, when we write f(n) = O(g(n)), we are merely claiming that some constant multiple of g(n) is an asymptotic upper bound on f(n), with *no* claim about how tight an upper bound it is. Distinguishing asymptotic upper bounds from asymptotically tight bounds is standard in the algorithms literature.
+
+Using /O/-notation, we can often describe the running time of an algorithm merely by inspecting the algorithm's overall structure. Since /O/-notation describes an upper bound, when we use it to bound the worst-case running time of an algorithm, we have a bound on the running time of the algorithm on /every/ input - the blanket statement we discussed earlier. Thus, the O(n^{2}) bound on the worst-case running time of insertion sort also applies to its running time on every input. The \Theta(n^{2}) bound on the worst-case running time of insertion sort, however, does *(!)* *not* *(!)* imply a \Theta(n^{2}) bound on the running time of insertion sort on /every/ input. For example, we saw in Chapter 2 that when the input is already sorted, insertion sort runs in \Theta(n) time.
+
+Technically, it is an abuse to say that the running time of insertion sort is O(n^{2}), since for a given /n/, the actual running time varies, depending on the particular input size /n/. When we say "the running time is O(n^{2})", we mean that there is a function f(n) that is O(n^{2}) such that for any value of /n/, no matter what particular input of size /n/ is chosen, the running time on that input is bounded from above by the value f(n). Equivalently, we mean that the worst-case running time is O(n^{2}).
+
+*** \Omega-notation
+
+Just as /O/-notation provides an asymptotic /upper/ bound on a function, \Omega-notation provides an *asymptotic lower bound*. For a given function g(n), we denote by \Omega(g(n)) (pronounced "big-omega of g of n" or sometimes just "omega of g of n") the set of functions
+
+\Omega(g(n)) = { f(n) : there exist positive constants c and n_{0} such that 0 \le cg(n) \le f(n) for all n \ge n_{0} }
+
+Figure 3.1(c) on page 45 shows the intuition behind \Omega-notation. For all values /n/ at or to the right of n_{0}, the value of f(n) is on or above cg(n).
+
+From the definitions of the asymptotic notations we have seen thus far, it is easy to prove the following important theorem.
+
+#+Theorem 3.1
+#+begin_theorem
+For any two functions f(n) and g(n), we have f(n) = \Theta(g(n)) if and only if f(n) = O(g(n)) and f(n) = \Omega(g(n)).
+#+end_theorem
+
+When we say that the /running time/ (no modifier) of an algorithm is \Omega(g(n)), we mean that /no matter what particular input of size n is chosen for each value of n/, the running time on that input is at least a constant times g(n), for sufficiently large /n/. Equivalently, we are giving a lower bound on the *best-case running time* of an algorithm. For example, the best-case running time of insertion sort is \Omega(n), which implies that the running time of insertion sort is \Omega(n).
+
+The running time of insertion sort therefore belongs to *both* \Omega(n) *and* O(n^{2}), since it falls anywhere between a linear function of /n/ and a quadratic function of /n/. Moreover *(!)*, these bounds are asymptotically as tight as possible: for instance, the running time of insertion sort is *not* \Omega(n^{2}), since there exists an input for which insertion sort runs in \Theta(n) time (e.g., when the input is already sorted). It is not contradictory, however, to say that the /worst-case/ running time of insertion sort is \Omega(n^{2}), since there exists an input that causes the algorithm to take \Omega(n^{2}) time.
+
+*** Asymptotic notation in equations and inequalities
+
+We have already seen how asymptotic notation can be used in mathematical formulas. For example, in introducing /O/-notation, we wrote "n = O(n^{2})." We might also write (2n^2 + 3n + 1 = 2n^2 + \Theta(n)). How do we interpret such formulas?
+
+When the asymptotic notation stands alone (that is, *not* within a larger formula) on the right-hand side of an equation or inequality, as in n = O(n^2), we have already defined the equal sign to mean /set membership/: n \in O(n^2). In general, however, when asymptotic notation appears in a formula, we interpret it as standing for some anonymous function that we do not care to name. For example, the formula (2n^2 + 3n + 1 = 2n^2 + \Theta(n)) means that (2n^2 + 3n + 1 = 2n^2 + f(n)), where f(n) is some function in the set \Theta(n). In this case, we let f(n) = 3n + 1, which indeed is in \Theta(n).
+
+Using asymptotic notation in this manner can help eliminate inessential detail and clutter in an equation. For example, in Chapter 2 we expressed the worst-case running time of merge sort as the recurrence
+
+T(n) = 2T(n/2) + \Theta(n).
+
+If we are interested only in the asymptotic behavior of T(n), there is no point in specifying all the lower-order terms exactly; they are all understood to be included in the anonymous function denoted by the term \Theta(n).
+
+The number of anonymous functions in an expression is understood to be equal to the number of times the asymptotic notation appears *(!)*.
+
+In some cases, asymptotic notation appears on the left-hand side of an equation, as in
+
+2n^2 + \Theta(n) = \Theta(n^2).
+
+We interpret such equations using the following rule:
+
+#+begin_quote
+No matter how the anonymous functions are chosen on the left of the equal sign, there is a way to choose the anonymous functions on the right of the equal sign to make the equation valid.
+#+end_quote
+
+Thus, our example means that for /any/ function f(n) \in \Theta(n), there is /some/ function g(n) \in \Theta(n^2) such that 2n^2 + f(n) = g(n) for all /n/. In other words, the right-hand side of an equation provides a coarser level of detail thatn the left-hand side.
+
+*** /o/-notation
+
+The asymptotic upper bound provided by /O/-notation may or may not be asymptotically tight. The upper bound 2n^2 = O(n^2) is asymptotically tight, but *(!)* the bound 2n = O(n^2) is not. We use /o/-notation to denote an upper bound that is *not* asymptotically tight. We formally define o(g(n)) (pronounced "little-oh of g of n") as the set
+
+o(g(n)) = { f(n) : for any positive constant c > 0, there exists a constant n_0 \gt 0 such that 0 \le f(n) \lt cg(n) for all n \ge n_0 }.
+
+The definitions of /O/-notation and /o/-notation are similar. The main difference is that in f(n) = )(g(n)), the bound 0 \le f(n) \le cg(n) holds for /some/ constant c \gt 0, but in f(n) = o(g(n)), the bound 0 \le f(n) \lt cg(n) holds for /all/ constants c \gt 0. Intuitively, in /o/-notation, the function f(n) becomes insignificant relative to g(n) as /n/ approaches infinity.
+
+*** \omega-notation
+
+By analogy, \omega-notation is to \Omega-notation as /o/-notation is to /O/-notation. We use \omega-notation to denote a lower bound that is *not* asymptotically tight. One way to define it is by
+
+f(n) \in \omega(g(n)) if and only if g(n) \in o(f(n)).
+
+Formally, however, we define \omega(g(n)) (pronounced "little-omega of g of n") as the set
+
+\omega(g(n)) = { f(n) : for any positive constant c \gt 0, there exists a constant n_0 \gt 0 such that 0 \le cg(n) \lt f(n) for all n \ge n_0 }.
+
+In other words, f(n) becomes arbitrarily large relative to g(n) as /n/ approaches infinity.
+
+*** Comparing functions
+
+Many of the relational properties of real numbers apply to asymptotic comparisons as well. For the following, assume that f(n) and g(n) are asymptotically positive.
+
+**** Transitivity:
+
+- f(n) = \Theta(g(n)) and g(n) = \Theta(h(n)) imply f(n) = \Theta(h(n))
+- f(n) = O(g(n)) and g(n) = O(h(n)) imply f(n) = O(h(n))
+- f(n) = \Omega(g(n)) and g(n) = \Omega(h(n)) imply f(n) = \Omega(h(n))
+- f(n) = o(g(n)) and g(n) = o(h(n)) imply f(n) = o(h(n))
+- f(n) = \omega(g(n)) and g(n) = \omega(h(n)) imply f(n) = \omega(h(n))
+
+**** Reflexivity:
+
+- f(n) = \Theta(f(n))
+- f(n) = O(f(n))
+- f(n) = \Omega(f(n))
+
+**** Symmetry:
+
+- f(n) = \Theta(g(n)) if and only if g(n) = \Theta(f(n))
+
+**** Transpose symmetry:
+
+- f(n) = O(g(n)) if and only if g(n) = \Omega(f(n))
+- f(n) = o(g(n)) if and only if g(n) = \omega(f(n))
+
+*** More on comparing functions
+
+Because these properties hold for asymptotic notations, we can draw an analogy between the asymptotic comparison of two functions /f/ and /g/ and the comparison of two real numbers /a/ and /b/:
+
+- f(n) = O(g(n)) is like a \le b
+- f(n) = \Omega(g(n)) is like a \ge b
+- f(n) = \Theta(g(n)) is like a = b
+- f(n) = o(g(n)) is like a \lt b
+- f(n) = \omega(g(n)) is like a \gt b
+
+We say that f(n) is *asymptotically smaller* than g(n) if f(n) = o(g(n)), and f(n) is *asymptotically larger* than g(n) if f(n) = \omega(g(n)). One property of real numbers, *(!)* however *(!),* does *not* carry over to asymptotic notation:
+
+**** Trichotomy:
+
+For any two real numbers /a/ and /b/, exactly one of the following must hold:
+
+- a \lt b
+- a = b
+- a \gt b
+
+Although any two real numbers can be compared, *not* all functions are asymptotically comparable *(!)*. That is, for two functions f(n) and g(n), it may be the case that neither f(n) = O(g(n)) nor f(n) = \Omega(g(n)) holds. For example, we cannot compare the functions f(n) = n and g(n) = n^{1 + sin n} using asymptotic notation, since the value of the exponent in n^{1 + sin n} oscillates between 0 and 2, taking on all values in between.
