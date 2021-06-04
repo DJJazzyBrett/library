@@ -1,0 +1,12 @@
+#+TITLE: Notes on: Sequential and parallel algorithms and data structures by Sanders, P., Mehlhorn, K., Dietzfelbinger, M., & Dementiev, R. (2019)
+#+Time-stamp: <2021-06-04 14:36:01 boxx>
+
+- source :: cite:sanders-2019-sequen-paral
+
+* TODO Summary
+
+An algorithm is a precise and unambiguous recipe for solving a class of problems. If formulated as programs, they can be executed by a machine. Algorithms are at the heart of every nontrivial computer application. Therefore, every computer scientist and every professional programmer should know about the basic algorithmic toolbox: structures that allow efficient organization and retrieval of data, key algorithms for problems on graphs, and generic techniques for modeling, understanding, and solving algorithmic problems.
+
+* TODO Comments
+
+* TODO Topics
