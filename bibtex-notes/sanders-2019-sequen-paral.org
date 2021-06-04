@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Sequential and parallel algorithms and data structures by Sanders, P., Mehlhorn, K., Dietzfelbinger, M., & Dementiev, R. (2019)
-#+Time-stamp: <2021-06-04 16:34:14 boxx>
+#+Time-stamp: <2021-06-04 19:11:42 boxx>
 
 - source :: cite:sanders-2019-sequen-paral
 
@@ -82,3 +82,65 @@ A RAM can execute (machine) programs. *A program is simply a sequence of machine
 
 
 A program is executed on a given input step by step. The input for a computation is stored in memory cells S[1] to S[R_l] and execution starts with program line 1. With the exception of the branch instructions ~JZ~ and ~J~, the next instruction to be executed is always the instruction in the next program line. The execution of a program terminates if a program line is to be executed whose number is outside the range 1 .. /l/. Recall that /l/ is the number of the last program line *(!)*.
+
+We define the execution time of a program on an input in the most simple way:
+
+#+begin_quote
+Each instruction takes one time step to execute. The total execution time of a program is the number of instructions executed.
+#+end_quote
+
+It is important to remember that the RAM model is an abstraction *(!)*. One should not confuse it with physically existing machines. In particular, real machines have a finite memory and a fixed number of bits per register (e.g., 32 or 64). In constrast *(!)*, the word size and memory of a RAM scale with input size. /This can be viewed as an abstraction of the historical development/. Microprocessors have had words of 4, 8, 16, and 32 bits in succession, and now often have 64-bit words. Words of 64 bits can index a memory of size 2^{64}. Thus, at current prices, memory size is limited by cost and *not* by physical limitations. This statement was also true when 32-bit words were introduced.
+
+Our complexity model is a gross oversimplification: Modern processors attempt to execute many instructions in parallel. How well they succeed depends on factors such as data dependencies between successive operations. As a consequence, an operation does *not* have a fixed cost *(!)*. This effect is particularly pronounced for memory accesses *(!)*. The worst-case time for a memory access to the main memory can be hundreds of times higher than the best-case time. The reason is that modern processors attempt to keep frequently used data in *caches* - small, fast memories close to the processors. How well caches work depends on a lot on their architecture, the program, and the particular input. Appendix B discusses hardware architecture in more detail *(!)*.
+
+We could attempt to introduce a very accurate cost model, but this would miss the point. We would end up with a complex model that would be difficult to handle. Even a successful complexity analysis would lead to a monstrous formula depending on many parameters that change with every new processor generation. Although such a formula would contain detailed information, the very complexity of the formula would render it useless. /We therefore go to the other extreme and eliminate all model parameters by assuming that each instruction takes exeactly one unit of time/. The result is that constant factors in our model are quite meaningless - one more reason to stick to asymptotic analysis most of the time. We compensate for this drawback by providing implementation notes, in which we discuss implementation choices and shortcomings of the model. Two (2) important shortcomings of the RAM model, namely the lack of a memory hierarchy and the limited parallelism, are discussed in the next two (2) subsections.
+
+*** External Memory
+
+The organization of the memory is a major difference between a RAM and a real machine: a uniform flat memory in a RAM and a complex memory hierarchy in a real machine. In sections 5.12, 6.3, 7.7, and 11.5 we shall discuss algorithms that have been specifically designed for huge data sets which have to be stored in slow memory, such as disks. We shall use the /external-memory model/ to study these algorithms.
+
+The external-memory model is like the RAM model except that the fast memory is limited to /M/ words. Additionally, there is an external memory with unlimited size. There are special I/O operations, which transfer /B/ consecutive words between slow and fast memory. The reason for transferring a block of /B/ words instead of a single word is that the memory access time is large for a slow memory in comparison with the transfer time for a single word. The value of /B/ is chosen such that the transfer time for /B/ words is approximately equal to the access time.
+
+** Pseudocode
+
+Our RAM model is an abstraction and simplification of the machine programs executed on microprocessors. The purpose of the model is to provide a precise definition of running time. Rather than actual code, we formulate our algorithms in /pseudocode/, which is an abstraction and simplification of imperative programming languages such as C, C++, Java, C#, Rust, Swift, Python, and Pascal, combined with the liberal use of mathematical notation.
+
+We now describe the conventions used in this book, and derive a timing model for pseudocode programs. The timing model is quite simple:
+
+#+begin_quote
+Basic pseudocode instructions take constant time, and procedure and function calls take constant time plus the time to execute their body.
+#+end_quote
+
+We justify the timing model by outlining how pseudocode can be translated into equivalent RAM code *(!)*. We do this only to the extent necessary for understanding the timing model. There is no need to worry about compiler optimization techniques, since constant factors are ignored in asymptotic analysis anyway. The syntax of our pseudocode is akin to that of Pascal, because we find this notation typographically nicer for a book than the more widely known syntax of C and its descendants C++ and Java.
+
+*** Variables and Elementary Data Types
+
+A /variable declaration/ "/v/ = /x/ : /T/" introduces a variable /v/ of type /T/ and initializes it to the value /x/. For example, "/answer/ = 42 : \N" introduces a variable /answer/ assuming nonnegative integer values and initializes it to the value of 42. When the type of a variable is clear from the context, we shall sometimes omit it from the declaration. *A type is either a basic type (e.g., integer, Boolean value or pointer) or a composite type*. We have predefined composite types such as arrays, and application-specific classes. When the type of a variable is irrelevant to the discussion, we use the unspecified type /Element/ as a placeholder for an arbitrary type. We take the liberty of extending numeric types by the values -\infty and \infty whenever this is convenient. Similarly, we sometimes extend types by an undefined value (denoted by the symbol \perp), which we assume to be distinguishable from any "proper" element of the type /T/. In particular, for pointer types it is useful to have an undefined value. In the values of the pointer type "*Pointer to* /T/" are handles to objects of type /T/. In the RAM model, this is the index of the first cell in a region of storage holding an object of type /T/.
+
+A declaration "/a/ : /Array/ [i..j] *of* /T/" introduces an /array a/ consisting of /j - i/ + 1 /elements/ of type /T/, stored in a[i], a[i+1], ..., a[j]. Arrays are implemented as contiguous pieces of memory. To find an element a[k], it suffices to know the starting address of /a/ and the size of an object of type /T/. For example, if register R_{a} stores the starting address of an array a[0..k], the elements have unit size, and R_{i} contains the integer 42, the instruction sequence "R_{1} := R_{a} + R_{i}; R_{2} := S[R_{1}]" loads a[42] into register R_{2}. The size of an array is fixed at the time of declaration *(!)*; such arrays are called *static*. In a later section, we show how to implement /unbounded arrays/ that can grow and shrink during execution.
+
+A declaration "/c/ : *Class* /age/ : \N, /income/ : \N *end*" introduces a variable /c/ whose values are pairs of integers. The components of /c/ are denoted by /c.age/ and /c.income/. For a variable /c/, *addressof* /c/ returns a handle to /c/, i.e., the address of /c/. If /p/ is an appropriate pointer type, /p/ := *addressof* /c/ stores a handle to /c/ in /p/ and \*p gives us back /c/. The fields of /c/ can be then also be accessed through /p/ \rightarrow /age/ and /p/ \rightarrow /income/. Alternatively, one may write (but nobody ever does *(!)*) (\*p).age and (\*p).income.
+
+Arrays and objects referenced by pointers can be allocated and deallocated by the commands *allocate* and *dispose*. For example, /p/ := *allocate* /Array/ [1..n] *of* /T/ allocates an array of /n/ objects of type /T/. That is, the statement allocates a contiguous chunk of memory of size /n/ times the size of an object of type /T/, and assigns a handle to this chunk (= the starting address of the chunk) to /p/. The statement *dispose* /p/ frees this memory and makes it available for reuse. With *allocate* and *dispose*, we can cut our memory array /S/ into disjoint pieces that can be referred to separately. These functions can be implemented to run in constant time. The simplest implementation is as follows. We keep track of the used portion of /S/ by storing the index of the first free cell of /S/ in a special variable, say /free/. A call of *allocate* reserves a chunk of memory starting at /free/ and increases /free/ by the size of the allocated chunk. A call of *dispose* does nothing. This implementation is time-efficient, but *not* space-efficient. Any call of *allocate* or *dispose* takes constant time. However, the total space consumption is the total space that has ever been allocated and *not* the maximum space simultaneously used, i.e., allocated but not yet freed, at any one time. It is not known whether an arbitrary sequence of *allocate* and *dispose* operations can be realized space-efficiently and with constant time per operation. However, for all algorithms presented in this book, *allocate* and *dispose* can be realized in a time- and space-efficient way.
+
+We borrow some composite data structures from mathematics. In particular, we use *tuples*, *sequences*, and *sets*. /Pairs/, /triples/, and other /tuples/ are written in round brackets, for example (3,1), (3,1,4) and (3,1,4,1,5). Since tuples contain only a constant number of elements, operations on them can be broken into operations on their constituents in an obvious way. /Sequences/ store elements in a specified order; for example, "/s/ = \langle3,1,4,1\rangle : /Sequence/ *of* \Z" declares a sequence /s/ of integers and initializes it to contain numbers 3, 1, 4, and 1 in that order *(!)*. Sequences are a natural abstraction of many data structures, such as files, strings, lists, stacks, and queues. In Chapter 3, we shall study many ways of representing sequences. In later chapters, we shall make extensive use of sequences as a mathematical abstraction with little further reference to implementation details. The empty sequence is /always/ written as \langle\rangle.
+
+Sets play an important role in mathematical arguments, and we shall also use them in our pseudocode. In particular, you will see declarations such as "/M/ = {3,1,4} : /Set/ *of* \N" that are analogous to declarations of arrays or sequences. Sets are usually implemented as sequences *(!)*.
+
+*** Statements
+
+The simplest statement is an assignment statement /x/ := /E/, where /x/ is a variable and /E/ is an expression. An assignnment is easily transformed into a constant number of RAM instructions. For example, the statement /a/ := /a/ + /bc/ is translated into "R_{1} := R_{b} \* R_{c} ; R_{a} := R_{a} + R_{1}", where R_{a}, R_{b}, and R_{c} stand for the registers storing /a/, /b/, and /c/, respectively. From programming language C, we borrow the shorthands ++ and -- for incrementing and decrementing variables. We also use parallel assignment to several variables. For example, if /a/ and /b/ are variables of the same type, "(/a/, /b/) := (/b/, /a/)" swaps the contents of /a/ and /b/ *(!)*.
+
+The conditional statement "*if* /C/ *then* /I/ *else* /J/", where /C/ is a Boolean expression and /I/ and /J/ are statements, translates into the following instruction sequence:
+
+eval(/C/); ~JZ~ /sElse/, R_{c}; trans(/I/); ~J~ /sEnd/; trans(/J/),
+
+where eval(/C/) is a sequence of instructions that evaluate the expression /C/ and leave its value in register R_{c}, trans(/I/) is a sequence of instructions that implement statement /I/, trans(/J/) implements /J/, /sElse/ is the address of the first instruction in trans(/J/), and /sEnd/ is the address of the first instruction after trans(/J/). The sequence above first evaluates /C/. If /C/ evaluate to false (= 0), the program jumps to the first instruction of the translation of /J/. If /C/ evaluates to true (= 1), the program  continues with the translation of /I/ and then jumps to the instruction after the translation of /J/. The statement "*if* /C/ *then* /I/" is a shorthand for "*if /C/ *then* /I/ *else* ;", i.e., an if-then-else with an empty "else" part.
+
+Our written representation of programs is intended for humans and uses less strict syntax than do programming languages. In particular, we usually group statements by indentation and in this way avoid the proliferation of brackets observed in programming languages such as C that are designed as a compromise between readability for humans and for computers. We use brackets /only/ if the program would be ambiguous otherwise. For the same reason, a line break can replace a semicolon for the purpose of separating statements.
+
+The loop "*repeat* /I/ *until* /C/" translates into trans(/I/); eval(/C/); ~JZ~ /sI/, R_{c}, where /sI/ is the address of the first instruction in trans(/I/). We shall also use many other types of loops that can be viewed as shorthands for various repeat loops [see top of p. 35 for example].
+
+Many low-level optimizations are possible when loops are translated into RAM code. These optimizations are of *no* concern to us. For us, it is only important that the execution time of a loop can be bounded by summing the execution times of each of its iterations, including *(!)* the time needed for evaluating conditions.
+
+*** Procedures and Functions
