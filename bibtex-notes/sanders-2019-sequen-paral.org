@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Sequential and parallel algorithms and data structures by Sanders, P., Mehlhorn, K., Dietzfelbinger, M., & Dementiev, R. (2019)
-#+Time-stamp: <2021-06-04 14:36:01 boxx>
+#+Time-stamp: <2021-06-04 16:34:14 boxx>
 
 - source :: cite:sanders-2019-sequen-paral
 
@@ -10,3 +10,75 @@ An algorithm is a precise and unambiguous recipe for solving a class of problems
 * TODO Comments
 
 * TODO Topics
+
+** Asymptotic Notation
+
+The main purpose of algorithm analysis is to give performance guarantees, for example bounds on running time, that are at the same time accurate, concise, general, and easy to understand. It is difficult to meet all these criteria simultaneously. For example, the most accurate way to characterize the running time /T/ of an algorithm is to view /T/ as a mapping from the set /I/ of all inputs to the set of nonnegative numbers \R_{+}. For any problem instance /i/, T(i) is the running time on /i/. This level of detail is so overwhelming that we could no possibly derive a theory about it. A useful theory needs a more global view of the performance of an algorithm.
+
+Hence, we group the set of all inputs into classes of "similar" inputs and summarize the performance on /all/ instances in the same class in a single number. The most useful grouping is by /size/. Usually there is a natural way to assign a size to each problem instance. *The size of an integer is the number of digits in its representation, and the size of a set is the number of elements in that set*. The size of an instance is /always/ a natural number. Sometimes we use more than one parameter to measure the size of an instance; for example, it is customary to measure the size of a graph by its number of nodes and its number of edges. We ignore this complication for now. We use size(i) to denote the size of instance /i/, and I_{n} todenote the set of instances of size /n/ for /n/ \in \N. For the inputs of size /n/, we are interested in the maximum, minimum, and average execution times.
+
+ - worst case:     T(n) = max{T(i) : i \in I_{n}}
+ - best case:      T(n) = min{T(i) : i \in I_{n}}
+ - average case:   T(n) = \cfrac{1}{|I_{n}|}\sum T(i)
+
+We are most interested in the worst-case execution time, since it gives us the strongest performance guarantee. A comparison of the best and the worst case tells us how much the execution time varies for different inputs in the same class *(!)*. If the discrepancy is big, the average case may give more insight into the true performance of the algorithm.
+
+We shall perform one more step of data reduction: We shall concentrate on /growth rate/ or /asymptotic analysis/. Functions f(n) and g(n) have the /same growth rate/ if there are positive constants /c/ and /d/ such that /c/ \le f(n)/g(n) \le d for all sufficiently large /n/, and f(n) /grows faster/ thatn g(n) if, for all positive constants /c/, we have f(n) \ge c \cdot g(n) for all sufficiently large /n/. The growth rate talks about the behavior for large /n/. The word "asymptotic" in "asymptotic analysis" also stresses the fact that we are interested in the behavior for large /n/.
+
+Why are we interested only in the growth rates and the behavior for large /n/? We are interested in the behavior for large /n/ because the whole purpose of designing efficient algorithms is to be able to solve for large instances. For large /n/, an algorithm whose running time has a smaller growth rate than the running time of another algorithm will be superior. Also, our machine model is an abstraction of real machines and hence can predict actual running times only up to a constant factor. A pleasing side effect of concentrating on growth rate is that we can characterize the running times of algorithms by simple functions.
+
+The following definitions allow us to argue precisely about /asymptotic behavior/. Let f(n) and g(n) denote functions that map nonnegative integers to nonnegative real numbers:
+
+ - O(f(n)) = {g(n) : \exists c \gt 0 : \exists n_{0} \in \N_{+} : \forall n \ge n_{0} : g(n) \le c \cdot f(n)},
+ - \Omega(f(n)) = {g(n) : \exists c \gt 0 : \exists n_{0} \in \N_{+} : \forall n \ge n_{0} : g(n) \ge c \cdot f(n)},
+ - \Theta(f(n)) = O(f(n)) \cap \Omega(f(n)),
+ - o(f(n)) = {g(n) : \forall c \gt 0 : \exists n_{0} \in \N_{+} : \forall n \ge n_{0} : g(n) \le c \cdot f(n)},
+ - \omega(f(n)) = {g(n) : \forall c \gt 0 : \exists n_{0} \in \N_{+} : \forall n \ge n_{0} : g(n) \ge c \cdot f(n)}.
+
+The left-hand sides should read as "big O of /f/", "big omega of /f/", "theta of /f/", "little o of /f/", and "little omega of /f/", respectively. A remark about notation is in order here. In the definitions above, we use "f(n)" and "g(n)" with two different meanings. In "O(f(n))" and "{g(n) : ...}", they denote the functions /f/ and /g/ and the "/n/" emphasizes that these are functions of the argument /n/, and in "g(n) \le c \cdot f(n)", they denote the values of the functions at the argument /n/ *(!)*.
+
+The growth rate of most algorithms discussed in this book is either a polynomial or a logarithmic function, or the product of a polynomial and a logarithmic function.
+
+Asymptotic notation is used a lot in algorithm analysis, and it is convenient to stretch mathematical notation a little in order to allow sets of functions (such as O(n^{2})) to be treated similarly to ordinary functions. In particular, we shall always write /h/ = O(f) instead of /h/ \in O(f), and O(h) = O(f) instead of O(h) \subset O(f). For example,
+
+\[ 3n^{2} + 7n = O(n^{2}_{}^{}) = O(n^{3}) \].
+
+Never forget *(!)* that sequences of "equalities" involving /O/-notation are really membership and inclusion relations, and as such, *can only be read from left to right*.
+
+If /h/ is a function, /F/ and /G/ are sets of functions, and \circ is an operator such as +, \cdot, or /, then /F/ \circ /G/ is a shorthand notation for {f \circ g : f \in F, g \in G}, and /h/ \circ /F/ stands for {/h/} \circ /F/. So f(n) + o(f(n)) denotes the set of all functions f(n) + g(n) where g(n) grows strictly more slowly than f(n), i.e., the ratio (f(n) + g(n))/f(n) goes to 1 as /n/ goes to infinity. Equivalently, we can write (1 + o(1))f(n). We use this notation whenever we care about the constant in the leading terms but want to ignore /lower-order terms/.
+
+The following rules hold for /O/-notation:
+
+ - \( cf(n) = \Theta(f(n)) \) for any positive constant c,
+ - \( f(n) + g(n) = \Omega(f(n)) \),
+ - \( f(n) + g(n) = O(f(n)) \) if \( g(n) = O(f(n)) \),
+ - \( O(f(n)) \cdot O(g(n)) = O(f(n) \cdot g(n)) \).
+
+** The Sequential Machine Model
+
+In 1945, John von Neumann introduced a computer architecture which was simple, yet powerful. The limited hardware technology of the time forced him to come up with a design that concentrated on the essentials; otherwise, realization would have been impossible. Hardware technology has developed tremendously since 1945. However, the programming model resulting from von Neumann's design is so elegant and powerful that it is still the basis for most of modern programming. Usually, programs written with von Neumann's model in mind work well on the vastly more complex hardware of today's machines.
+
+The variant of von Neumann's model used in algorithmic analysis is called the *RAM model*. It was introduced by Shepherdson and Sturgis in 1963. It is a /sequential/ machine with uniform memory, i.e., there is a single processing unit, and all memory accesses take the same amount of time. The (main) memory, or *store*, consists of infinitely many cells S[0], S[1], ...; at any point in time, only a finite number of them will be in use. In addition to the main memory, there are a small number of *registers* R_{1}, ..., R_{k}.
+
+The memory cells store "small" integers, also called *words*. In our discussion of integer arithmetic in Chapter 1, we assumed that "small" meant one-digit. It is more reasonable and convenient to assume that the interpretation of "small" depends on the size of the input *(!)*. Our default assumption is that integers whose absolute value is bounded by a polynomial in the size of the input can be stored in a single cell. Such integers can be represented by a number of bits that is logarithmic in the size of the input. This assumption is reasonable because we could always spread out the contents of a single cell over logarithmically many cells with a logarithmic overhead in time & space and obtain constant-size cells. The assumption is convenient because we want to be able to store array indices in a single cell. The assumption is necessary because allowing cells to store arbitrary numbers would lead to absurdly overoptimistic algorithms. For example, by repeated squaring, we could generate a number with 2^{n} bits in /n/ steps. Namely, if we start with the number 2 = 2^{1}, squaring it once gives 4 = 2^{2} = 2^2^^1, ..., etc.
+
+Our model supports a limited form of parallelism. We can perform simple operations on a logarithmic number of bits in constant time.
+
+A RAM can execute (machine) programs. *A program is simply a sequence of machine instructions, numbered from 0 to some number /l/.* The elements of the sequence are called *program lines*. The program is stored in a program store. Our RAM supports the following *machine instructions*:
+
+ - R_{i} := S[R_{j}] /loads/ the contents of the memory cell indexed by the contents of R_{j} into register R_{i.}
+
+ - S[R_{j}] := R_{i} /stores/ the contents of register R_{i} in the memory cell indexed by the contents of R_{j}.
+
+ - R_{i} := R_{j} \odot R_{h} executes the binary operation \odot on the contents of registers R_{j} and R_{h} and stores the result in register R_{i}. Here, \odot is a placeholder for a variety of operations. The /arithmetic/ operations are the usual +, -, and \*; they interpret the contents of the registers as integers *(!)*. The operations *div* and *mod* stand for integer division and the remainder, respectively. The /comparison/ operators \le, \lt, \gt, and \ge for integers return /truth values/, i.e., either /true/ ( = 1) or /false/ ( = 0). The /logical operators/ \land and \lor manipulate the truth values 0 and 1. We also have bitwise Boolean operations | (OR), & (AND), and \oplus (exclusive OR, XOR). They interpret contents as bit strings *(!)*. The shift operators >> (shift right) and << (shift left) interpret the first argument as a bit string *(!)* and the second argument as a nonnegative integer *(!)*. We may also assume that there are operations which interpret the bits stored in a register as a floating-point number, i.e., a finite-precision approximation of a real number.
+
+ - R_{i} := \odot R_{j} executes the /unary/ operation \odot on the contents of register R_{j} and stores the result in register R_{i}. The operators -, \neg (logical NOT), and \~ (bitwise NOT) are available.
+
+ - R_{i} := C assigns the /constnat/ value C to R_{i}.
+
+ - ~JZ~ /k/,R_{i} continues execution at program line /k/, if register R_{i} is 0, and at the next program line otherwise (/conditional branch/). There is also the variant ~JZ~ R_{j},R_{i}, where the target of the jump is the program line stored in R_{j}.
+
+ - ~J~ /k/ continues execution at program line /k/ (/unconditional branch/). Similarly to ~JZ~, the program line can also be specified by the content of a register.
+
+
+A program is executed on a given input step by step. The input for a computation is stored in memory cells S[1] to S[R_l] and execution starts with program line 1. With the exception of the branch instructions ~JZ~ and ~J~, the next instruction to be executed is always the instruction in the next program line. The execution of a program terminates if a program line is to be executed whose number is outside the range 1 .. /l/. Recall that /l/ is the number of the last program line *(!)*.
