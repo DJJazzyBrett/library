@@ -1,10 +1,45 @@
 #+TITLE: Notes on: Introduction to natural language processing by Eisenstein, J. (2019)
-#+Time-stamp: <2021-05-28 16:08:13 boxx>
+#+Time-stamp: <2021-06-05 14:55:50 boxx>
 
 - source :: cite:eisenstein-2019-introd-natur
 
 * TODO Summary
 
+The goal of this text is focused on a core subset of the natural language processing, unified by the concepts of /learning/ and /search/. A remarkable number of problems in NLP can be solved by a compact set of methods:
+
+  - /Search/: Viterbi, CKY, minimum spanning tree, shift-reduce, integer linear programming, beam search
+  - /Learning/: Maximum likelihood estimation, logistic regression, perceptron, expectation-maximization, matrix factorization, backpropagation
+
+This text explain how these methods work and how they can be applied to a wide range of tasks: document classification, word sense disambiguation, part-of-speech tagging, named entity recognition, parsing, coreference resolution, relation extraction, discourse analysis, language modeling, and machine translation.
+
 * TODO Comments
+
+** Background
+
+Because NLP draws on many different intellectual traditions, almost everyone who approaches it feels underprepared in one way or another. Here is a summary of what is expected:
+
+*** Mathematics and machine learning
+
+This text assumes a background in multivariate calculus and linear algebra: vectors, matrices, derivatives, and partial derivatives. You should also be familiar with probability and staistics. A review of basic probability is found in Appendix A, and a minimal review of numerical optimization is found in Appendix B.
+
+*** Linguistics
+
+This book assumes no formal training in linguistics, aside from elementary concepts like nouns and verbs, which you have probably encountered in the study of English grammar. Ideas from linguistics are introduced throughout the text as needed, including discussions of morphology and syntax (chapter 9), semantics (chapters 12 and 13), and discourse (chapter 16). Linguistic issues also arise in the application-focused chapters 4, 8, and 18.
+
+*** Computer science
+
+This book is targeted at computer scientists, who are assumed to have taken introductory courses on the analysis of algorithms and complexity theory. In particular, you should be familiar with asymptotic analysis of the time and memory costs of algorithms and with the basics of dynamic programming.
+
+** How to Use This Book
+
+After the introduction, the textbook is organized into four (4) main units:
+
+1. /Learning/ - This section builds up a set of machine learning tools that will be used throughout the other sections. Because the focus is on machine learning, the text representations and linguistic phenomenona are mostly simple: "bag-of-words" text classification is treated as a model example. Chapter 4 describes some of the more linguistically interesting applications of word-based text analysis.
+
+2. /Sequences and trees/ - This section introduces the treatment of language as a structured phenomena. It describes sequence and tree representations and the algorithms that they facilitate, as well as the limitations that these representations impose. Chapter 9 introduces finite-state automata and briefly overviews a context-free account of English syntax.
+
+3. /Meaning/ - This section takes a broad view of efforts to represent and copmute meaning from text, ranging from formal logic to neural word embeddings. It also includes two topics that are closely related to semantics: (1) resolution of ambiguous references, and (2) analysis of multi-sentence discourse structure.
+
+4. /Applications/ - The final section offers chapter-length treatments on three of the most prominent applications of natural language processing: (1) information extraction, machine translation, and text generation. Each of these applications merits a textbook length treatment of its own; the chapters here explain some of the most well-known systems using the formalisms and methods built up earlier in the book, while introducing methods such as neural attention.
 
 * TODO Topics
