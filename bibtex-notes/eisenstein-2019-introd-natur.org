@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to natural language processing by Eisenstein, J. (2019)
-#+Time-stamp: <2021-06-05 14:55:50 boxx>
+#+Time-stamp: <2021-06-05 17:15:02 boxx>
 
 - source :: cite:eisenstein-2019-introd-natur
 
@@ -43,3 +43,21 @@ After the introduction, the textbook is organized into four (4) main units:
 4. /Applications/ - The final section offers chapter-length treatments on three of the most prominent applications of natural language processing: (1) information extraction, machine translation, and text generation. Each of these applications merits a textbook length treatment of its own; the chapters here explain some of the most well-known systems using the formalisms and methods built up earlier in the book, while introducing methods such as neural attention.
 
 * TODO Topics
+
+Natural language processing is the set of methods for making human language accessible to computers *(!)*. In the past decade, NLP has become embedded in our daily lives: automatic machine translation is ubiquitous on the web and in social media; text classification keeps our email boxes from collapsing under a deluge of spam; search engines have moved beyond string matching and network analysis to a high degree of linguistic sophistication; dialog systems provide an increasingly common and effective way to get and share information.
+
+These diverse applications are based on a common set of ideas, drawing on algorithms, linguistics, logic, statistics, and more. The goal of this text is to provide a survey of these foundations. The technical fun starts in the next chapter; the rest of this current chapter situates natural language processing with respect to other intellectual disciplines, identifies some high-level themes in contemporary natural language processing, and advises the reader on how best to approach the subject.
+
+** Natural Language Processing and Its Neighbors
+
+Natural language processing draws on many other intellectual traditions, from formal linguistic to statistical physics. This section briefly situates natural language processing with respect to some of its closest neighbors.
+
+*** Computational linguistics
+
+Most of the meetings and journals that host NLP research bear the name "computational linguistic", and the terms may be thought of as essentially synonymous. But while there is a substantial overlap, there is an important difference in focus. In linguistics, language is the object of study *(!)*. Computational methods may be brought to bear, just as in scientific disciplines like computational biology and computational astronomy, but they play only a supporting role. In contrast, natural language processing is focused on the design and analysis of computational algorithms and representations for processing natural human language *(!)*. The goal of NLP is to provide new computational capabilities around human language: for example, extracting information from texts, translating between languages, answering questions, holding a conversation, taking instructions, and so on. Fundamental linguistic insights may be crucial for accomplishing these tasks, but success is ultimately measured by whether and how well the job gets done.
+
+*** Machine learning
+
+Contemporary approaches to NLP rely heavily on machine learning, which makes it possible to build complex computer programs from examples. Machine learning provides an array of general techniques for tasks like converting a sequence of discrete tokens in one vocabulary to a sequence of discrete tokens in another vocabulary - a generalization of what one might informally call "translation". Much of today's natural language processing research can be thought of as applied machine learning *(!)*. However, natural language processing has characteristics that distinguish it from many of machine learning's other application domains.
+
+- Unlike images or audio, text data is fundamentally discrete, with meaning created by combinatorial arrangements of symbolic units. This is particularly consequential for applications in which text is the output, such as translation and summarization, because it is not possible to gradually approach an optimal solution.
