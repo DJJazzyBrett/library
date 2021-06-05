@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Sequential and parallel algorithms and data structures by Sanders, P., Mehlhorn, K., Dietzfelbinger, M., & Dementiev, R. (2019)
-#+Time-stamp: <2021-06-04 19:11:42 boxx>
+#+Time-stamp: <2021-06-05 14:30:26 boxx>
 
 - source :: cite:sanders-2019-sequen-paral
 
@@ -144,3 +144,45 @@ The loop "*repeat* /I/ *until* /C/" translates into trans(/I/); eval(/C/); ~JZ~ 
 Many low-level optimizations are possible when loops are translated into RAM code. These optimizations are of *no* concern to us. For us, it is only important that the execution time of a loop can be bounded by summing the execution times of each of its iterations, including *(!)* the time needed for evaluating conditions.
 
 *** Procedures and Functions
+
+A subroutine with the name /foo/ is declared in the form "*Procedure* foo(/D/) /I/", where /I/ is the body of the procedure and /D/ is a sequence of variable declarations specifying the parameters of /foo/. A call of /foo/ has the form foo(/P/), where /P/ is a parameter list. The parameter list has the same length as the variable declaration list. Parameter passing is either "by value" or "by reference". Our default assumption is that basic objects such as integers and Booleans are passed by value and that complex objects such as arrays are passed by reference *(!)*. These conventions are similar to the conventions used by C and guarantee that parameter passing takes constant time *(!)*. The semantics of parameter passing is defined as follows:
+
+ - For a value parameter /x/ of type /T/, the actual parameter must be an expression /E/ of the same type. Parameter passing is equivalent to the declaration of a local variable /x/ of type /T/ initialized to /E/.
+ - For a reference parameter /x/ of type /T/, the actual parameter must be a variable of the same type and the formal parameter is simply an alternative name for the actual parameter.
+
+As with variable declarations, we sometimes omit type declarations for parameters if they are unimportant or clear from the context. Sometimes we also declare parameters implicitly using mathematical notation. For example, the declaration *Procedure* bar(\langle a_{1} , a_{2} , ... , a_{n} \rangle) introduces a procedure whose argument is a sequence of /n/ elements of unspecified type.
+
+Most procedure calls can be compiled into machine code by simply substituting the procedure body for the procedure call and making provisions for parameter passing; this is called *inlining (!)*. Value passing is implemented by making appropriate assignments to copy the parameter values into the local variables of the procedure. Reference passing to a formal parameter /x/ : /T/ is implemented by changing the type of /x/ to *Pointer to* /T/, replacing all occurrences of /x/ in the body of the procedure by (\*x) and initializing /x/ by the assignment /x/ := *addressof* /y/, where /y/ is the actual parameter. Inlining gives the compiler many opportunities for optimization, so that inlining is the most efficient *(!)* approach for small procedures and for procedures that are called from only a single place.
+
+*Functions* are similar to procedures, except that they allow the return statement to return a value *(!)*. Figure 2.2 on page 36 shows the declaration of a recursive function that returns ~n!~ and its translation into RAM code. The substitution approach fails for *recursive* procedures and functions that directly or indirectly call themselves - substitution would /never/ terminate *(!)*. Realizing recursive procedures in RAM code requires the concept of a *recursion stack*. Explicit subroutine calls over a stack are also used for large procedures that are called multiple times where inlining would unduly increase the code size. The recursion stack is a reserved part of the memory *(!)*. Register R_{r} always points to the first free entry in this stack. The stack contains a sequence of *activation records*, one for each active procedure call. The activation record for a procedure with /k/ parameters and /l/ local variables has size 1 + /k/ + /l/. The first location contains the return address, i.e., the address of the instruction where execution is to be continued after the call has terminated, the next /k/ locations are reserved for the parameters, and the final /l/ locations are reserved for the local variables. A procedure call is now implemented as follows:
+
+  - First, the calling procedure *caller* pushed the return address and the actual parameters onto the stack, increases R_{r} accordingly, and jumps to the first instruction of the called routine *called*.
+  - The called routine reserves space for its local variables by increasing R_{r} appropriately.
+  - Then the body of *called* is executed. During execution of the body, any access to the i^{th} formal parameter (0 \le /i/ \lt /k/) is an access to S[ R_{r} - /l/ - /k/ + /i/ ] and any access to the i^{th} local variable (0 \le /i/ \lt /l/) is an access to S[ R_{r} - /l/ + /i/ ]. When *called* executed a *return* statement, it decreases R_{r} by 1 + /k/ + /l/ (observe that *called* knows /k/ and /l/) and execution continues at the return address (which can be found at S[R_{r}]). Thus, control is returned to the *caller*. Note that recursion is no problem with this scheme, since each incarnation of a routine will have its /own stack area/ for its parameters and local variables. Figure 2.3 on page 36 shows the contents of the recursion stack of a call ~factorial(5)~ when the recursion has reached ~factorial(3)~. The label ~afterCall~ is the address of the instructionfollowing the call ~factorial(5)~, and ~aRecCall~ is defined in Fig. 2.2.
+
+*** Object Orientation
+
+We also need a simpler form of object-oriented programming so that we can separate the interface and the implementation of the data structures *(!)*. We introduce our notation by way of example. The following definition gives a (partial) implementation of a complex number type that can use arbitrary numeric types such as \Z, \Q, and \R for the real and imaginary parts.
+
+
+*Class* Complex(/x/, /y/ : /Number/) *of* /Number/
+   /re/ = /x/ : /Number/
+   /im/ = /y/ : /Number/
+   *Function* /abs/ : /Number/ *return* \sqrt{re^{2} + im^{2}}
+   *Function* add(c' : /Complex/) : /Complex/ *return* Complex(re + c'.re, im + c'.im)
+
+
+Our class names (here "/Complex/") will usually begin with capital letters. The real and imaginary parts are stored in the *member variables* /re/ and /im/, respectively. Now, the declaration "/c/ : Complex(2,3) *of* \R" declares a complex number /c/ initialized to  2 + 3i, where /i/ is the imaginary unit. The expression /c.im/ evaluates to the imaginary part of /c/, and /c.abs/ returns the absolute value of /c/, a real number.
+
+The type after the *of* allows us to parameterize classes with types in a way similar to the template mechanism of C++ or the generic types of Java. Note that in the light of this notation, the types "/Set/ *of* /Element/" and "/Sequence/ *of* /Element/" mentioned earlier are ordinary classes *(!)*. Objects of a class are initialized by setting the member variables as specified in the class definition.
+
+** Parallel Machine Models
+
+We classify parallel machine models into two broad classes:
+
+  1. shared-memory machines, and
+  2. distributed-memory machines.
+
+In both cases, we have /p processing elements/ (PEs). In the former case, these PEs share a common memory and all communication between PEs is through the shared memory. In the latter case, each PE has its own private memory, the PEs are connected by a communication network, and all communication is through the network.
+
+*** Shared-Memory Parallel Computing
