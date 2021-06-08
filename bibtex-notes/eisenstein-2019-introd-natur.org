@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to natural language processing by Eisenstein, J. (2019)
-#+Time-stamp: <2021-06-05 17:15:02 boxx>
+#+Time-stamp: <2021-06-07 20:00:25 boxx>
 
 - source :: cite:eisenstein-2019-introd-natur
 
@@ -61,3 +61,71 @@ Most of the meetings and journals that host NLP research bear the name "computat
 Contemporary approaches to NLP rely heavily on machine learning, which makes it possible to build complex computer programs from examples. Machine learning provides an array of general techniques for tasks like converting a sequence of discrete tokens in one vocabulary to a sequence of discrete tokens in another vocabulary - a generalization of what one might informally call "translation". Much of today's natural language processing research can be thought of as applied machine learning *(!)*. However, natural language processing has characteristics that distinguish it from many of machine learning's other application domains.
 
 - Unlike images or audio, text data is fundamentally discrete, with meaning created by combinatorial arrangements of symbolic units. This is particularly consequential for applications in which text is the output, such as translation and summarization, because it is not possible to gradually approach an optimal solution.
+
+- Although the set of words is discrete, new words are always being created. Furthermore, the distribution over words (and other linguistic elements) resembles that of a *power law*; there will be a few words that are very frequent, and a long tail of words that are rare. A consequence is that natural language processing algorithms must be especially robust to observations that do not occur in the training data.
+
+- Language is *compositional*: units such as words can combine to create phrases, which can combine by the very same principles to create larger phrases. For example, a *noun phrase* can be created by combining a smaller noun phrase with a *prepositional phrase*, as in /the whiteness of the whale/. The prepositional phrase is created by combining a preposition (in this case, /of/) with another noun phrase (/the whale/). In this way, it is possible to create arbitrarily long phrases, such as,
+
+  #+begin_quote
+  ... huge globular pieces of the whale of the bigness of a human head.
+  #+end_quote
+
+  The meaning of such a phrase must be analyzed in accord with the underlying hierarchical structure. In this case, /huge globular pieces of the whale/ acts as a single noun phrase, which is conjoined with the prepositional phrase /of the bigness of a human head/. The interpretation would be different if instead, /huge globular pieces/ were conjoined with the phrase /of the whale of the bigness of a human head/ - implying a disappointingly small whale. Even though text appears as a sequence, machine learning methods must account for its implicit recursive structure *(!)*.
+
+*** Artificial Intelligence
+
+The goal of artificial intelligence is to build software and robots with the same range of abilities as humans. Natural language processing is relevant to this goal in several ways. On the most basic level, the capacity for language is one of the central features of human intelligence, and is therefore a prerequisite for artificial intelligence. Second, much of AI research is dedicated to the development of systems that can reason from premises to a conclusion, but such algorithms are only as good as what they know. NLP is a potential solution to the "knowledge bottleneck", by acquiring knowledge from texts, and perhaps also from conversations. This idea goes all the way back to Turing's 1949 paper "Computing Machinery and Intelligence", which proposed the *Turing test* for determining whether artificial intelligence had been achieved.
+
+Conversely, reasoning is sometimes essential for basic tasks of language processing, such as resolving a pronoun. *Winograd schemas* are examples in which a single word changes the likely referent of a pronoun, in a way that seems to require knowledge and reasoning to decode. For example,
+
+#+begin_quote
+The trophy doesn't fit into the brown suitcase because it is too [small/large].
+#+end_quote
+
+When the final word is /small/, then the pronoun /it/ refers to the suitcase; when the final word is /large/, then /it/ refers to the trophy. Solving this example requires spatial reasoning; other schemas require reasoning about actions and their effects, emotions and intentions, and social conventions.
+
+Such examples demonstrate that natural language understanding cannot be achieved in isolation from knowledge and reasoning. Yet the history of artificial intelligence has been one of increasing specialization: with the growing volume of research in subdisciplines such as NLP, ML, and CV, it is difficult for anyone to maintain expertise across the entire field. Still, recent work has demonstrated interesting connections between natural language processing and other areas of AI, including computer vision and game playing. The dominance of machine learning throughout AI has led to a broad consensus on representations such as graphical models and computation graphs, and on algorithms such as back propagation and combinatorial optimization. Many of the algorithms and representations covered in this text are part of this consensus.
+
+*** Computer Science
+
+The discrete and recursive nature of natural language invites the application of theoretical ideas from computer science. Linguists such as Chomsky and Montague have shown how formal language theory can help to explain the syntax and semantics of natural language. Theoretical models such as finite-state and pushdown automata are the basis for many practical NLP systems. Algorithms for searching the combinatorial space of analyses of natural language utterances can be analyzed in terms of their computational complexity, and theoretically motivated approximations can sometimes be applied.
+
+The study of computer systems is also relevant to NLP. Large datasets of unlabeled text can be processed more quickly by parallelization techniques like MapReduce; high-volume data sources such as social media can be summarized efficiently by approximate streaming and sketching techniques. When deep neural networks are implemented in production systems, it is possible to eke out speed gains using techniques such as reduced-precision arithmetic. Many classical NLP algorithms are not naturally suited to GPU parallelization, suggesting directions for further research at the intersection of NLP and computing hardware.
+
+*** Speech Processing
+
+Natural language is often communicated in spoken form, and speech recognition is the task of converting an audio signal to text. From one perspective, this is a signal processing problem, which might be viewed as a preprocessing step before NLP can be applied. However *(!)*, context plays a critical role in speec recognition by human listeners: knowledge of the surrounding words influences perception and helps to correct for noise. For this reason, speech recognition is often integrated with text analysis, particularly with statistical *language models*, which quantify the probability of a sequence of text. Beyond speech recognition, the broader field of speech processing includes the study of speech-based dialogue systems, which are briefly discussed in Chapter 19. Historically, speech processing has often been pursued in electrical engineering departments, while natural language processing has been the purview of computer scientists. For this reason, the extent of interaction between these two disciplines is less than it might otherwise be.
+
+*** Ethics
+
+As machine learning and artificial intelligence become increasingly ubiquitous, it is crucial to understand how their benefits, costs, and risks are distributed across different kinds of people. Natural language processing raises some particularly salient issues around ethics, fairness, and accountability:
+
+  - /Access/ - Who is natural language processing designed to serve? For example, whose language is translated /from/, and whose language is translated /to/?
+
+  - /Bias/ - Does language technology learn to replicate social biases from text corpora, and does it reinforce these biases as seemingly objective computational conclusions?
+
+  - /Labor/ - Whose text and speech comprise the datasets that power natural language processing, and who performs the annotations? Are the benefits of this technology shared with the people whose work makes it possible?
+
+  - /Privacy and internet freedom/ - What is the impact of large-scale text processing on the right to free and private communication? What is the potential role of NLP in regimes of censorship or surveillance?
+
+*** Others
+
+NLP plays a significant role in emerging interdisciplinary fields like *computational social science* and the *digital humanities*. Text classification (chapter 4), clustering (chapter 5), and information extraction (chapter 17) are particularly useful tools; another is *probabilistic topic models*, which are not covered in this text. *Information retrieval* makes use of similar tools, and conversely, techniques such as latent semantic analysis have roots in information retrieval. *Text mining* is sometimes used to refer to the application of data mining techniques, especially classification and clustering, to text. While there is no clear distinction between text mining and NLP (nor between data mining and ML), text mining is typically less concerned with linguistic structure, and more interested in fast, scalable algorithms.
+
+** Three Themes in Natural Language Processing
+
+NLP covers a diverse range of tasks, methods, and linguistic phenomena. But despite the apparent incommensurability between, say, the summarization of scientific articles and the identification of suffix patterns in Spanish verbs, some general themes emerge. The remainder of the introduction focuses on these themes, which will recur in various forms through the text. Each theme can be expressed as an opposition between two extreme viewpoints on how to process natural language. The methods discussed in the text can usually be placed somewhere on the continuum between these two extremes.
+
+*** Learning and Knowledge
+
+A recurring topic of debate is the relative importance of ML and linguistic knowledge. On one extreme, advocates of "NLP from scratch" propose to use machine learning to train end-to-end systems that transmute raw text into any desired output structure: such as summary, database, or translation. On the other extreme, the core work of NLP is sometimes taken to be transforming text into a stack of general-purpose linguistic structures: from subword units called *morphemes*, to word-level *parts-of-speech*, to tree-structured representations of grammar, and beyond, to logic-based representation of meaning. In theory, these general-purpose structures should then be able to support any desired application.
+
+The end-to-end approach has been buyoed by recent results in computer vision and speech recognition, in which advances in machine learning have swept away expert-engineered representations based on the fundamentals of optics and phonology. But while machine learning is an element of nearly every contemporary approach to NLP, linguistic representations such as syntax trees have not yet gone the way of the visual edge detector or the auditory triphone. Linguists have argued for the existence of a "language faculty" in all human beings, which encodes a set of abstractions specially designed to faciliate the understanding and production of language. The argument for the existence of such a language faculty is based on the observation that children learn language faster and from fewer examples than would be possible if language was learned from experience alone. From a practical standpoint, linguistic structure seems to be particularly important in scenarios where training data is limited.
+
+There are a number of ways in which knowledge and learning can be combined in natural language processing. Many supervised learning systems make use of carefully engineered *features*, which transform the data into a representation that can facilitate learning. For example, in a tasl like search, it may be useful to identify each  word's *stem*, so that a system can more easily generalize across related terms such as /whale/, /whales/, /whalers/, and /whaling/. (This issue is relatively benign in English, as compared to the many languages that include much more elaborate systems of prefixed and suffixes.) Such features could be obtained from a hand-crafted resource, like a dictionary that maps each word to a single root form. Alternatively, features can be obtained from the output of a general-purpose language processing system, such as a parser or part-of-speech tagger, which may itself be built on supervised machine learning.
+
+Another synthesis of learning and knowledge is in model structure: building machine learning models whose architectures are inspired by linguistic theories. For example, the organization of sentences is often described as *compositional*, with meaning of larger units gradually constructed from the meaning of their smaller constituents. This idea can be built into the architecture of a deep neural network, which is then trained using contemporary deep learning techniques.
+
+The debate about the relative importance of machine learning and linguistic knowledge sometimes becomes heated. No machine learning specialist likes to be told that their engineering methodology is unscientific alchemy; nor does a linguist want to hear that the search for general linguistic principles and structures has been made irrelevant by big data. Yet there is clearly room for both types of research: we need to know how far we can go with end-to-end learning alone, while at the same time, we continue the search for linguistic representations that generalize across applications, scenarios, and languages.
+
+*** Search and Learning
