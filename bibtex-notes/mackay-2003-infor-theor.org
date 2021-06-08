@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Information theory, inference, and learning algorithms by MacKay, D. J. C. (2003)
+#+Time-stamp: <2021-06-07 20:34:23 boxx>
+
+- source :: cite:mackay-2003-infor-theor
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics

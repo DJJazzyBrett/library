@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Topology: a categorical approach by Bradley, T., Bryson, T., & Terilla, J. (2020)
+#+Time-stamp: <2021-06-07 20:35:59 boxx>
+
+- source :: cite:bradley-2020-topol
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics

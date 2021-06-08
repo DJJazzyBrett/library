@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Software abstractions: logic, language, and analysis by Jackson, D. (2016)
+#+Time-stamp: <2021-06-07 20:35:18 boxx>
+
+- source :: cite:jackson-2016-softw-abstr
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics

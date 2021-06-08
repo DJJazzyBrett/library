@@ -1,0 +1,10 @@
+#+TITLE: Notes on: Bandit Algorithms by Lattimore, T., & Szepesvari, C. (2020)
+#+Time-stamp: <2021-06-07 20:35:40 boxx>
+
+- source :: cite:lattimore-2020-bandit-algor
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
