@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to algorithms by T. H. Cormen (2009)
-#+Time-stamp: <2021-06-03 15:36:57 boxx>
+#+Time-stamp: <2021-06-08 12:09:07 boxx>
 
 - source :: cite:cormen-2009-introd
 
@@ -259,3 +259,70 @@ For any two real numbers /a/ and /b/, exactly one of the following must hold:
 - a \gt b
 
 Although any two real numbers can be compared, *not* all functions are asymptotically comparable *(!)*. That is, for two functions f(n) and g(n), it may be the case that neither f(n) = O(g(n)) nor f(n) = \Omega(g(n)) holds. For example, we cannot compare the functions f(n) = n and g(n) = n^{1 + sin n} using asymptotic notation, since the value of the exponent in n^{1 + sin n} oscillates between 0 and 2, taking on all values in between.
+
+** Section A.1: Summation formulas and properties
+
+When an algorithm contains an iterative control construct such as a *while* or *for* loop, we can express its running time as the sum of the times spent on each execution of the body of the loop. Section A.2 offers useful techniques for bounding summations. We present formulas in Section A.1 without proof, though proofs for some of them appear in Section A.2 to illustrate the methods of that section. You can find most of the other proofs in any calculus textbook.
+
+*** Linearity
+
+*** Arithmetic series
+
+*** Sums of squares and cubes
+
+*** Geometric series
+
+*** Harmonic series
+
+*** Integrating and differentiating series
+
+*** Telescoping series
+
+*** Products
+
+** Section A.2: Bounding summations
+
+We have many techniques at our disposal for bounding the summations that describe the running time of algorithms. Here are some of the most frequently used methods.
+
+*** Mathematical induction
+
+*** Bounding the terms
+
+*** Splitting summations
+
+*** Approximation by integrals
+
+** Section 4.3: The substitution method for solving recurrences
+
+Now that we have seen how recurrences characterize the running times of divide-and-conquer algorithms, we will learn how to solve recurrences. We start in this section with the /substitution/ method.
+
+The *substitution method* for solving recurrences comprises two steps:
+
+  1. Guess the form of the solution.
+  2. Use mathematical induction to find the constants and show that the solution works.
+
+We substitute the guessed solution for the function when applying the inductive hypothesis to smaller values; hence the name "substitution method." This method is powerful, but we must be able to guess the form of the answer in order to apply it.
+
+We can use the substitution method to establish either upper or lower bounds on a recurrence. As an example, let us determine an upper bound on the recurrence
+
+[/ T(n) = 2T(\lfloor n/2 \rfloor) + n /]
+
+which is similar to recurrences (4.3) and (4.4). We guess that the solution is T(n) = O(n lgn). The substitution method requires us to prove that T(n) \le cn lgn for an appropriate choice of the constant /c/ \gt 0. We start by assuming that this bound holds for all positive /m/ \lt /n/, in particular for /m/ = \lfloor n/2 \rfloor, yielding T(\lfloor n/2 \rfloor) \le c \lfloor n/2 \rfloor lg(\lfloor n/2 \rfloor). Substituting into the recurrence yields
+
+\[ T(n) \le 2(c \lfloor n/2 \rfloor lg(\lfloor n/2 \rfloor)) + n \]
+\[ T(n) \le cn lg(n/2) + n \]
+\[ T(n) = cn lgn - cn lg2 + n \]
+\[ T(n) = cn lgn - cn + n \]
+\[ T(n) \le cn lg n \]
+
+where the last step holds as long as /c/ \ge 1.
+
+Mathematical induction now requires us to show that our solution holds for the boundary conditions. Typically, we do so by showing that the boundary conditions are suitable as base cases for the inductive proof. For the recurrence (4.19), we must show that we can choose the constant /c/ large enough so that the bound T(n) \le cn lgn works for the boundary conditions as well. This requirement can sometimes lead to problems. Let us assume, for the sake of argument, that T(1) = 1 is the sole boundary condition for the recurrence. Then for n = 1, the bound T(n) \le cn lgn yields T(1) \le 0, which is obviously at odds with T(1) = 1. Consequently, the base case of our inductive proof fails to hold.
+
+We can overcome this obstacle in proving an inductive hypothesis for a specific boundary condition with only a little more effort. In the recurrence (4.19), for example, we take advantage of asymptotic notation requiring us only to prove T(n) \le cn lgn for n \ge n_{0}, where n_{0} is a constant /that we get to choose/. We keep the troublesome boundary condition T(1) = 1, but remove it from consideration in the inductive proof. We do so by first observing that for n \gt 3, the recurrence does *not* depend directly on T(1). Thus, we can replace T(1) by T(2) and T(3) as the base cases in the inductive proof, letting n_{0} = 2. Note that we make a distinction between the base case of the recurrence (n = 1) and the base cases of the inductive proof (n = 2 and n = 3). With T(1) = 1, we derive from the recurrence that T(2) = 4 and T(3) = 5. Now we can complete the inductive proof that T(n) \le cn lgn for some constant c \ge 1 by choosing /c/ large enough so that T(2) \le c2 lgn and T(3) \le c3 lg3. As it turns out, any choice of /c/ \ge 2 suffices for the base case of /n/ = 2 and /n/ = 3 to hold. For most recurrences we shall examine, it is straightforward to extend boundary conditions to make the inductive assumption work for small /n/, and we shall not always explicitly work out the details.
+
+*** Making a good guess
+
+** Section 4.4: The recursion-tree method for solving recurrences
+
+** Section 4.5: The master method for solving recurrences
