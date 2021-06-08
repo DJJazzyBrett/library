@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to algorithms by T. H. Cormen (2009)
-#+Time-stamp: <2021-06-08 12:09:07 boxx>
+#+Time-stamp: <2021-06-08 16:20:17 boxx>
 
 - source :: cite:cormen-2009-introd
 
@@ -323,6 +323,90 @@ We can overcome this obstacle in proving an inductive hypothesis for a specific 
 
 *** Making a good guess
 
+Unfortunately, there is no general way to guess the correct solutions to recurrences *(!)*. Guessing a solution takes experience and, occasionally, creativity. Forunately, though, you can use some heuristics to help you become a good guesser. You can also use recursion trees, which will be discussed in the next section, to generate good guesses.
+
+If a recurrence is similar to one you have seen before, then guessing a similar solution is reasonable. As an example, consider the following recurrence:
+
+\[ T(n) = 2T(\lfloor n/2 \rfloor + 17) + n \]
+
+which looks difficult because of the added "17" in the argument to /T/ on the right-hand side. Intuitively, however, this additional term cannot substantially affect the solution to the recurrence. When /n/ is large, the difference between \lfloor n/2 \rfloor and \lfloor n/2 \rfloor + 17 is not that large: both cut /n/ nearly evenly in half. Consequently, we make the guess that T(n) = O(n lgn), which you can verify as correct by using the substitution method.
+
+Another way to make a good guess is to prove loose upper and lower bounds on the recurrence and then reduce the range of uncertainty. For example, we might start with a lower bound of T(n) = \Omega(n) for the recurrence (4.19), since we have the term /n/ in the recurrence, and we can prove an initial upper bound of T(n) = O(n^{2}). Then, we can gradually lower the upper bound and raise the lower bound until we converge on the correct, asymptotically tight solution T(n) = \Theta(n lgn).
+
+*** Subtleties
+
+Sometimes you might correctly guess an asymptotic bound on the solution of a recurrence, but somehow the math fails to work out in the induction. The problem frequently turns out to be that the inductive assumption is *not* strong enough to prove the detailed bound. If you revise your guess by subtracting a lower-order term when you hit such a snag, the math often goes through.
+
+You might find the idea of subtracting a lower-order term counterintuitive. After all, if the math does not work out, we should increase our guess, right? Not necessarily! When proving an upper bound by induction, it may actually be more difficult to prove that a weaker upper bound holds, because in order to prove the weaker bound, we must use the same weaker bound inductively in the proof.
+
+*** Avoiding pitfalls
+
+It is easier to err in the use of asymptotic notation. For example, in the recurrence (4.19) we can falsely "prove" T(n) = O(n) by guessing T(n) \le cn and then arguing
+
+\[ T(n) \le 2(c \lfloor n/2 \rfloor) + n \]
+\[ T(n) \le cn + n \]
+\[ T(n) = O(n) \rightarrow wrong!! \]
+
+since /c/ is constant. The error is that we have not proved the /exact form/ of the inductive hypothesis, that is, that T(n) \le cn. We therefore will explicitly prove that T(n) \le cn when we want to show that T(n) \le O(n) *(!)*.
+
+*** Changing variables
+
+Sometimes, a little algebraic manipulation can make an unknown recurrence similar to one you have seen before. As an example, consider the recurrence
+
+\[ T(n) 2T (\lfloor \sqrt{n} \rfloor) + lg /n/ \]
+
+which looks difficult. We can simplify this recurrence, though, with a change of variables. For convenience, we shall not worry about rounding off values, such as \sqrt{n}, to be integers. Renaming /m/ = lg /n/ yields the following:
+
+\[ T(2^{m}) = 2T(2^{m/2}) + m \]
+
+We can now rename S(m) = T(2^{m}) to produce the new recurrence
+
+\[ S(m) = 2S(m/2) + m \]
+
+which is very much like recurrence (4.19). Indeed, this new recurrence has the same solution: S(m) = O(m lg m). Changing back from S(m) to T(n), we obtain the following:
+
+\[ T(n) = T(2^{m}) = S(m) = O(m lg m) = O(lg n lg lg n) \]
+
 ** Section 4.4: The recursion-tree method for solving recurrences
 
+Although you can use the substitution method to provide a succinct proof that a solution to a recurrence is correct, you might have trouble coming up with a good guess. Drawing out a recursion tree, as we did in our analysis of the merge sort recurrence in Section 2.3.2, serves as a straightforward way to devise a good guess. In a *recursion tree*, each node represents the cost of a single subproblem somewhere in the set of recursive function invocations. We sum the costs within each level of the tree to obtain a set of per-level costs, and then we sum all the per-level costs to determine the total cost of all levels of the recursion.
+
+A recursion tree is best used *(!)* to generate a good guess, which you can then verify by the substitution method. When using a recursion tree to generate a good guess, you can often tolerate a small amount of "sloppiness", since you will be verifying your guess later on. If you are very careful when drawing out a recursion tree and summing the costs, however, you can use a recursion tree as a direct proof of a solution to a recurrence. In this section, we will use recursion trees to generate good guesses, and in Section 4.6, we will use recursion trees directly to prove the theorem that forms the basis of the master method.
+
 ** Section 4.5: The master method for solving recurrences
+
+The master method provides a "cookbook" method for solving recurrences of the form
+
+\[ T(n) = aT(n/b) + f(n) \]
+
+where /a/ \ge 1 and /b/ \gt 1 are constants and f(n) is an asymptotically positive function. To use the master method, you will need to memorize three (3) cases, but then you will be able to solve many recurrences quite easily, often without pencil and paper.
+
+The recurrence (4.20) describes the running time of an algorithm that divides a problem of size /n/ into /a/ subproblems, each of size n/b, where /a/ and /b/ are positive constants. The /a/ subproblems are solved recursively, each in time T(n/b). The function f(n) encompasses the cost of dividing the problem and combining the results of the subproblems. For example, the recurrence arising from Strassen's algorithm has /a/ = 7, /b/ = 2, and f(n) = \Theta(n^{2}).
+
+As a matter of technical correctness, the recurrence is *not* actually well defined, because n/b might not be an integer. Replacing each of the /a/ terms T(n/b) with either T(\lfloor n/b \rfloor) or T(\lceil n/b \rceil) will *not* affect the asymptotic behavior of the recurrence, however *(!)*. We normally find it convenient, therefore, to omit the floor and ceiling functions when writing divide-and-conquer recurrences of this form.
+
+*** The master theorem
+
+The master method depends on the following theorem.
+
+**** Theorem 4.1 (Master theorem)
+
+Let /a/ \ge 1 and /b/ \gt 1 be constants, let f(n) be an asymptotically positive function, and let T(n) be defined on the nonnegative integers by the recurrence
+
+\[ T(n) = aT(n/b) + f(n) \]
+
+where we interpret n/b to mean either \lfloor n/b \rfloor or \lceil n/b \rceil. Then T(n) has the following asymptotic bounds:
+
+  1. If f(n) = O(n^{log_{b}a-\epsilon}) for some constant \epsilon \gt 0, then T(n) = \Theta(n^{log_{b}a}).
+  2. If f(n) = \Theta(n^{log_{b}a}), then T(n) = \Theta(n^{log_{b}a }lg /n/).
+  3. If f(n) = \Omega(n^{log_{b}a+\epsilon}) for some constant \epsilon \gt 0, and if af(n/b) \le cf(n) for some constant /c/ \lt 1 and all sufficiently large /n/, then T(n) = \Theta(f(n)).
+
+*** Using the master method
+
+Before applying the master theorem to some examples, let's spend a moment trying to understand what it says. In each of the three (3) cases, we compare the function f(n) with the function n^{log_{b}a}. Intuitively, the larger of the two functions determines the solution to the recurrence. If, as in case 1, the function n^{log_{b}a} is the larger, then the solution is T(n) = \Theta(n^{log_{b}a}). If, as in case 3, the function f(n) is the larger, then the solution is T(n) = \Theta(f(n)). If, as in case 2, the two functions are the same size, we multiply by a logarithmic factor and the solution is T(n) = \Theta(n^{log_{b}a} lg /n/) = \Theta(f(n) lg /n/).
+
+Beyond this intuition, you need to be aware of some technicalities. In the first case, not only must f(n) be smaller than n^{log_{b}a}, it must be /polynomially/ smaller. That is, f(n) must be asymptotically smaller than n^{log_{b}a} by a factor of n^{\epsilon} for some constant \epsilon \gt 0. In the third case, not only must f(n) be larger than n^{log_{b}a}, it also must be /polynomially/ larger and in addition satisfy the "regularity" condition that af(n/b) \le cf(n). This condition is satisfied by most of the polynomially bounded functions that we shall encounter.
+
+Note *(!)* that the three (3) cases do *not* cover all possibilities for f(n). There is a gap between cases 1 and 2 when f(n) is smaller than n^{log_{b}a} but /not/ polynomially smaller. Similarly, there is a gap between cases 2 and 3 when f(n) falls into one of these gaps, or if the regularity condition in case 3 fails to hold, you cannot use the master method to solve the recurrence *(!)*.
+
+To use the master method, we simply determine which case (if any) of the master theorem applies and write down the answer.
