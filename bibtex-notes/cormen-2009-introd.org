@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Introduction to algorithms by T. H. Cormen (2009)
-#+Time-stamp: <2021-06-08 16:20:17 boxx>
+#+Time-stamp: <2021-06-09 16:11:47 boxx>
 
 - source :: cite:cormen-2009-introd
 
@@ -410,3 +410,86 @@ Beyond this intuition, you need to be aware of some technicalities. In the first
 Note *(!)* that the three (3) cases do *not* cover all possibilities for f(n). There is a gap between cases 1 and 2 when f(n) is smaller than n^{log_{b}a} but /not/ polynomially smaller. Similarly, there is a gap between cases 2 and 3 when f(n) falls into one of these gaps, or if the regularity condition in case 3 fails to hold, you cannot use the master method to solve the recurrence *(!)*.
 
 To use the master method, we simply determine which case (if any) of the master theorem applies and write down the answer.
+
+** Section 34.2: Polynomial-time verification
+
+We now look at algorithms that verify membership in languages. For example, suppose that for a given instance \langle G, u, v, k \rangle of the decision problem PATH, we are also given a path /p/ from /u/ to /v/. We can easily check whether /p/ is a path in /G/ and whether the length of /p/ is at most /k/, and if so, we can view /p/ as a "certificate" that the instance indeed belongs to PATH. For the decision problem PATH, this certificate doesn't seem to buy us much. After all, PATH belongs to P - in fact, we can solve PATH in linear time - and so verifying membership from a given certificate takes as long as solving the problem from scratch. We shall now examine a problem for which we know of no polynomial-time decision algorithm and yet, given a certificate, verification is easy.
+
+*** Hamiltonian cycles
+
+The problem of finding a hamiltonian cycle in an undirected graph has been studies for over a hundred years. Formally, a *hamiltonian cycle* of an undirected graph G = (V, E) is a simple cycle that contains each vertex in /V/. A graph that contains a hamiltonian cycle is said to be *hamiltonian*; otherwise it is *nonhamiltonian*. The name honors W.R. Hamilton, who described a mathematical game on the dodecahedron in which one player sticks five pins in any five consecutive vertices and the other player must complete the path to form a cycle containing all the vertices. The dodecahedron is hamiltonian, and Figure 34.2(a) shows one hamiltonian cycle. Not all graphs are hamiltonian, however. For example, Figure 34.2(b) shows a bipartite graph with an odd number of vertices.
+
+We can define the *hamiltonian-cycle problem*, "Does a graph /G/ have a hamiltonian cycle?" as a formal language:
+
+\[ HAM-CYCLE = {\langle G \rangle : G is a hamiltonian graph} \]
+
+How might an algorithm decide the language HAM-CYCLE? Given a problem instance \langle G \rangle , one possible decision algorithm lists all permutations of the vertices of /G/ and then checks each permutation to see if it is a hamiltonian cycle. What is the running time of this algorithm? If we use the "reasonable" encoding of a graph as its adjacency matrix, the number /m/ of vertices in the graph is \Omega(\sqrt{n}), where /n/ = | \langle G \rangle | is the length of the encoding of /G/. There are m! possible permutations of the vertices, and therefore the running time is \Omega(m!) = \Omega(2^{\sqrt{n}}), which is *not* O(n^{k}) for any constant /k/. Thus, this naive algorithm does *not* run in polynomial time. In fact, the hamiltonian-cycle problem is NP-complete, as we shall later prove in Section 34.5.
+
+*** Verification algorithms
+
+Consider a slightly easier problem. Suppose that a friend tells you that a given graph /G/ is hamiltonian, and then offers to prove it by giving you the vertices in order along the hamiltonian cycle. It would certainly be easy enough to verify the proof: simply verify that the provided cycle is hamiltonian by checking whether it is a permutation of the vertices of /V/ and whether each of the consecutive edges along the cycle actually exists in the graph. You could certainly implement this verification algorithm to run in O(n^{2}) time, where /n/ is the length of the encoding of /G/. Thus, a proof that a hamiltonian cycle exists in a graph can be verified in polynomial time *(!)*.
+
+We define a *verification algorithm* as being a two-argument algorithm /A/, where one argument is an ordinary input string /x/ and the other is a binary string /y/ called a *certificate*. A two-argument algorithm /A/ *verifies* an input string /x/ if there exists a certificate /y/ such that A(x, y) = 1. The *language verified* by a verification algorithm /A/ is as follows:
+
+\[ L = {x \in {0, 1}\* : there exists y \in {0, 1}\* such that A(x, y) = 1} \]
+
+Intuitively, an algorithm /A/ verifies a language /L/ if for any string /x/ \in /L/, there exists a certificate /y/ that /A/ can use to prove that /x/ \in /L/. Moreover, for any string /x/ \notin /L/, there must be *no* certificate proving that /x/ \in /L/. For example, in the hamiltonian-cycle problem, the certificate is the list of vertices in some hamiltonian cycle. If a graph is hamiltonian, the hamiltonian cycle itself offers enough information to verify this fact. Conversely, *(!)* if a graph is *not* hamiltonian, there can be no list of vertices that fools the verification algorithm into believing that the graph is hamiltonian, since th verification algorithm carefully checks the proposed "cycle" to be sure.
+
+*** The complexity class NP
+
+The *complexity class NP* is the class of languages that can be verified by a polynomial-time algorithm. More precisely, a language /L/ belongs to NP iff there exist a two-input polynomial-time algorithm /A/ and a constant /c/ such that
+
+\[ L = {x \in {0, 1}\* : there exists a certificate y with |y| = O(|x|^{{c}}) such that A(x, y) = 1} \]
+
+We say that algorithm /A/ *verifies* language /L/ *in polynomial time*.
+
+From our earlier discussion on the hamiltonian-cycle problem, we now see that HAM-CYCLE \in NP. Moreover, if /L/ \in P, then /L/ \in NP, since if there is a polynomial-time algorithm to decide /L/, the algorithm can easily be converted to a two-argument verification algorithm that simply ignores any certificate and accepts exactly those input strings it determines to be in /L/. Thus, P \subseteq NP.
+
+It is unknown whether P = NP, but most researchers believe that P and NP are *not* the same class *(!)*. Intuitively, the class P consists of problems that *can be solved quickly*. The class NP consists of problems for which a solution *can be verified quickly*. You may have learned from experience that it is often more difficult to solve a problem from scratch than to verify a clearly presented solution, especially when working under time constraints. Theoretical computer scientists generally believe that this analogy extends to the classes P and NP, and thus that NP includes languages that are *not* in P.
+
+There is more compelling, though *not* conclusive, evidence that P \ne NP ... the existence of languages that are "NP-complete." We shall study this class in Section 34.3.
+
+Many other fundamental questions beyond the P \ne NP question remain unresolved. Figure 34.3 shows some possible scenarios. Despite much work by many researchers, no one even knows whether the class NP is closed under complement *(!)*. That is, does /L/ \in NP imply \overbar{L} \in NP? We can define the *complexity class co-NP* as the set of languages /L/ such that \overbar{L} \in NP. We can restate the question of whether NP is closed under complement as whther NP = co-NP. Since P is closed under complement, it follows that P \subseteq NP \cap co-NP. Once again, however *(!)*, no one knows whether P = NP \cap co-NP or whether there is some language in NP \cap co-NP - P.
+
+Thus, our understanding of the precise relationship between P and NP is woefully *(!)* incomplete. Nevertheless, even though we might not be able to prove that a particular problem is intractable, if we can prove that it is NP-complete, then we have gained valuable information about it.
+
+** Section 34.3: NP-completeness and reducibility
+
+Perhaps the most compelling reason why theoretical computer scientists believe that P \ne NP comes from the existence of the class of "NP-complete" problems. This class has the intriguing property that if /any/ NP-complete problem can be solved in polynomial time, then /every/ problem in NP has a polynomial-time solution, that is, P = NP. Despite years of study, though, *no* polynomial-time algorithm has been discovered for any NP-complete problem.
+
+The language HAM-CYCLE is one NP-complete problem. If we could decide HAM-CYCLE in polynomial time, then we could solve every problem in NP in polynomial time. In fact, if NP \minus P should turn out to be nonempty, we could say with certainty that HAM-CYCLE \in NP \minus P.
+
+The NP-complete languages are, in a sense, the "hardest" languages in NP. IN this section, we shall show how to compare the relative "hardness" of languages using a precise notion called /polynomial-time reducibility/. Then we formally define the NP-complete languages, and we finish by sketching a proof that one such language, called CIRCUIT-SAT, is NP-complete. In Sections 34.4 and 34.5, we shall use the notion of reducibility to show that many other problems are NP-complete.
+
+*** Reducibility
+
+Intuitively, a problem /Q/ can be reduced to another problem /Q/\prime if any instance of /Q/ can be "easilt rephrased" as an instance of /Q/', the solution to which provides a solution to the instance of /Q/. For example, the problem of solving linear equations in an indeterminate /x/ reduces to the problem of solving quadratic equations. Given a linear-equation instance /ax + b = 0/ (with solution x = \minus b/a), we transform it to the quadratic equation ax^{2} + bx + 0 = 0, whose solutions are x = 0 and x = \minus b/a, therebby providing a solution to /ax + b = 0/. Thus, if a problem /Q/ reduces to another problem /Q/', then /Q/ is, in a sense, "no harder to solve" than /Q/'.
+
+Returning to our formal-language framework for decision problems, we say that a language L_{1} is *polynomial-time reducible* to a language L_{2}, written L_{1} \le_{p} L_{2}, if there exists a polynomial-time computable function /f/ : {0, 1}\* \rightarrow {0, 1}\* such that for all /x/ \in {0, 1}\*,
+
+/x/ \in L_{1} if an only if f(x) \in L_{2}.
+
+We call the function /f/ the *reduction function*, and a polynomial-time algorithm /F/ that computes /f/ is a *reduction algorithm*.
+
+Figure 34.4 illustrates the idea of a polynomial-time reduction from a language L_{1} to another language L_{2}. Each language is a subset of {0, 1}\*. The reduction function /f/ provides a polynomial-time mapping such that if /x/ \in L_{1}, then f(x) \in L_{2}. Moreover, if /x/ \notin L_{1}, then f(x) \notin L_{2}. Thus, the reduction function maps any instance /x/ of the decision problem represented by the language L_{1} to an instance f(x) of the problem represented by L_{2}. Providing an answer to whether f(x) \in L_{2} directly provides the answer to whether /x/ \in L_{1} *(!)*.
+
+Polynomial-time reductions give us a powerful tool for proving that various languages belong to P.
+
+*** NP-completeness
+
+Polynomial-time reductions provide a formal means for showing that one problem is at least as hard as another, to within a polynomial-time factor. That is, if L_{1} \le_{p} L_{2}, then L_{1} is not more than a polynomial factor harder than L_{2}, which is why the "less than or equal to" notation for reduction is mnemonic. We can now define the set of NP-complete languages, which are the hardest problems in NP.
+
+A language /L/ \subseteq {0, 1}\* is *NP-complete* if
+
+  1. /L/ \in NP, and
+  2. /L/' \le_{p} /L/ for every /L/' \in NP.
+
+If a language /L/ satisfies property 2, but not necessarily property 1, we say that /L/ os *NP-hard*. We also define NPC to be the class of NP-complete languages.
+
+*** Circuit satisfiability
+
+We have defined the notion of an NP-complete problem, but up to this point, we have not actually proved that any problem is NP-complete. Once we prove that at least one problem is NP-complete, we can use polynomial-time reducibility as a tool to prove other problems to be NP-complete. Thus, we now focus on demonstrating the existence of an NP-complete problem: the circuit-satisfiability problem.
+
+Unfortunately, the formal proof that the circuit-satisfiability problem is NP-complete requires technical detail beyond the scope of this text. Instead, we shall informally describe a proof that relies on a basic understanding of boolean combinational circuits.
+
+Boolean combinational circuits are built from boolean combinational elements that are interconnected by wires. A *boolean combinational element* is any circuit element that has a constant number of boolean inputs and outputs that performs a well-defined function. Boolean values are drawn from the set {0, 1}, where 0 represents ~FALSE~ and 1 represents ~TRUE~.
