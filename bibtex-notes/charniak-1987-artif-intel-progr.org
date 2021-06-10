@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 16:18:39 boxx>
+#+Time-stamp: <2021-06-10 16:20:43 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -355,17 +355,14 @@ Since ~FUNCTION~ is so common, Lisp uses a special notation for it. An expressio
 
 ~MAPCAR~ is a /mapping/ function. In its simplest form, it takes two arguments, a function and a list, and returns a new list consisting of the values of the function applied to the elements of the original list.
 
+#+begin_example
 (MAPCAR #'SQUARE '(3 -2 12 4))
-
    = (LIST (SQUARE 3)
-
            (SQUARE -2)
-
            (SQUARE 12)
-
            (SQUARE 4))
-
    \Rightarrow (9 4 144 16)
+#+end_example
 
 ~MAPCAR~ could be defined as follows.
 
@@ -377,15 +374,14 @@ Since ~FUNCTION~ is so common, Lisp uses a special notation for it. An expressio
                        (MAPCAR F (CDR L))))))
 #+end_src
 
-~FUNCALL~ is a function that takes an arbitrary number of arguments. The first one should evaluate to a function. ~FUNCALL~ calls that function, passing it to the values of the rest of FUNCALL's arguments. Foe example,
+~FUNCALL~ is a function that takes an arbitrary number of arguments. The first one should evaluate to a function. ~FUNCALL~ calls that function, passing it to the values of the rest of FUNCALL's arguments. For example,
 
+#+begin_example
 (FUNCALL (CAR (LIST #'CONS #'APPEND #'FOO))
-
          'A NIL)
-
    = (CONS 'A NIL)
-
    \Rightarrow (A)
+#+end_example
 
 In general, (FUNCALL /function {expression}*/) = (/value-of-function/ {expression}*).
 
@@ -398,15 +394,13 @@ There are other mapping functions:
 
 In Common Lisp, ~MAPCAR~, ~MAPCAN~, and ~MAPC~ actually can take more than two (2) arguments. The first one /must/ be a function. The rest are all lists. If that function takes 2 arguments, for example, then you would call ~MAPCAR~ with the name of the function and 2 lists. For example,
 
+#+begin_example
 (MAPCAR #'CONS '(A B C) '(X Y Z))
-
    = (LIST (CONS 'A 'X)
-
            (CONS 'B 'Y)
-
            (CONS 'C 'Z))
-
    \Rightarrow ((A . X) (B . Y) (C . Z))
+#+end_example
 
 ** Lambda Expressions
 
