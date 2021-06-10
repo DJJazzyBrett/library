@@ -1,0 +1,138 @@
+#+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
+#+Time-stamp: <2021-06-10 09:58:47 boxx>
+
+- source :: cite:charniak-1987-artif-intel-progr
+
+* TODO Summary
+
+* TODO Comments
+
+* TODO Topics
+
+** Data Structures
+
+Lisp data structures are called /S-expressions/, where the /S/ stands for /symbolic/. In this text, the terms /S-expression/ and /expression/ are used interchangeably. An S-expression is
+
+  1. a /number/, e.g., ~15~, written as an optional plus or minus sign, followed by one or more digits.
+  2. a /symbol/, e.g., ~FOO~, written as a letter followed by zero or more letters or digits.
+  3. a /string/, e.g., ~"This is a string"~, written as a double quote, followed by zero or more characters, followed by another double quote.
+  4. a /character/, e.g., ~#\9~, written as a sharp sign, followed by a backslash, followed by a character. (Numbers, symbols, strings, and characters are called /atoms/. There are other kinds of /atoms/ that we will see in later chapters.)
+  5. a /list/ of S-expressions, e.g., ~(A B)~ or ~(IS TALL (FATHER BILL))~, written as a left parenthesis, followed by zero or more S-expressions, followed by a right parenthesis.
+
+Parentheses are more significant in Lisp than they are in most other programming languages. Parentheses are virtually the only punctuation marks available in Lisp programs. They are used to indicate the structure of S-expressions. For example, ~(A)~ is a list of one element, the symbol ~A~. ~((A))~ is also a list of one element, which is in turn a list of one element, which is the symbol ~A~. Notice also that the left and right parentheses /must balance/. That is, a well-formed S-expression has a right parenthesis to close off each left parenthesis.
+
+** Program Structures
+
+*Syntax*: The syntax of a Lisp program is simple ... /every/ S-expression is a /syntactically/ legal program *(!)* That is, any given data structure could be executed as a program. Most of them, however, fail on /semantic/ grounds *(!)*
+
+*Semantics*: The function that executes S-expressions (and hence defines the semantics of Lisp) is called ~EVAL~. ~EVAL~ takes one S-expression and returns another S-expression. The second S-expression is called the /value/ of the first expression. We notate this as /expression/ \Rightarrow /value/.
+
+The rules for evaluation are fairly simple.
+
+  - *Rule 1*: If the expression is a /number/, a /string/, a /character/, the symbol ~T~, or the symbol ~NIL~, then its value is itself. So ~5~ \Rightarrow 5.
+  - *Rule 2*: If the expression is a /list/ of the form ~(/function arg_{1} ... arg_{k}/)~ then the value is found by first evaluating each argument ~(/arg_{1}/ to arg_{k}~), and then calling /function/ with these values. For the moment, all our functions are named by symbols. For example, the symbols ~+~ (for addition) and ~*~ (for multiplication) name functions that are defined in Lisp for doing arithmetic.
+  - *Rule 3*: If the expression is a /list/ of the form ~(/reserved-word arg_{1} ... arg_{k}/)~ then the value depends completely *(!)* on the definition of /reserved-word/. Reserved words are named by symbols, just as functions are. One such reserved word is ~SETQ~. ~SETQ~ is used for assigning values to symbols. ~(SETQ /symbol expression/)~ causes /symbol/ to be "bound to" (or "set to" or "assigned") the value of /expression/. The value of /expression/ is returned as the value of the ~SETQ~ (i.e., the value that the SETQ-expression produces).
+  - *Rule 4*: If the expression is a /symbol/, then its value is the last value that has been assigned to it. If no value has been assigned, then an error occurs. So if ~X~ is bound to 16, ~X~ \Rightarrow 16.
+
+These are the four (4) rules employed by the ~EVAL~, which is part of the Lisp interpreter. The interpreter is a program that you run. You type an S-expression and it prints back another S-expression. This second S-expression is the value of the one you typed in. (Or, if something goes wrong, an error message is printed instead of a value).
+
+Lisp programs don't always need to be compiled like Algol or Fortran progams. That is, you do not have to take a file of Lisp text, convert it into internal machine code, and then run the machine code. Instead, you can type Lisp text to the interpreter, which evaluates it and types the result back to you as more Lisp text.
+
+While interpreting means that a program runs slower, it also usually means that you always have your expressions available during execution for inspection and modification. Lisp can support very powerful debugging and editing facilities for this reason *(!)*
+
+The "top-level" loop of the Lisp interpreter can be written in an Algol-like language as
+
+#+begin_example
+BEGIN
+LOOP: EVAL := READ (INPUT);
+      VAL := EVAL (EXP);
+      PRINT (VAL, OUTPUT);
+      GO TO LOOP
+END;
+#+end_example
+
+This is usually referred to as the ~READ-EVAL-PRINT~ loop. All three functions are avilable to the user - that is, when you write a function that uses the Lisp functions ~READ~, ~EVAL~, or ~PRINT~, you are calling the same machine code that the interpreter uses in the ~READ-EVAL-PRINT~ loop.
+
+The function ~READ~ reads one S-expression. It knows about balanced parentheses and the spaces that terminate numbers and atoms. It takes one argument, a /stream/, which is a Lisp object that indicates the source of the input.
+
+The function ~EVAL~ applied the four rules of evaluation to its argument and returns a new S-expression unless an error occurs, in which case an error message is printed.
+
+The function ~PRINT~ takes two arguments: an S-expression, which it prints, and a stream, which indicates where the output should be sent. Internally, Lisp stores everything as machine addresses *(!)*, not as character strings. The functions ~READ~ and ~PRINT~ are responsible for converting strings with letters, numbers, spaces, and parentheses into list structures and back again *(!)*. It is important to realize that what you type and what Lisp reads are character strings, *not* Lisp lists.
+
+For example, every time you type the name of a Lisp function like ~PRINT~, you want it to refer to the same internal machine code for printing. The function ~READ~ is responsible for taking the characters ~P~, ~R~, ~I~, ~N~, and ~T~ and converting them into a reference to a unique address. We will see shortly several other jobs that ~READ~ does.
+
+The fact that the interpreter reads what you type and prints back its value explains why very few of the functions we define have any explicit input/output references. In Lisp, almost everything is done by passing values between functions, including *(!)* communication from the user to the interpreter and back.
+
+Furthermore, in Lisp, you do *not* define a "main program" with subroutines. Instead *(!)* you define a set of functions. One of them may be the only one that you intend to call explicitly at the top level of Lisp, but this does not rule out calling any of the others if you want to. All functions are equal in the sight of the Lisp interpreter *(!)*.
+
+Learning Lisp is a matter of learning the reserved words and built-in functions, plus the appropriate programming techniques. A list of the reserved words and functions needed for this book appear in the glossary.
+
+When we describe the various functions and reserved words, we need an informal notation for giving the syntax of the Lisp expressions they are called with. The following conventions are used:
+
+  1. Any word in lowercase italics stands for an arbitrary Lisp expression which can be substituted where the word appears. Usually the word suggests what kind of expressions can be used (e.g., /atom/ or /expression/).
+  2. Anything that is enclosed in braces and followed by an asterisk stands for zero or more occurrences of that thing, separated by spaces (e.g., {/atom/}*).
+  3. Items enclosed in braces and separated by a vertical bar indicate a choice. For example, { FLET | LABELS } means "either FLET or LABELS."
+  4. Anything else is exactly what should appear in the Lisp expression.
+
+Here is an example of what a Lisp expression looks like. It is also a valid Lisp program.
+
+#+name: fig-1-1
+#+begin_src lisp
+      (LET ((SUM 0))
+        (LOOP (IF (EQUAL N 0) (RETURN SUM))
+              (SETQ SUM (+ SUM N))
+              (SETQ N (- N 1))))
+#+end_src
+
+The ~READ~ function ignores extra spaces and ends of lines. Therefore, you can (and should) break up expressions over several lines, with a great deal of indentation to set things off, in order to make it easier for you and other programmers to read. There are special printing functions that do this for you automatically.
+
+The program /fig-1-1/ adds up the integers from 1 to N. The /reserved words/ used are ~LET~, ~LOOP~, ~IF~, ~RETURN~, and ~SETQ~. The /functions/ used are ~EQUAL~, ~+~, and ~\minus~.
+
+LET-expressions are treated like ~BEGIN/END~ blocks in Algol. The first expression after the ~LET~ symbol is a list of pairs (2-element lists). The first item in each pair is a symbol that names a local variable, and the second item is the initial value assigned to that variable. The previous values assigned to these variables are saved. When the evaluation of the ~LET~ is finished, these previous values are restored, and whatever values were assigned during the evaluation of the ~LET~ are lost.
+
+In this case, the only local variable is ~SUM~. It is bound to 0 when the ~LET~ is entered, and re-bound to its previous value when the ~LET~ is exited. If it didn't have a previous value, then we say that it was previously "unbound", meaning that it had no value at all, and it becomes unbound once again after exiting the ~LET~.
+
+The rest of the expressions in a ~LET~ are called the "body" of the ~LET~. They are normal Lisp expressions, and they are evaluated in order. The value of the last of these expressions becomes the value of the ~LET~.
+
+In our example, there is only one Lisp expression in the body. It's a LOOP-expression. ~LOOP~ is another reserved word, *not* a function. The expressions inside the ~LOOP~ are evaluated in order. After the last expression is evaluated, they are all evaluated again, and again, forever. The only way out of a ~LOOP~ is to call ~RETURN~.
+
+The first expression inside this ~LOOP~ is an "if-then" statement, also known as a conditional. Its general form looks like this:
+
+( IF  /test/  /consequent/  /alternate/ )
+
+/Test/, /consequent/, and /alternate/ are Lisp expressions: the /alternate/ is optional; there isn't one in our example, for instance.
+
+Notice that the if-then-else form in Lisp returns a value; in many programming languages, it does not.
+
+/False/ in Lisp is represented by the symbol ~NIL~. /True/ is represented in Lisp by *anything* that is not ~NIL~. Hence, 1, ~FOO~, and ~(A B C)~ are all /true/. The symbol ~T~ is commonly used to represent /true/. For example, ~(EQUAL N 0)~ returns ~T~ if N equals 0, and ~NIL~ otherwise.
+
+~RETURN~ is a reserved word. It evaluates its argument (~SUM~ in our example), and then, instead of following the normal rules for evaluation, it breaks out of the nearest ~LOOP~; the value of its argument becomes the value of that LOOP-expression.
+
+So if N is zero, then the value of ~SUM~ is immediately reutrned as the value of the ~LOOP~. Since that's the last (and only!) expression inside the LET-expression, it also becomes the value that the LET-expression returns.
+
+The other expression in the ~LOOP~ should look familiar by now. We increase the value of ~SUM~ by ~N~, and decrease the value of ~N~ by 1. Then because we're in a ~LOOP~, we start over again with the IF-statement. Eventually, ~N~ will be zero, and ~SUM~ will be returned.
+
+The program /fig-1-2/ shows another way of writing the same program.
+
+#+name: fig-1-2
+#+begin_src lisp
+      (LET ((SUM 0))
+        (LOOP (COND ((EQUAL N 0) (RETURN SUM))
+                    (T (SETQ SUM (+ SUM N))
+                       (SETQ N (- N 1))))))
+#+end_src
+
+In this version, we use a different form of conditional expression, ~COND~. ~COND~ is a very elegant construct. Each list inside the ~COND~ is called a COND-clause. The first element of each COND-clause is a /test/. The /tests/ are evaluated in order until one evaluates to /true/, then the expressions in the rest of that test's clause are evaluated. The value of the last of those expressions is returned as the value of the whole COND-expression, and the other clauses are bypassed.
+
+The last test in a ~COND~ is often just ~T~. Since ~T~ is always /true/, this means that if the ~COND~ reaches the last branch, that branch will be taken. Thus the ~T~ serves the role of "else" in the conditional *(!)*.
+
+We have shown that there are two ways to do a sequence of operations in Lisp. We have just looked at ~LET~ and ~LOOP~, which allow us to evaluate expressions in a linear sequence. Earlier we noted that because the evaluation procedure itself was *(!)* recursive *(!)*, evaluating the arguments of one function call could lead to evaluating other function calls.
+
+For example, the normal Lisp way of writing the ~READ-EVAL-PRINT~ loop of the Lisp interpreter would be
+
+#+begin_src lisp
+  (LOOP(PRINT (EVAL (READ *STANDARD-INPUT*))
+              *STANDARD-OUTPUT*))
+#+end_src
+
+Notice that the evaluation is from outside to inside, but that in order to evaluate the ~PRINT~, Lisp first has to evaluate the call to ~EVAL~, and that in order to evaluate that, Lisp first has to evaluate the call to ~READ~. Hence, the actual order of execution becomes ~READ~, then ~EVAL~, and finally ~PRINT~.
