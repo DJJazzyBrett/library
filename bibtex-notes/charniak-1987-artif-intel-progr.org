@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 16:20:43 boxx>
+#+Time-stamp: <2021-06-10 18:22:27 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -432,3 +432,150 @@ The general construct, called a /functional constant/ or ~LAMBDA~ expression is 
 It is a function without a name. When called, it is evaluted just like a function, by first binding the symbols (i.e., the local variables) to the arguments, and then evaluating the expressions in the body of the ~LAMBDA~.
 
 This may seem strange at first, because in most programming languages, all functions have to have names. In Lisp, however, a function can be created and used without ever giving it a name, in much the same way as expressions can.
+
+Consider the expression
+
+#+begin_example
+(SETQ X (+ (* 5 3) 2))
+#+end_example
+
+We could get the same result by writing
+
+#+begin_example
+(SETQ TEMP (* 5 3))
+(SETQ X (+ TEMP 2))
+#+end_example
+
+That is, we might save the value of (* 5 3) by assigning it to a variable, but we don't have to, and unless we're going to need that value in several places, we probably don't want to. Instead, we would use the expression (* 5 3) directly as part of another expression. The same thing is true for functions in Lisp. While we usually want to save function definitions by giving them names, we don't always. We can use them directly, wherever a function would be used.
+
+For example, we could write
+
+#+begin_example
+(FUNCALL #'(LAMBDA (X) (+ X (/ 1 X)))
+         (- (SQUARE A) (SQUARE B)))
+#+end_example
+
+which is equivalent to
+
+#+begin_example
+(+ (- (SQUARE A) (SQUARE B))
+   (/ 1 (- (SQUARE A) (SQUARE B))))
+#+end_example
+
+except that we avoid recomputing A^{2} minus B^{2} by assigning it to the local variable ~X~. Using local variables to avoid extra calculations is a handy technique which will be discussed later on.
+
+The use of "nameless" functions is very important in Lisp, and a special notation is allowed for it.
+
+#+begin_example
+((LAMBDA (X) (+ X (/ 1 X)))
+ (+ X (/ 1 X)))
+#+end_example
+
+We can eliminate the call to ~FUNCALL~, and we don't have to qupte the ~LAMBDA~ expression *(!)*. This is, in fact, exactly what ~LET~ does. We could rewrite this expression as
+
+#+begin_example
+(LET ((X (- (SQUARE A) (SQUARE B))))
+  (+ X (/ 1 X)))
+#+end_example
+
+Finally, ~DEFUN~ is just a way of attaching a globally accessible name to a ~LAMBDA~ expression *(!)* *(!)* *(!)*. That is, the following two expressions have approximately the same effect:
+
+#+begin_example
+(DEFUN SQUARE (N) (* N N))
+
+(SETF (SYMBOL-FUNCTION 'SQUARE)
+      #'(LAMBDA (N) (* N N)))
+#+end_example
+
+In some Lisps, including Common Lisp, the /function/ associated with a symbol is stored separately from other information about that symbol (such as its /value/) *(!)* *(!)* *(!)*. In Common Lisp, ~SYMBOL-FUNCTION~ simply names the place where the function is stored. ~SETF~ is a generalization of ~SETQ~, allowing us to store values in "places". We'll see more ~SETF~ shortly.
+
+** Atoms
+
+Numbers and symbols are /primitive/: for most purposes, they have *no* internal structure, and they each have their own set of basic operators. For numbers, there are the various arithmetic functions such as ~+~ and ~*~, and the ordering functions such as ~<~ and ~>~. For symbols, there are functions for attaching information to them. This is important *(!)* because symbols have one very useful property - each symbol refers to one, unique data structure *(!)*. Once information is attached to a symbol, you can get at it easily by giving the symbol's name. For example, once you have attached a function definition to the symbol ~SQUARE-LIST~, you can access and use that definition whenever you want, just by using the name ~SQUARE-LIST~.
+
+** Inside Lisp
+
+Until now we have avoided saying anything about how Lisp actually represents lists inside the machine. To some extent we never have to worry about how Lisp really does it, but we do need to describe an abstract data structure that is actually quite close to the real thing.
+
+This abstract data structure is called a /dotted pair/, or sometimes a ~CONS~ /cell/. A dotted pair is a pair of /pointers/. A pointer is either the null pointer (i.e., it is a pointer to ~NIL~) or it is a "link" to another dotted pair or an atom. The first pointer is called the ~CAR~ of the pair and the second is called the ~CDR~.
+
+There are two ways commonly used to write a dotted pair. First, there is a graphical notation. Graphically, a dotted pair is written as a rectangle divided into a left and a right box. The null pointer is written as a diagonal slash in the appropriate box of the rectangle. An atom is written by putting its printed representation (e.g., a symbol's name, a number's value) in the appropriate box. A pointer is written by drawing an arrow from the appropriate box to the next dotted pair. Figure 1.12 on page 19 shows a dotted pair whose ~CAR~ points to a dotted pair of the symbols ~A~ and ~B~, and whose ~CDR~ is the null pointer.
+
+The Lisp notation for dotted pairs is to write a left parenthesis, followed by the Lisp notation for the data structure pointed to by the ~CAR~, followed by a period, followed by the Lisp notation for the data structure pointed to by the ~CDR~, followed by a right parenthesis. The null pointer is written as ~NIL~, and atoms are written with their names. Thus, the graphical structure in figure 1.12 is written as ~((A . B) . NIL)~.
+
+A list is a special case of dotted pair structure *(!)*. A list is either
+
+  1. the null pointer, or
+  2. a dotted pair whose ~CAR~ is an expression and whose ~CDR~ is a list.
+
+Compare this data structure definition with the ~CONS~ procedure one given in the section on "Lists."
+
+Thus the following are lists:
+
+  - ~NIL~
+  - ~(A . NIL)~
+  - ~(NIL . NIL)~
+  - ~(A . (B . NIL))~
+  - ~((A . NIL) . NIL)~
+  - ~((A . NIL) . (B . NIL))~
+
+The following are *not* lists:
+
+  - ~A~
+  - ~(A . B)~
+  - ~(NIL . A)~
+  - ~(A . (B . C))~
+  - ~((A . NIL) . B)~
+  - ~((C . B) . C . D))~
+
+Even though they are more restricted, lists are much more commonly used in Lisp than dotted pairs *(!)*. Almost anything that can be represented with dotted pairs can be represented with lists, although some extra space may be wasted to hold the extra ~NIL~ values. Many functions, such as the mapping functions, /require/ that their arguments be lists. For example, the following expression is erroneous because the second argument of the ~MAPCAR~ is not a list.
+
+#+begin_example
+(MAPCAR #'PRINT '(A . B))
+#+end_example
+
+Since lists are commonly used but look ugly in dotted-pair notation, Lisp uses a different system *(!)*, called list notation, which includes dotted-pair notation as a special case. It is the notation we have been using all along in this chapter.
+
+The algorithm for writing a (noncircular) dotted-pair structure in list notation is:
+
+  1. Set a pointer ~Q~ to the beginning of the dotted-pair structure and write a left parenthesis.
+  2. Write the list notation for the data structure pointed to by the ~CAR~ of ~Q~, and reset ~Q~ to the ~CDR~ of ~Q~.
+  3. If ~Q~ is now the null pointer, then write a right parenthesis. If ~Q~ is an atom (other than ~NIL~), then write a space, a period, a space, Q's name, and a right parenthesis. If ~Q~ is not an atom, write a space and go to step 2.
+
+List notation in general is a lot easier to read than the equivalent dotted-pair notation. Below are some comparisons of the different notational styles.
+
+#+begin_example
+(A . NIL)                =   (A)
+(A . B)                  =   (A . B)
+(NIL . NIL)              =   (NIL)
+(A . (B . NIL))          =   (A B)
+((A . NIL) . NIL)        =   ((A))
+((A . NIL) . (B . NIL))  =   ((A) B)
+(A . (B . C))            =   (A B . C)
+#+end_example
+
+A symbol names a location where a value can be stored, and we can use ~SETQ~ to store a value in that location *(!)*. For example,
+
+#+begin_example
+(SETQ X (CONS 'A 'B)) \Rightarrow  (A . B)
+(SETF (CAR X) 'C)     \Rightarrow  C
+X                     \Rightarrow  (C . B)
+(SETF (CDR X) 'D)     \Rightarrow  D
+X                     \Rightarrow  (C . D)
+#+end_example
+
+~SETF~, unlike the other functions we have described so far, actually changes internal pointers *(!)*. *This means that its effects are global and permanent*. It should therefore be used with care.
+
+The function ~CONS~ in Lisp could be defined in terms of ~SETF~ if we had available a function that would return an unused dotted-pair cell whenever we wanted it. Suppose this function (which doesn't really exist) were called ~NEW-CELL~. Then a definition of ~CONS~ would be
+
+#+begin_example
+(DEFUN CONS (X Y)
+  (LET ((Z (NEW-CELL)))
+    (SETF (CAR Z) X)
+    (SETF (CDR Z) Y)
+    Z))
+#+end_example
+
+That is, we would get a new cell, replace the ~CAR~ of it with ~X~, and replace the ~CDR~ of it with ~Y~. The fact that ~CONS~ gets a new cell rather than changing existing cells can be important *(!)*.
+
+For example,
