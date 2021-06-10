@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 10:20:27 boxx>
+#+Time-stamp: <2021-06-10 10:21:36 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -163,7 +163,7 @@ Since ~QUOTE~ turns out to be a very commonly needed function. Lisp provides an 
 
 or
 
-~'(A B C)~
+~' (A B C)~
 
 To get pieces of the list, we write
 
