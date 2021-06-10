@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 16:00:58 boxx>
+#+Time-stamp: <2021-06-10 16:17:08 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -390,10 +390,10 @@ There are other mapping functions:
 
 In Common Lisp, ~MAPCAR~, ~MAPCAN~, and ~MAPC~ actually can take more than two (2) arguments. The first one /must/ be a function. The rest are all lists. If that function takes 2 arguments, for example, then you would call ~MAPCAR~ with the name of the function and 2 lists. For example,
 
-(MAPCAR #'CONS '(A B C) '(X Y Z))
-   = (LIST (CONS 'A 'X)
-           (CONS 'B 'Y)
-           (CONS 'C 'Z))
+(MAPCAR #'CONS '(A B C) '(X Y Z)) \\
+   = (LIST (CONS 'A 'X) \\
+           (CONS 'B 'Y) \\
+           (CONS 'C 'Z)) \\
    \Rightarrow ((A . X) (B . Y) (C . Z))
 
 ** Lambda Expressions
@@ -402,12 +402,27 @@ Suppose that we want to take a list of numbers and produce a new list of the sam
 
 #+name: fig-1-10
 #+begin_src lisp
+      (MAPCAR #'SYM-SIGN L)
 
+      (DEFUN SYM-SIGN (N)
+        (COND ((< N 0) 'NEG)
+              ((EQUAL N 0) 'ZERO)
+              ((> N 0) 'POS)))
 #+end_src
 
 However, the function ~SYM-SIGN~ will probably never be used anywhere else. It would be more reasonable if we could write the code for it /directly/ in the ~MAPCAR~ expression, without having to make up a name. In fact, we can do this *(!)*.
 
 #+name: fig-1-11
 #+begin_src lisp
-
+        (MAPCAR #'(LAMBDA (N)
+                    (COND ((< N 0) 'NEG)
+                          ((EQUAL n 0) 'ZERO)
+                          ((> N 0) 'POS)))
+                L)
 #+end_src
+
+The general construct, called a /functional constant/ or ~LAMBDA~ expression is (LAMBDA ({/symbol/}*) {/expression/}*).
+
+It is a function without a name. When called, it is evaluted just like a function, by first binding the symbols (i.e., the local variables) to the arguments, and then evaluating the expressions in the body of the ~LAMBDA~.
+
+This may seem strange at first, because in most programming languages, all functions have to have names. In Lisp, however, a function can be created and used without ever giving it a name, in much the same way as expressions can.
