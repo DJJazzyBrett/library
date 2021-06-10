@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 09:58:47 boxx>
+#+Time-stamp: <2021-06-10 10:20:27 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -136,3 +136,64 @@ For example, the normal Lisp way of writing the ~READ-EVAL-PRINT~ loop of the Li
 #+end_src
 
 Notice that the evaluation is from outside to inside, but that in order to evaluate the ~PRINT~, Lisp first has to evaluate the call to ~EVAL~, and that in order to evaluate that, Lisp first has to evaluate the call to ~READ~. Hence, the actual order of execution becomes ~READ~, then ~EVAL~, and finally ~PRINT~.
+
+** Primitive Operations on S-Expressions
+
+Our first example operated on numbers the way any other language would. Lisp is, however, mainly designed for performing symbolic manipulations *(!)*. Its most important functions are those that apply to symbolic expressions.
+
+Two central functions are ~CAR~ and ~CDR~. ~CAR~ takes a list of and returns the first element of that list. ~CDR~ takes a list and returns the rest of the list minus *(!)* the first element. In some other languages having list structures, ~CAR~ and ~CDR~ are called ~HEAD~ and ~TAIL~, respectively.
+
+With ~CAR~ and ~CDR~ we can get at /any/ subpart of a list structure. For example, by taking the ~CDR~ of a list, followed by the ~CAR~ of the result, we get the second element of the original list. By taking two CDRs and then a CAR, we get the third element, and so on.
+
+Assume we have the list ~(A B C)~. We immediately run into a problem if we try to apply ~CAR~ or ~CDR~ to this list. Suppose we try writing the following:
+
+~(CAR (A B C))~
+
+Compare this with the form
+
+~(+ (* 3 5) 2)~
+
+Remember that in evaluating the ~+~ expression, Lisp first evaluated the ~*~ subexpression. The same thing happens with the ~CAR~ expression. Lisp first tries to evaluate the subexpression ~(A B C)~. Lisp assumes that any atom at the head of a list that is /not/ known to be a reserved word /must/ be a function *(!)*. Therefore, by *Rule 2*, it tries to apply the function ~A~ to the values of the symbols ~B~ and ~C~. This is *not* what we want. We want ~(A B C)~ to be left alone.
+
+To do this, we use the reserved word ~QUOTE~. ~QUOTE~ returns its one argument unevaluated. That is, (QUOTE /expression/) \Rightarrow /expression/.
+
+Since ~QUOTE~ turns out to be a very commonly needed function. Lisp provides an abbreviation. An expression of the form ~'exp~ is transformed by the function ~READ~ into (QUOTE /exp/). Thus to get the list ~(A B C)~ we can use either
+
+~(QUOTE (A B C))~
+
+or
+
+~'(A B C)~
+
+To get pieces of the list, we write
+
+~(CAR (QUOTE (A B C)))~         \Rightarrow  ~A~
+~(CDR (QUOTE (A B C)))~         \Rightarrow  ~(B C)~
+~(CAR (CDR (QUOTE (A B C))))~   \Rightarrow  ~B~
+
+What happens if we take the ~CDR~ of a list of one element? Watch!
+
+~(CDR (QUOTE (A)))~  \Rightarrow ~()~
+
+The ~CDR~ of a list that has one element is the empty list, which resonably enough is written as ~()~. In Lisp the empty list ~()~ is the value of the symbol ~NIL~. Thus, ~NIL~ stands for the empty list as well as /false/ *(!)*.
+
+Given ~CAR~ and ~CDR~, we can write a ~LOOP~ analogous to our first one, that sums up the numbers in a list /L/ of numbers.
+
+#+name: fig-1-4
+#+begin_src lisp
+      (LET ((SUM 0))
+        (LOOP (IF (EQUAL L NIL) (RETURN SUM))
+           (SETQ SUM (+ SUM (CAR L)))
+           (SETQ L (CDR L))))
+#+end_src
+
+If /L/ were assigned the value ~(1 2 3 4)~, then this expression would return the value 10.
+
+So far we have seen how we can decompose a list using ~CAR~ and ~CDR~. Of course, lists have to be built up as well as taken apart. To build them, we use the function ~CONS~. ~(CONS x l)~ creates a new lists with /x/ as the first element followed by the elements of /l/.
+
+For example,
+
+~(CONS (QUOTE A) (QUOTE (B C)))~   \Rightarrow  ~(A B C)~
+~(CONS (QUOTE B) NIL)~             \Rightarrow  ~(B)~
+
+What happens if we ~CONS~ an atom onto another atom (besides ~NIL~, which represents the empty list)?
