@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Artificial Intelligent Programming by Charniak, E., Riesbeck, C. K., McDermott, D. V., & Meehan, J. R. (1987)
-#+Time-stamp: <2021-06-10 10:21:36 boxx>
+#+Time-stamp: <2021-06-10 16:00:58 boxx>
 
 - source :: cite:charniak-1987-artif-intel-progr
 
@@ -159,11 +159,11 @@ To do this, we use the reserved word ~QUOTE~. ~QUOTE~ returns its one argument u
 
 Since ~QUOTE~ turns out to be a very commonly needed function. Lisp provides an abbreviation. An expression of the form ~'exp~ is transformed by the function ~READ~ into (QUOTE /exp/). Thus to get the list ~(A B C)~ we can use either
 
-~(QUOTE (A B C))~
+(QUOTE (A B C))
 
 or
 
-~' (A B C)~
+'(A B C)
 
 To get pieces of the list, we write
 
@@ -197,3 +197,217 @@ For example,
 ~(CONS (QUOTE B) NIL)~             \Rightarrow  ~(B)~
 
 What happens if we ~CONS~ an atom onto another atom (besides ~NIL~, which represents the empty list)?
+
+(CONS 'A 'B) \Rightarrow (A . B)
+
+This is called a /dotted pair/. Dotted pairs are actually the fundamental data structures of Lisp, but we delay describing them until later, in the section called /Inside Lisp/.
+
+Note that for any non-empty list, the following identity holds
+
+(CONS (CAR /list/) (CDR /list/))  =  /list/
+
+There are two other very handy functions for building lists: ~APPEND~ and ~LIST~. ~APPEND~ takes two or more arguments, all of which should be lists (empty lists are allowed), and returns a list built from the elements of each list. ~LIST~ takes one or more arguments and makes a list with them as elements.
+
+** Tree Structures
+
+We now explore several common cases involving the decomposition and rebuilding of Lisp data structures.
+
+Consider the class of Lisp arithmetic expressions:
+
+  1. A number is an arithmetic expression.
+  2. If /exp1/ and /exp2/ are arithmetic expressions, then (+ /exp1/ /exp2/) is an arithmetic expression.
+  3. If /exp1/ and /exp2/ are arithemtic expressions, then (* /exp1/ /exp2/) is an arithmetic expression.
+
+Now suppose that we wanted a function that would compute the value of an arbitrary arithmetic expression. We define a new Lisp function ~COMPUTE~ to do this. It takes a Lisp arithmetic expression and computes its value. Obviously, ~COMPUTE~ is imitating the behavior of ~EVAL~.
+
+A definition of ~COMPUTE~ is given below.
+
+#+name: fig-1-5
+#+begin_src lisp
+       (DEFUN COMPUTE (AE)
+              (COND ((NUMBERP AE) AE)
+                    ((EQUAL (CAR AE) '+)
+                     (+ (COMPUTE (CAR (CDR (AE))))))
+                    ((EQUAL (CAR AE) '*)
+                     (* (COMPUTE (CAR (CDR AE)))
+                        (COMPUTE (CAR (CDR (CDR AE))))))))
+#+end_src
+
+The Lisp function ~NUMBERP~ returns /true/ if its argument is a number, and /false/ otherwise.
+
+The reserved word ~DEFUN~ is used to define new functions. In this case, we are defining a function names ~COMPUTE~ that takes one argument. The symbol ~AE~ will be bound to that argument when the function is called. The rest of the definition is an expression giving the value of ~COMPUTE~. This expression is a COND-form.
+
+In general, DEFUN-expressions are written like this:
+
+(DEFUN /name/ ({/symbol/}*) {/expression/}*)
+
+This defines /name/ as a function with the symbols as the names of the function's local variables (also called *formal variables*), and a function body made up of the expressions. The result of calling /name/ with a set of arguments is found by binding the values of the arguments to the local variables, evaluating the expressions of the function body in order, and returning the value of the last expression evaluated.
+
+In the definition of ~COMPUTE~, notice that each clause of the ~COND~ exactly mirrors each clause of the recursive definition of /arithmetic expression/. The first clause tests whether ~AE~ is a number. If it is, then the value of the arithmetic expression is just that number.
+
+The second clause checks the ~CAR~ of the expression to see whether it is the symbol ~+~. If it is, then the value of the whole expression is the sum of the values computed for the two subexpressions: ~(CAR (CDR AE))~, which is the second element of ~AE~, and ~(CAR (CDR (CDR AE)))~, which is the third.
+
+~*~ is handled like ~+~, except that the two subexpressions are multiplied.
+
+At this point it becomes relevant to introduce two more abbreviations. It is somewhat tiresome to have to write ~(CAR (CDR (CDR ... )))~, so Lisp allows you to abbreviate such expressions by just writing ~(CADDR ...)~. In general, ~CxxxxR~ may be used, where the x's are replaced with A's and D's. (In most versions of Lisp, at most four A's and D's may be written.) The most interesting part of ~COMPUTE~ is its use of /recursion/. Many people have trouble grasping recursion at first. It helps to realize that recursive procedures are most often applied to recursively defined data structures that are to be decomposed. If you can grasp the data-structure definition, the program to operate on it will be clear.
+
+This example is also a demonstration of how easy it is to write language interpreters in Lisp. In this case, of course, the language being defined is a subset of Lisp itself, but this need not always be the case. It is not uncommon in Lisp to have programs which operate on other Lisp programs, as we shall see.
+
+** Lists
+
+We can formally define the notion of a /list/ as follows:
+
+  1. ~NIL~ is a list.
+  2. If /expression/ is an expression and /list/ is a list, then the result of (CONS /expression/ /list/) is a list.
+
+Since this is a recursive definition, it is natural to think of using recursion when doing operations on lists *(!)*. For example, the following snippet of code defines the function ~SQUARE-LIST~ which takes a list of numbers and returns a list of their squares.
+
+#+name: fig-1-6
+#+begin_src lisp
+    (DEFUN SQUARE-LIST (L)
+      (COND ((NULL L) NIL)
+            (T (CONS (SQUARE (CAR L))
+                     (SQUARE-LIST (CDR L))))))
+
+    (DEFUN SQUARE (N) (* N N))
+#+end_src
+
+(NULL /expression/) is equivalent to (EQUAL /expression/ NIL).
+
+In ~SQUARE-LIST~, the first element of the list ~L~ is squared and put on the front of the list obtained by applying ~SQUARE-LIST~ to the rest of ~L~. For example, (SQUARE-LIST '(2 3)) leads to the following chain of evaluation:
+
+(SQUARE-LIST '(2 3))
+=  (CONS (SQUARE 2) (SQUARE-LIST '(3)))
+=  (CONS 4 (CONS (SQUARE 3) (SQUARE-LIST NIL)))
+=  (CONS 4 (CONS 9 NIL))
+\Rightarrow (4 9)
+
+In the definition of ~SQUARE-LIST~, there is one COND-clause for each clause of the recursive definition of lists. If the list ~L~ is empty then the list of its squares is empty, too. Otherwise, the list of squares is obtained by CONSing the square of the first element onto the squares of the rest of the elements.
+
+The function ~SQUARE-LIST~ takes a list and transforms it into a list of equal length. It is just as easy to write a function that selects some of the elements and ignores others, thereby returning a list that is longer or shorter than the input list.
+
+For example, the following program defines ~SQRT-LIST~, which takes a list of positive and negative numbers and returns a list of the square roots of the non-negative elements of the list *(!)*.
+
+#+name: fig-1-7
+#+begin_src lisp
+              (DEFUN SQRT-LIST (L)
+                (COND ((NULL L) NIL)
+                      ((< (CAR L) 0) (SQRT-LIST (CDR L)))
+                      ((EQUAL (CAR L) 0)
+                       (CONS 0 (SQRT-LIST (CDR L))))
+                      (T (CONS (SQRT (CAR L))
+                               (CONS (- (SQRT (CAR L)))
+                                     (SQRT-LIST (CDR L))))))))
+#+end_src
+
+#+RESULTS: fig-1-7
+: SQRT-LIST
+
+This function has one test for the empty list, and three COND-clauses for the recursive part of the list definition. If the ~CAR~ of ~L~ is less than zero, we skip over it by just taking ~SQRT-LIST~ of the ~CDR~. If it's zero exactly, we ~CONS~ a zero onto the remaining square roots. If it's positive, we have to include both the positive and negative roots. Thus one input list element can lead to zero, one, or two output elements *(!)*.
+
+For example,
+
+#+begin_src lisp
+(SQRT-LIST '(-9 0 4 -25))
+#+end_src
+
+#+RESULTS:
+| 0 | 2.0 | -2.0 |
+
+As an example of another list-building function, we shall define the function ~REVERSE~. (REVERSE /list/) returns a list of the elements of /list/ backwards. It already exists in Lisp but it is instructive to define it ourselves. Here is one way of defining the function.
+
+#+name: fig-1-8
+#+begin_src lisp
+  (DEFUN REVERSE (L)
+    (LET ((RESULT NIL))
+      (LOOP (IF (NULL L) (RETURN RESULT))
+            (SETQ RESULT (CONS (CAR L) RESULT))
+            (SETQ L (CDR L)))))
+#+end_src
+
+Notice how in an iterative loop, the function ~CONS~ naturally builds a list backwards *(!)*.
+
+Notice also that ~REVERSE~ binds values to symbols in three different ways.
+
+  1. First, ~L~ is the formal variable of the function and is bound to whatever list ~REVERSE~ is applied to.
+  2. Second, ~RESULT~ is the local variable of the ~LET~ and is bound to ~NIL~ initially.
+  3. Third, during the loop both ~RESULT~ and ~L~ are explicitly assigned new values with the reserved word ~SETQ~.
+
+Both ~L~ and ~RESULT~ are local to the function ~REVERSE~. That is, they are unaffected *(!)* by the values of ~L~ and ~RESULT~ in any other function or expression, nor do they affect such values. It is a matter of good programming practice to make sure that all variables used in a function are local *(!)*, if at all possible, in order to avoid unexpected interferences between functions.
+
+** Mapping Functions
+
+The control structure of ~SQUARE-LIST~ is so common that Lisp provides facilities for doing it more directly. We do this with the function ~MAPCAR~.
+
+#+begin_src lisp
+  (DEFUN SQUARE-LIST (L)
+    (MAPCAR (FUNCTION SQUARE) L))
+#+end_src
+
+~FUNCTION~ is a reserved word. It's very similar to ~QUOTE~, but we use it whenever we specifically want to refer to a Lisp function, as opposed to a symbol or other S-expression *(!)*. So far, we've seen function-names used in /function definitions/, i.e., DEFUN-forms, and in /function calls/, where the function-name is the ~CAR~ of a list that is being evaluated. But this is the first time we've seen a function-name passed as an argument *(!)*.
+
+Since ~FUNCTION~ is so common, Lisp uses a special notation for it. An expression written as #'/exp/ is transformed by the function ~READ~ into (FUNCTION /exp/). So we could rewrite the definition of ~SQUARE-LIST~ this way:
+
+#+begin_src lisp
+  (DEFUN SQUARE-LIST (L)
+    (MAPCAR #'SQUARE L))
+#+end_src
+
+~MAPCAR~ is a /mapping/ function. In its simplest form, it takes two arguments, a function and a list, and returns a new list consisting of the values of the function applied to the elements of the original list.
+
+(MAPCAR #'SQUARE '(3 -2 12 4))
+   = (LIST (SQUARE 3)
+           (SQUARE -2)
+           (SQUARE 12)
+           (SQUARE 4))
+   \Rightarrow (9 4 144 16)
+
+~MAPCAR~ could be defined as follows.
+
+#+name: fig-1-9
+#+begin_src lisp
+      (DEFUN MAPCAR (F L)
+        (COND ((NULL L) NIL)
+              (T (CONS (FUNCALL F (CAR L))
+                       (MAPCAR F (CDR L))))))
+#+end_src
+
+~FUNCALL~ is a function that takes an arbitrary number of arguments. The first one should evaluate to a function. ~FUNCALL~ calls that function, passing it to the values of the rest of FUNCALL's arguments. Foe example,
+
+(FUNCALL (CAR (LIST #'CONS #'APPEND #'FOO))
+         'A NIL)
+   = (CONS 'A NIL)
+   \Rightarrow (A)
+
+In general, (FUNCALL /function {expression}*/) = (/value-of-function/ {expression}*).
+
+There are other mapping functions:
+
+  - ~MAPC~,
+  - ~MAPCAN~,
+  - ~EVERY~, and
+  - ~SOME~.
+
+In Common Lisp, ~MAPCAR~, ~MAPCAN~, and ~MAPC~ actually can take more than two (2) arguments. The first one /must/ be a function. The rest are all lists. If that function takes 2 arguments, for example, then you would call ~MAPCAR~ with the name of the function and 2 lists. For example,
+
+(MAPCAR #'CONS '(A B C) '(X Y Z))
+   = (LIST (CONS 'A 'X)
+           (CONS 'B 'Y)
+           (CONS 'C 'Z))
+   \Rightarrow ((A . X) (B . Y) (C . Z))
+
+** Lambda Expressions
+
+Suppose that we want to take a list of numbers and produce a new list of the same length, consisting of the symbols ~POS~, ~NEG~, or ~ZERO~, such that ~POS~ appears in the positions corresponding to positive numbers, ~NEG~ in those for negative numbers, and ~ZERO~ for the zeros. The code in the following snippet would do this.
+
+#+name: fig-1-10
+#+begin_src lisp
+
+#+end_src
+
+However, the function ~SYM-SIGN~ will probably never be used anywhere else. It would be more reasonable if we could write the code for it /directly/ in the ~MAPCAR~ expression, without having to make up a name. In fact, we can do this *(!)*.
+
+#+name: fig-1-11
+#+begin_src lisp
+
+#+end_src
