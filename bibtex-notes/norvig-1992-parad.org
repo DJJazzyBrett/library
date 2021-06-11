@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 14:32:51 boxx>
+#+Time-stamp: <2021-06-11 14:36:17 boxx>
 
 - source :: cite:norvig-1992-parad
 
@@ -206,19 +206,21 @@ p
 
 The functions ~first~, ~second~, ~third~, and ~fourth~ are aptly named. The function ~rest~ stands for "the rest of the list after the first element." The symbol ~nil~ and the form ~()~ are completely synonymous; they are both representations of the empty list. ~nil~ is also used to denote the "false" value in Lisp. Thus, ~(fourth p)~ is ~nil~ because there is no fourth element of ~p~. Note that lists need not be composed only of atoms, but can contain sublists as elements:
 
-#+begin_src lisp :results value verbatim :exports both
+#+begin_src lisp :results value raw verbatim :exports both
 (setf x '((1st element) 2 (element 3) ((4)) 5))
 #+end_src
 
 #+RESULTS:
-: ((1ST ELEMENT) 2 (ELEMENT 3) ((4)) 5)
+((1ST ELEMENT) 2 (ELEMENT 3) ((4)) 5)
 
-#+begin_src lisp :results value verbatim :exports both
+#+begin_src lisp :results value html verbatim :exports both
 (length x)
 #+end_src
 
 #+RESULTS:
-: 5
+#+begin_export html
+5
+#+end_export
 
 #+begin_src lisp :results value verbatim
 (first x)
