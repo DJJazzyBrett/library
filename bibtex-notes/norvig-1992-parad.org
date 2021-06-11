@@ -1,6 +1,6 @@
-#+PROPERTY: header-args :results value verbatim raw replace :exports both
+#+PROPERTY: header-args :results value raw replace :exports both
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 15:19:26 boxx>
+#+Time-stamp: <2021-06-11 15:22:21 boxx>
 
 
 
@@ -46,6 +46,8 @@ Here's an example of a computation on lists:
 #+RESULTS:
 (PAT KIM ROBIN SANDY)
 (PAT KIM ROBIN SANDY)
+(PAT KIM ROBIN SANDY)
+(PAT KIM ROBIN SANDY)
 
 The quote mark serves to block the evaluation of the following expression and returns it literally. If we just had the expression ~(Pat Kim)~, it would be evaluated by considering ~Pat~ as a function and applying it to the value of the expression ~Kim~. This is not what we had in mind. The quote mark instructs Lisp to treat the list as a piece of data *(!)* rather than as a function call.
 
@@ -54,6 +56,8 @@ The quote mark serves to block the evaluation of the following expression and re
 #+end_src
 
 #+RESULTS:
+(PAT KIM)
+(PAT KIM)
 (PAT KIM)
 (PAT KIM)
 
@@ -83,6 +87,8 @@ We have seen some of the basics of symbolic computation. Now we move on to perha
 #+RESULTS:
 (JOHN Q PUBLIC)
 (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
 #+begin_src lisp
   p
@@ -91,12 +97,14 @@ We have seen some of the basics of symbolic computation. Now we move on to perha
 #+RESULTS:
 (JOHN Q PUBLIC)
 (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
 #+begin_src lisp
   (setf x 10)
 #+end_src
 
 #+RESULTS:
+10
 10
 
 #+begin_src lisp
