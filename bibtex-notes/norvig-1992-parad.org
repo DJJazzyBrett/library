@@ -1,6 +1,6 @@
-#+PROPERTY: header-args :results verbatim
+#+PROPERTY: header-args :results value verbatim
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 15:49:21 boxx>
+#+Time-stamp: <2021-06-11 19:28:57 boxx>
 
 
 
@@ -414,7 +414,7 @@ Now that we understand ~mapcar~, let's use it to test the ~first-name~ function:
 #+end_src
 
 #+RESULTS:
-: (JOHN MALCOLM ADMIRAL SPOT ARISTOTLE A Z SIR MISS)
+| JOHN | MALCOLM | GRACE | SPOT | ARISTOTLE | A | Z | LARRY | SCARLET |
 
 We might be disappointed with these results. Suppose we wanted a version of ~first-name~ which ignored titles like Admiral and Miss, and got to the "real" first name. We could proceed as follows:
 
@@ -426,3 +426,67 @@ We might be disappointed with these results. Suppose we wanted a version of ~fir
 
 #+RESULTS:
 : *TITLES*
+
+We've introduced another new special form, ~defparameter~, which defines a parameter - a variable that does not change over the course of a computation, but that might change when we think of new things to add. The ~defparameter~ form both gives a value to the variable and makes it possible to use the variable in subsequent function definitions. It is a widely used convention among Lisp programmers to mark special variables by spelling their names with asterisk on either end. This isjust a convention; in Lisp, the asterisk is just another character that has no particular meaning.
+
+We next give a new definition for ~first-name~, which supersedes the previous definition (just as we can change the value of a variable, we can also change the value of a function in Lisp; it is not necessary to recompile everything when a change is made). This definition says that if the first word of the name is a member of the list of titles, then we want to ignore the word and return the ~first-name~ of the rest of the words in the name. Otherwise, we use the first word, just as before. Another built-in function, ~member~, tests to see if its first argument is an element of the list passed as the second argument.
+
+The special form ~if~ has the form (if /test/ /then-part/ /else-part/). There are many special forms for performing conditional tests in Lisp; ~if~ is the most appropriate for this example. An ~if~ form is evaluated by first evaluating the /test/ expression. If it is true, the /then-part/ is evaluated and returned as the value of the ~if~ form; otherwise the /else-part/ is evaluated and returned. While some languages insist that the value of a conditional test must be either ~true~ or ~false~, Lisp is much more forgiving. The test may legally evaluate to /any/ value at all. Only the value ~nil~ *(!)* is considered false; all other values are considered true *(!)*. In the definition of ~first-name~ below, the function ~member~ will return a non-nil (hence true) value if the first element of the name is in the list of titles, and will return ~nil~ (hence false) if it is not. Although all non-nil values are considered true, by convention the constant ~t~ is usually used to represent truth.
+
+#+begin_src lisp
+        (defun first-name (name)
+          "Select the first name from a name represented as a list."
+          (if (member (first name) *titles*)
+              (first-name (rest name))
+              (first name)))
+#+end_src
+
+#+RESULTS:
+: FIRST-NAME
+
+When we map the new ~first-name~ over the list of names, the results are more encouraging. In addition, the function gets the "right" result for '(Madam Major General Paula Jones) by dropping off titles one at a time.
+
+#+begin_src lisp
+(mapcar #'first-name names)
+#+end_src
+
+#+RESULTS:
+: (JOHN MALCOLM GRACE SPOT ARISTOTLE A Z LARRY SCARLET)
+
+#+begin_src lisp
+(first-name '(Madam Major General Paula Jones))
+#+end_src
+
+#+RESULTS:
+: PAULA
+
+*(!)* We can see how this works by /tracing/ the execution of ~first-name~, and seeing the values passed to and returned from the function. The special forms of ~trace~ and ~untrace~ are used for this purpose.
+
+#+begin_src lisp
+(trace first-name)
+#+end_src
+
+#+RESULTS:
+: (FIRST-NAME)
+
+#+begin_src lisp
+(first-name '(John Q Public))
+#+end_src
+
+#+RESULTS:
+: JOHN
+
+When ~first-name~ is called, the definition is entered with the single argument, ~name~, taking on the value ~(John Q Public)~. The value returned is ~JOHN~. Trace prints two lines indicating entry and exit from the function, and then Lisp, as usual, prints the final result, ~JOHN~.
+
+The function ~first-name~ is said to be /recursive/ because its definition includes a call to itself. Programmers who are new to the concept of recursion sometimes find it mysterious. But recursive functions are really no different from nonrecursive ones. Any function is required to return the correct value for the given input(s). Another way to look at this requirement is to break it into two parts:
+
+  1. a function must return a value, and
+
+  2. it must *not* return any incorrect values.
+
+
+This two-part requirement is equivalent to the first one, but it makes it easier to think about and design function definitions.
+
+*** Higher-Order Functions
+
+Functions in Lisp can not only be "called", or applied to arguments, they can also be manipulated just like any other kind of object. A function that takes another function as an argument is called a /higher-order function/ *(!)*. ~mapcar~ is an example. To demonstrate the higher-order function style of programming, we will define a new function called ~mappend~. It takes two arguments, a function and a list. ~mappend~ maps the function over each element of the list and appends together all the results. The first definition follows immediately from the description and the fact that the function ~apply~ can be used to apply a function to a list of arguments.
