@@ -1,6 +1,6 @@
-#+PROPERTY: header-args :exports both
+#+PROPERTY: header-args :results verbatim
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 15:27:11 boxx>
+#+Time-stamp: <2021-06-11 15:49:21 boxx>
 
 
 
@@ -44,7 +44,7 @@ Here's an example of a computation on lists:
 #+end_src
 
 #+RESULTS:
-| PAT | KIM | ROBIN | SANDY |
+: (PAT KIM ROBIN SANDY)
 
 The quote mark serves to block the evaluation of the following expression and returns it literally. If we just had the expression ~(Pat Kim)~, it would be evaluated by considering ~Pat~ as a function and applying it to the value of the expression ~Kim~. This is not what we had in mind. The quote mark instructs Lisp to treat the list as a piece of data *(!)* rather than as a function call.
 
@@ -53,7 +53,7 @@ The quote mark serves to block the evaluation of the following expression and re
 #+end_src
 
 #+RESULTS:
-| PAT | KIM |
+: (PAT KIM)
 
 In other computer languages (and in English), quotes usually come in pairs: one to mark the beginning and one to mark the end. In Lisp, a single quote is used to mark the beginning of an expression. Since we /always/ know how long a single expression is - either to the end of an atom or to the matching parenthesis of a list - we don't need an explicit punctuation mark to tell us where the expression ends. Quotes can be used on lists, on symbols, and in fact on anything else.
 
@@ -79,6 +79,7 @@ We have seen some of the basics of symbolic computation. Now we move on to perha
 #+end_src
 
 #+RESULTS:
+: (JOHN Q PUBLIC)
 (JOHN Q PUBLIC)
 (JOHN Q PUBLIC)
 (JOHN Q PUBLIC)
@@ -331,3 +332,97 @@ PUBLIC
 It turns out that ~last~ perversely returns a list of the last element, rather than the last element itself. Thus we need to combine ~first~ and ~last~ to pick out the actual last element. We would like to be able to save the work we've done, and give it a proper description, like ~last-name~. We could use ~setf~ to save the last name of ~p~, but that wouldn't help determine any other last name. Instead we want to define a new function that computes the last name of /any/ name that is represented as a list. This next section does just that.
 
 *** Defining New Functions
+
+The special form ~defun~ stands for "define function." It is used here to define a new function called ~last-name~.
+
+#+begin_src lisp
+    (defun last-name (name)
+      "Select the last name from a name represented as a list."
+      (first (last name)))
+#+end_src
+
+#+RESULTS:
+: LAST-NAME
+
+In general, a function takes the following form (where the documentation string is optional, and all other parts are required):
+
+#+begin_example
+(defun function-name (parameter ... )
+  "documentation string"
+  function-body ... )
+#+end_example
+
+The function must be a symbol, the parameters are usually symbols (with some complications to be explained later), and the function body consists of one or more expressions that are evaluated when the function is called. The last expression is returned as the value of the function call.
+
+Once we have defined ~last-name~, we can use it just like any other Lisp function:
+
+#+begin_src lisp
+(last-name p)
+#+end_src
+
+#+RESULTS:
+: PUBLIC
+
+#+begin_src lisp
+    (defun first-name (name)
+      "Select the first name from a name represented as a list."
+      (first name))
+#+end_src
+
+#+RESULTS:
+: FIRST-NAME
+
+#+begin_src lisp
+(first-name p)
+#+end_src
+
+#+RESULTS:
+: JOHN
+
+*** Using Functions
+
+One good thing about defining a list of names, as we did above, is that it makes it easier to test our functions. Consider the following expression, which can be used to test the ~last-name~ function:
+
+#+begin_src lisp
+      (setf names '((John Q Public) (Malcolm X)
+                    (Admiral Grace Murray Hopper) (Spot)
+                    (Aristotle) (A A Milne) (Z Z Top)
+                    (Sir Larry Olivier) (Miss Scarlet)))
+#+end_src
+
+#+RESULTS:
+: ((JOHN Q PUBLIC) (MALCOLM X) (ADMIRAL GRACE MURRAY HOPPER) (SPOT) (ARISTOTLE)
+:  (A A MILNE) (Z Z TOP) (SIR LARRY OLIVIER) (MISS SCARLET))
+
+#+begin_src lisp
+(mapcar #'last-name names)
+#+end_src
+
+#+RESULTS:
+: (PUBLIC X HOPPER SPOT ARISTOTLE MILNE TOP OLIVIER SCARLET)
+
+The funny #' notation maps from the name of a function to the function itself. This is analogous to 'x notation. The built-in function ~mapcar~ is passed two arguments, a function and a list. It returns a list built by calling the function on every element of the input list.
+
+The name of the function ~mapcar~ comes from the fact that it "maps" the function across each of the arguments. The ~car~ part of the name refers to the Lisp function ~car~, an old name for ~first~. ~cdr~ is an old name for ~rest~. The names stand for "contents of the address register" and "contents of the decrement register," the instructions that were used in the first implementation of Lisp on the IBM 704.
+
+In general, ~mapcar~ expects an /n/-ary function as its first argument, followed by /n/ lists *(!)*. It first applies the function to the argument list obtained by collecting the first element on each list. Then it applies the function to the second element of each list, and so on, until one of the lists is exhausted. It returns a list of all the function values it has computed.
+
+Now that we understand ~mapcar~, let's use it to test the ~first-name~ function:
+
+#+begin_src lisp
+(mapcar #'first-name names)
+#+end_src
+
+#+RESULTS:
+: (JOHN MALCOLM ADMIRAL SPOT ARISTOTLE A Z SIR MISS)
+
+We might be disappointed with these results. Suppose we wanted a version of ~first-name~ which ignored titles like Admiral and Miss, and got to the "real" first name. We could proceed as follows:
+
+#+begin_src lisp
+    (defparameter *titles*
+      '(Mr Mrs Miss Ms Sir Madam Dr Admiral Major General)
+      "A list of titles that can appear at the start of a name.")
+#+end_src
+
+#+RESULTS:
+: *TITLES*
