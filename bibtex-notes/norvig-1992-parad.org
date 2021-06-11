@@ -1,5 +1,5 @@
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-10 19:36:45 boxx>
+#+Time-stamp: <2021-06-11 14:22:28 boxx>
 
 - source :: cite:norvig-1992-parad
 
@@ -154,3 +154,168 @@ It turns out that the quote mark is just an abbreviation for another special for
 *** Lists
 
 So far we have seen two (2) functions that operate on lists: ~append~ and ~length~. Since lists are important, let's look at some more list processing functions:
+
+#+begin_src lisp :results value verbatim
+p
+#+end_src
+
+#+RESULTS:
+: (JOHN Q PUBLIC)
+
+#+begin_src lisp :results value verbatim
+(first p)
+#+end_src
+
+#+RESULTS:
+: JOHN
+
+#+begin_src lisp :results value verbatim
+(rest p)
+#+end_src
+
+#+RESULTS:
+: (Q PUBLIC)
+
+#+begin_src lisp :results value verbatim
+(second p)
+#+end_src
+
+#+RESULTS:
+: Q
+
+#+begin_src lisp :results value verbatim
+(third p)
+#+end_src
+
+#+RESULTS:
+: PUBLIC
+
+#+begin_src lisp :results value verbatim
+(fourth p)
+#+end_src
+
+#+RESULTS:
+: NIL
+
+#+begin_src lisp :results value verbatim
+(length p)
+#+end_src
+
+#+RESULTS:
+: 3
+
+The functions ~first~, ~second~, ~third~, and ~fourth~ are aptly named. The function ~rest~ stands for "the rest of the list after the first element." The symbol ~nil~ and the form ~()~ are completely synonymous; they are both representations of the empty list. ~nil~ is also used to denote the "false" value in Lisp. Thus, ~(fourth p)~ is ~nil~ because there is no fourth element of ~p~. Note that lists need not be composed only of atoms, but can contain sublists as elements:
+
+#+begin_src lisp :results value verbatim
+(setf x '((1st element) 2 (element 3) ((4)) 5))
+#+end_src
+
+#+RESULTS:
+: ((1ST ELEMENT) 2 (ELEMENT 3) ((4)) 5)
+
+#+begin_src lisp :results value verbatim
+(length x)
+#+end_src
+
+#+RESULTS:
+: 5
+
+#+begin_src lisp :results value verbatim
+(first x)
+#+end_src
+
+#+RESULTS:
+: (1ST ELEMENT)
+
+#+begin_src lisp :results value verbatim
+(fourth x)
+#+end_src
+
+#+RESULTS:
+: ((4))
+
+#+begin_src lisp :results value verbatim
+(first (fourth x))
+#+end_src
+
+#+RESULTS:
+: (4)
+
+#+begin_src lisp :results value verbatim
+(first (first (fourth x)))
+#+end_src
+
+#+RESULTS:
+: 4
+
+So far we have seen how to access parts of lists. It is also possible to build up new lists, as these examples show:
+
+#+begin_src lisp :results value verbatim
+(cons 'Mr p)
+#+end_src
+
+#+RESULTS:
+: (MR JOHN Q PUBLIC)
+
+#+begin_src lisp :results value verbatim
+p
+#+end_src
+
+#+RESULTS:
+: (JOHN Q PUBLIC)
+
+#+begin_src lisp :results value verbatim
+(cons (first p) (rest p))
+#+end_src
+
+#+RESULTS:
+: (JOHN Q PUBLIC)
+
+#+begin_src lisp :results value verbatim
+(setf town (list 'Anytown 'USA))
+#+end_src
+
+#+RESULTS:
+: (ANYTOWN USA)
+
+#+begin_src lisp :results value verbatim
+(first (fourth x))
+#+end_src
+
+#+begin_src lisp :results value verbatim
+(list p 'of town 'may 'have 'already 'won!)
+#+end_src
+
+#+RESULTS:
+: ((JOHN Q PUBLIC) OF (ANYTOWN USA) MAY HAVE ALREADY WON!)
+
+#+begin_src lisp :results value verbatim
+p
+#+end_src
+
+#+RESULTS:
+: (JOHN Q PUBLIC)
+
+The function ~cons~ stands for "construct." It takes as arguments an element and a list, and constructs a new list whose first is the element and whose rest is the original list. ~list~ takes any number of elements as arguments and returns a new list containing those elements in order. We've already seen ~append~, which is similar to ~list~; it takes as arguments any number of lists and appends them all together, forming one big list. *Thus, the arguments to* ~append~ *must be lists, while the arguments to* ~list~ *may be lists or atoms*.
+
+/It is important to note that these functions create new lists; they don't modify old ones/.
+
+Now let's move away from abstract functions on lists, and consider a simple problem: given a person's name in the form of a list, how might we extract the family name? For ~(JOHN Q PUBLIC)~ we could just use the function ~third~, but that wouldn't work for someone with no middle name. There is a function called ~last~ in Lisp; perhaps that would work. We can experiment:
+
+#+begin_src lisp :results value verbatim
+(last p)
+#+end_src
+
+#+RESULTS:
+: (PUBLIC)
+
+#+begin_src lisp :results value verbatim
+(first (last p))
+#+end_src
+
+#+RESULTS:
+: PUBLIC
+
+It turns out that ~last~ perversely returns a list of the last element, rather than the last element itself. Thus we need to combine ~first~ and ~last~ to pick out the actual last element. We would like to be able to save the work we've done, and give it a proper description, like ~last-name~. We could use ~setf~ to save the last name of ~p~, but that wouldn't help determine any other last name. Instead we want to define a new function that computes the last name of /any/ name that is represented as a list. This next section does just that.
+
+*** Defining New Functions
