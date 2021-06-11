@@ -1,7 +1,8 @@
+#+PROPERTY: header-args :results raw replace verbatim :exports both
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 14:38:51 boxx>
-#+PROPERTY: header-args  :results raw verbatim
-#+PROPERTY: header-args  :exports both
+#+Time-stamp: <2021-06-11 15:07:23 boxx>
+
+
 
 - source :: cite:norvig-1992-parad
 
@@ -38,21 +39,21 @@ Besides numbers, Lisp can represent characters (letters), strings of characters,
 
 Here's an example of a computation on lists:
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (append '(Pat Kim) '(Robin Sandy))
 #+end_src
 
-#+RESULTS: ex-1-1
-: (PAT KIM ROBIN SANDY)
+#+RESULTS:
+(PAT KIM ROBIN SANDY)
 
 The quote mark serves to block the evaluation of the following expression and returns it literally. If we just had the expression ~(Pat Kim)~, it would be evaluated by considering ~Pat~ as a function and applying it to the value of the expression ~Kim~. This is not what we had in mind. The quote mark instructs Lisp to treat the list as a piece of data *(!)* rather than as a function call.
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 '(Pat Kim)
 #+end_src
 
 #+RESULTS:
-: (PAT KIM)
+(PAT KIM)
 
 In other computer languages (and in English), quotes usually come in pairs: one to mark the beginning and one to mark the end. In Lisp, a single quote is used to mark the beginning of an expression. Since we /always/ know how long a single expression is - either to the end of an atom or to the matching parenthesis of a list - we don't need an explicit punctuation mark to tell us where the expression ends. Quotes can be used on lists, on symbols, and in fact on anything else.
 
@@ -73,40 +74,40 @@ There are four (4) important points to make about symbols:
 
 We have seen some of the basics of symbolic computation. Now we move on to perhaps the most important *(!)* characteristic of a programming language: /the ability to define new objects in terms of other, and to name these objects for future use/. Here symbols again play an important role - they are used to name variables. A variable can take on a value, which can be /any/ Lisp object. One way to give a value to a variable is with ~setf~:
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
   (setf p '(John Q Public))
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
   p
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
   (setf x 10)
 #+end_src
 
 #+RESULTS:
-: 10
+10
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
   (+ x x)
 #+end_src
 
 #+RESULTS:
-: 20
+20
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
   (+ x (length p))
 #+end_src
 
 #+RESULTS:
-: 13
+13
 
 After assigning the value ~(John Q Public)~ to the variable named ~p~, we can refer to the value with the name ~p~. Similarly, after assigning a value to the variable named ~x~, we can refer to both ~x~ and ~p~.
 
@@ -157,148 +158,149 @@ It turns out that the quote mark is just an abbreviation for another special for
 
 So far we have seen two (2) functions that operate on lists: ~append~ and ~length~. Since lists are important, let's look at some more list processing functions:
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 p
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first p)
 #+end_src
 
 #+RESULTS:
-: JOHN
+JOHN
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (rest p)
 #+end_src
 
 #+RESULTS:
-: (Q PUBLIC)
+(Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (second p)
 #+end_src
 
 #+RESULTS:
-: Q
+Q
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (third p)
 #+end_src
 
 #+RESULTS:
-: PUBLIC
+PUBLIC
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (fourth p)
 #+end_src
 
 #+RESULTS:
-: NIL
+NIL
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (length p)
 #+end_src
 
 #+RESULTS:
-: 3
+3
 
 The functions ~first~, ~second~, ~third~, and ~fourth~ are aptly named. The function ~rest~ stands for "the rest of the list after the first element." The symbol ~nil~ and the form ~()~ are completely synonymous; they are both representations of the empty list. ~nil~ is also used to denote the "false" value in Lisp. Thus, ~(fourth p)~ is ~nil~ because there is no fourth element of ~p~. Note that lists need not be composed only of atoms, but can contain sublists as elements:
 
-#+begin_src lisp :results value raw verbatim :exports both
+#+begin_src lisp
 (setf x '((1st element) 2 (element 3) ((4)) 5))
 #+end_src
 
 #+RESULTS:
 ((1ST ELEMENT) 2 (ELEMENT 3) ((4)) 5)
 
-#+begin_src lisp :results value html verbatim :exports both
+#+begin_src lisp
 (length x)
 #+end_src
 
 #+RESULTS:
-#+begin_export html
 5
-#+end_export
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first x)
 #+end_src
 
 #+RESULTS:
-: (1ST ELEMENT)
+(1ST ELEMENT)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (fourth x)
 #+end_src
 
 #+RESULTS:
-: ((4))
+((4))
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first (fourth x))
 #+end_src
 
 #+RESULTS:
-: (4)
+(4)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first (first (fourth x)))
 #+end_src
 
 #+RESULTS:
-: 4
+4
 
 So far we have seen how to access parts of lists. It is also possible to build up new lists, as these examples show:
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (cons 'Mr p)
 #+end_src
 
 #+RESULTS:
-: (MR JOHN Q PUBLIC)
+(MR JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 p
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (cons (first p) (rest p))
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (setf town (list 'Anytown 'USA))
 #+end_src
 
 #+RESULTS:
-: (ANYTOWN USA)
+(ANYTOWN USA)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first (fourth x))
 #+end_src
 
-#+begin_src lisp :results value verbatim
+#+RESULTS:
+(4)
+
+#+begin_src lisp
 (list p 'of town 'may 'have 'already 'won!)
 #+end_src
 
 #+RESULTS:
-: ((JOHN Q PUBLIC) OF (ANYTOWN USA) MAY HAVE ALREADY WON!)
+((JOHN Q PUBLIC) OF (ANYTOWN USA) MAY HAVE ALREADY WON!)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 p
 #+end_src
 
 #+RESULTS:
-: (JOHN Q PUBLIC)
+(JOHN Q PUBLIC)
 
 The function ~cons~ stands for "construct." It takes as arguments an element and a list, and constructs a new list whose first is the element and whose rest is the original list. ~list~ takes any number of elements as arguments and returns a new list containing those elements in order. We've already seen ~append~, which is similar to ~list~; it takes as arguments any number of lists and appends them all together, forming one big list. *Thus, the arguments to* ~append~ *must be lists, while the arguments to* ~list~ *may be lists or atoms*.
 
@@ -306,19 +308,19 @@ The function ~cons~ stands for "construct." It takes as arguments an element and
 
 Now let's move away from abstract functions on lists, and consider a simple problem: given a person's name in the form of a list, how might we extract the family name? For ~(JOHN Q PUBLIC)~ we could just use the function ~third~, but that wouldn't work for someone with no middle name. There is a function called ~last~ in Lisp; perhaps that would work. We can experiment:
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (last p)
 #+end_src
 
 #+RESULTS:
-: (PUBLIC)
+(PUBLIC)
 
-#+begin_src lisp :results value verbatim
+#+begin_src lisp
 (first (last p))
 #+end_src
 
 #+RESULTS:
-: PUBLIC
+PUBLIC
 
 It turns out that ~last~ perversely returns a list of the last element, rather than the last element itself. Thus we need to combine ~first~ and ~last~ to pick out the actual last element. We would like to be able to save the work we've done, and give it a proper description, like ~last-name~. We could use ~setf~ to save the last name of ~p~, but that wouldn't help determine any other last name. Instead we want to define a new function that computes the last name of /any/ name that is represented as a list. This next section does just that.
 
