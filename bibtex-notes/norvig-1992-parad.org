@@ -1,5 +1,7 @@
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-11 14:36:17 boxx>
+#+Time-stamp: <2021-06-11 14:38:51 boxx>
+#+PROPERTY: header-args  :results raw verbatim
+#+PROPERTY: header-args  :exports both
 
 - source :: cite:norvig-1992-parad
 
