@@ -1,8 +1,6 @@
 #+PROPERTY: header-args :results value verbatim
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-15 20:44:59 boxx>
-
-
+#+Time-stamp: <2021-06-16 19:52:39 boxx>
 
 - source :: cite:norvig-1992-parad
 
@@ -703,3 +701,136 @@ Lisp actually defines about 25 different types of objects: vectors, arrays, stru
 *** Summary: The Lisp Evaluation Rule
 
 We can now summarize the evaluation rule for Lisp.
+
+- Every expression is either /list/ or an /atom/.
+
+- Every list to be evaluated is either a /special form expression/ or a /function application/.
+
+- A /special for expression/ is defined to be a list whose first element is a special form operator. The expression is evaluated according to the operator's idiosyncratic evaluation rule. For example, the evaluation rule for ~setf~ is to evaluate the second argument according to the normal evaluation rule, set the first argument to that value, and then return the value as the result. The rule for ~defun~ is to define a new function, and return the name of the function. The rule for ~quote~ is to return the first argument unevaluated. The notation ~'x~ is actually an abbreviation for the special form expression ~(quote x)~. Similarly, the notation ~#'~ is an abbreviation for the special form expression ~(function f)~.
+
+- A /function application/ is evaluated by first evaluating the arguments (the rest of the list) and then finding the function named by the first element of the list and applying it to the list of evaluated arguments.
+
+- Every atom is either a /symbol/ or a /nonsymbol/ *(!)*.
+
+- A /symbol/ evaluates to the most recent value that has been assigned to the variable named by that symbol. Symbols are composed of letters, and possible digits, and, rarely, punctuation characters. To avoid confusion, we will use symbols composed mostly of the letters ~a-z~ and the '-' character, with a few exceptions.
+
+- A /nonsymbol atom/ evaluates to itself. For now, numbers and strings are the only such non-symbol atoms we know of.
+
+There are some minor details of Common Lisp that complicate the evaluation rules, but this definition will suffice for now.
+
+One complication that causes confusion for beginning Lispers is the difference between /reading/ and /evaluating/ *(!)* and expression. Beginners often imagine that when they type an expression, such as
+
+#+begin_src lisp
+(+ (* 3 4) (* 5 6))
+#+end_src
+
+#+RESULTS:
+: 42
+
+the Lisp system first reads the (+ and then fetches the addition function, then reads ~(* 3 4)~ and computes 12, and then reads ~(* 5 6)~ and computes 30, and finally computes 42. *What actually happens* is that the system first reads the entire expression, the list ~(+ (* 3 4) (* 5 6))~. Only after *(!)* it has been read does the system begin to evaluate it. This evaluation can be done by an interpreter that looks at the list directly, or it can be done by a compiler that translates the list into machine language instructions and then executes those instructions.
+
+Beginners who fail to grasp the distinction between reading and evaluating may have a good model of what expressions evaluate to, but they usually have a terrible model of the efficiency of evaluating expressions. Every variable, regardless of its name, *is just a memory location*, and the time to access the location does *not* depend on the name of the variable *(!)*.
+
+*** What Makes Lisp Different?
+
+What is it that sets Lisp apart from other languages? Why is it a good language for AI applications? There are at least eight (8) important factors:
+
+- Built-in Support for lists
+- Automatic Storage Management
+- Dynamic Typing
+- First-Class Functions
+- Uniform Syntax
+- Interactive Environment
+- Extensibility
+- History
+
+In sum, these factors allow a programmer to delay making decisions. This ability to delay decisions - or more accurately, to make temporary, nonbinding decisions - is usually a good thing, because it means that irrelevant details can be ignored. There are also some negative points of delaying decisions. First, the less we tell the compiler, the greater the chance that it may have to produce inefficient code. Second, the less we tell the compiler, the less chance it has of noticing inconsistencies and warning us. Errors may not be detected until the program is run.
+
+** A Simple Lisp Program
+
+*** A Straightforward Solution
+
+#+begin_src lisp
+(defun sentence () (append (noun-phrase) (verb-phrase)))
+;;(defun noun-phrase () (append (Article) (Noun)))
+(defun verb-phrase () (append (Verb) (noun-phrase)))
+(defun Article () (one-of '(the a)))
+(defun Noun () (one-of '(man ball woman table)))
+(defun Verb () (one-of '(hit took saw liked)))
+#+end_src
+
+#+RESULTS:
+: VERB
+
+Each of these function defintions has an empty parameter list, ~()~. That means that the functions take no arguments. This is unusual because, strictly speaking, a function with no arguments would always return the same thing, so we would use a constant instead. However, these functions make use of the ~random~ function, and thus can return different results even with no arguments. Thus, they are not functions in the mathematical sense, but they are still called functions in Lisp, because they return a value.
+
+#+begin_src lisp
+(defun one-of (set)
+"Pick one element of set, and make a list of it."
+(list (random-elt set)))
+
+(defun random-elt (choices)
+"Choose an element from a list at random."
+(elt choices (random (length choices))))
+#+end_src
+
+#+RESULTS:
+: RANDOM-ELT
+
+There are two new functions here, ~elt~ and ~random~. ~elt~ picks an element out of a list. The first argument is the list, and the second is the position in the list. The confusing part is that the positions start at 0, so ~(elt choices 0)~ is the first element of the list. Think of the position numbers as telling you how far away you are from the front. The expression ~(random n)~ returns an integer from 0 to n-1, so that ~(random 4)~ would return either 0, 1, 2, or 3.
+
+** Overview of Lisp
+
+*** A Guide to Lisp Style
+
+In general, there are six (6) maxims that every programmer should follow:
+
+- Be specific.
+- Use abstractions.
+- Be concise.
+- Use the provided tools.
+- Don't be obscure.
+- Be consistent.
+
+One important *(!)* way of being specific is using abstractions. Lisp provides very general data structures, such as lists and arrays. These can be used to implement specific data structures that your program will use, but *(!)* you should *not* make the mistake of invoking primitive functions directly *(!)*. If you define a list of names:
+
+~(defvar *names* '((Robert E. Lee) ... ))~
+
+then you should also define functions to get at the components of each name *(!)*. To get at ~Lee~, use ~(last-name (first *names*))~, *not* ~(caddar *names*)~.
+
+*** Special Forms
+
+As noted in a previous chapter, /special form/ is the term used to refer *both* to Common Lisp's syntactic constructs *and* the reserved words that mark these constructs. The most commonly used special forms are:
+
+| Definitions  | Conditional | Variables | Iteration | Other    |
+|--------------+-------------+-----------+-----------+----------|
+| defun        | and         | let       | do        | declare  |
+| defstruct    | case        | let*      | do*       | function |
+| defvar       | cond        | pop       | dolist    | progn    |
+| defparameter | if          | push      | dotimes   | quote    |
+| defconstant  | or          | setf      | loop      | return   |
+| defmacro     | unless      | incf      |           | trace    |
+| labels       | when        | decf      |           | untrace  |
+
+To be precise, only ~declare, function, if, labels, let, let*, progn,~ and ~quote~ are /true special forms/. The others are actually defined as macros *(!)* that expand into calls to more primitive special forms and functions. There is *no* real difference to the programmer, and Common Lisp implementations are free to implement macros as special forms and vice versa, so for simplicity we will continue to use /special forms/ as a blanket term for both true special forms and built-in macros *(!)*.
+
+**** Special Forms for Definitions
+
+In this section we survey the special forms that can be used to introduce new global functions, macros, variables, and structures. We have already seen the ~defun~ form for defining functions; the ~defmacro~ form is similar and is covered in a later section.
+
+(defun /function-name/ (/parameter/ ...) "optional documentation" /body/ ...)
+(defmacro /macro-name/ (/parameter/ ...) "optional documentation" /body/ ...)
+
+There are three (3) forms for introducing special variables *(!)*.
+
+1. ~defvar~ defines a special variable and can optionally be used to supply an initial value and a documentation string. The initial value is evaluated and assigned only if the variable does *not* yet have any value.
+
+2. ~defparameter~ is similar, except that the value is required *(!)*, and it will be used to change any existing value.
+
+3. ~defconstant~ is used to declare that a symbol will /always/ stand for a particular value.
+
+(defvar /variable-name/ /initial-value/ "optional documentation")
+(defparameter /variable-name/ /value/ "optional documentation")
+(defconstant /variable-name/ /value/ "optional documentation")
+
+*(!)* All the ~def~ forms define globale objects *(!)*. It is also possible to define local variables with ~let~, and to define local functions with ~labels~, as we shall see.
