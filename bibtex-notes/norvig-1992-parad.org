@@ -1,6 +1,6 @@
 #+PROPERTY: header-args :results value verbatim
 #+TITLE: Notes on: Paradigms of artificial intelligence programming: case studies in Common Lisp by Norvig, P. (1992)
-#+Time-stamp: <2021-06-16 19:52:39 boxx>
+#+Time-stamp: <2021-06-17 13:31:01 boxx>
 
 - source :: cite:norvig-1992-parad
 
@@ -818,8 +818,8 @@ To be precise, only ~declare, function, if, labels, let, let*, progn,~ and ~quot
 
 In this section we survey the special forms that can be used to introduce new global functions, macros, variables, and structures. We have already seen the ~defun~ form for defining functions; the ~defmacro~ form is similar and is covered in a later section.
 
-(defun /function-name/ (/parameter/ ...) "optional documentation" /body/ ...)
-(defmacro /macro-name/ (/parameter/ ...) "optional documentation" /body/ ...)
+- (defun /function-name/ (/parameter/ ...) "optional documentation" /body/ ...)
+- (defmacro /macro-name/ (/parameter/ ...) "optional documentation" /body/ ...)
 
 There are three (3) forms for introducing special variables *(!)*.
 
@@ -829,8 +829,84 @@ There are three (3) forms for introducing special variables *(!)*.
 
 3. ~defconstant~ is used to declare that a symbol will /always/ stand for a particular value.
 
-(defvar /variable-name/ /initial-value/ "optional documentation")
-(defparameter /variable-name/ /value/ "optional documentation")
-(defconstant /variable-name/ /value/ "optional documentation")
+- (defvar /variable-name/ /initial-value/ "optional documentation")
+- (defparameter /variable-name/ /value/ "optional documentation")
+- (defconstant /variable-name/ /value/ "optional documentation")
 
-*(!)* All the ~def~ forms define globale objects *(!)*. It is also possible to define local variables with ~let~, and to define local functions with ~labels~, as we shall see.
+*(!)* All the ~def~ forms define global objects *(!)*. It is also possible to define local variables with ~let~, and to define local functions with ~labels~, as we shall see.
+
+Most programming languages provide a way to group related data together into a structure. Common Lisp is no exception. The ~defstruct~ special form defines a structure type (known as a /record/ type in Pascal) and automatically defines functions to get at components of the structure. The general syntax is
+
+- (defstruct /structure-name/ "optional documentation" /slot/ ... )
+
+As an example, we could define a structure for names:
+
+#+begin_src lisp
+(defstruct name
+first
+(middle nil)
+last)
+#+end_src
+
+#+RESULTS:
+: NAME
+
+This automatically defines the constructor function ~make-name~, the recognizer predicate ~name-p~, and the accessor functions ~name-first~, ~name-middle~, and ~name-last~. The ~(middle nil)~ means that each new name built by ~make-name~ will have a middle name of ~nil~ by default. Here we create, access, and modify a structure:
+
+#+begin_src lisp
+(setf b (make-name :first 'Barney :last 'Rubble))
+#+end_src
+
+#+RESULTS:
+: #S(NAME :FIRST BARNEY :MIDDLE NIL :LAST RUBBLE)
+
+#+begin_src lisp
+(name-first b)
+#+end_src
+
+#+RESULTS:
+: BARNEY
+
+#+begin_src lisp
+(name-p b)
+#+end_src
+
+#+RESULTS:
+: T
+
+#+begin_src lisp
+(name-p 'Barney)
+#+end_src
+
+#+RESULTS:
+: NIL
+
+#+begin_src lisp
+(setf (name-middle b) 'Q)
+#+end_src
+
+#+RESULTS:
+: Q
+
+#+begin_src lisp
+b
+#+end_src
+
+#+RESULTS:
+: #S(NAME :FIRST BARNEY :MIDDLE Q :LAST RUBBLE)
+
+The printed representation of a structure starts with a #S and is followed by a list consisting of the type of structure and alternating pairs of slot names and values. *Do not let this representation fool you*: it is a convenient way of printing the structure, but it is *not* and accurate picture of the way structures are represented internally. *Structures are actually implemented much like vectors*. For the ~name~ structure, the type would be in the zero element of the vector, and the first name would be in the first element, middle in the second, and last in the third. *This means structures are more efficient than lists*; they take up less space, and any element can be accessed in a single step. In a list, it takes n steps to access the n^th element.
+
+There are options that give more control over the strucutre itself and the individual slots. They will be covered later as they come up.
+
+**** Special Forms for Conditionals
+
+There are actually quite a few special forms for doing conditional evaluation. The following table shows how each conditional can be expressed in terms of ~if~ and ~cond~. Actually, these translations are not quite right, because ~or~, ~case~, and ~cond~ take care *not* to evaluate any expression more than once, while the translations with ~if~ can lead to multiple evaluation of some expression.
+
+| conditonal           | ~if~ form                     | ~cond~ form                  |
+|----------------------+-----------------------------+----------------------------|
+| (when /test/ a b c)    | (if /test/ (progn /a b c/))     | (cond (/test a b c/))        |
+| (unless /test x y z/)  | (if (not /test/) (progn /x y/)) | (cond ((not /test/) /x y/))    |
+| (and /a b c/)          | (if /a/ (if /b c/))             | (cond (/a/ (cond (/b c/))))    |
+| (or /a b c/)           | (if /a a/ (if /b b/ /c/))         | (cond (/a/) (/b/) (/c/))         |
+| (case /a/ (/b c/) (t /x/)) | (if (eql /a/ '/b/) /c x/)         | (cond ((eql /a/ '/b/) /c/) t /x/)) |
