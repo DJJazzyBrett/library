@@ -1,0 +1,419 @@
+# The following macro allows insertion of newlines in titles, etc. It
+# contains definitions for both latex and html from
+# http://emacs.stackexchange.com/questions/255/new-line-in-title-of-an-org-mode-exported-html-document
+#+MACRO: NEWLINE @@latex:\\@@ @@html:<br>@@
+
+#+TITLE: Foundations of Algorithms {{{NEWLINE}}} Homework #2
+
+#+AUTHOR: Brett Johnson
+#+EMAIL: bjohn184@jh.edu
+
+#+OPTIONS: author:t c:nil date:t
+#+OPTIONS: timestamp:t num:nil toc:nil TeX:t LaTeX:t
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [10pt]
+
+#+LATEX_HEADER_EXTRA: \usepackage[margin=0.75in]{geometry}
+
+#+LATEX_HEADER_EXTRA: \usepackage[T1]{fontenc}
+#+LATEX_HEADER_EXTRA: \usepackage{xcolor}
+#+LATEX_HEADER_EXTRA: \usepackage{amsmath,amssymb,mathtools}
+
+#+LATEX_HEADER_EXTRA: \usepackage{algorithm}
+#+LATEX_HEADER_EXTRA: \usepackage{algorithmicx}
+#+LATEX_HEADER_EXTRA: \usepackage{algpseudocode}
+
+#+LATEX_HEADER_EXTRA: \usepackage{forest}
+#+LATEX_HEADER_EXTRA: \usepackage{tikz}
+#+LATEX_HEADER_EXTRA: \usetikzlibrary{arrows.meta,backgrounds,calc,fit,matrix}
+#+LATEX_HEADER_EXTRA: \usetikzlibrary{decorations.pathreplacing,positioning}
+
+#+LATEX: \setlength\parindent{0pt}
+
+* Misc Terms & Concepts
+
+- *CNF* \rightarrow /conjunctive normal form/
+
+- *Family of Problems*
+
+  We can consider two rather different problems regarding Hamiltonian cycles. One is the /decision problem/, the yes-or-no question of whether such a cycle exists. The other is the /search problem/ or /function problem/, in which we want to actually find the cycle.
+
+  Another important fact to note is that, when we define a problem, we need to be precise about what input we are given, and what question we are being asked. These questions are often closely related. For instance, yes-or-no questions like whether or not a Hamiltonian cycle exists are called /decision problems/, while we call the problem of actually finding such a cycle a /search problem/ or /function problem/.
+
+- *NP Class*
+
+  NP is the class of decision problems with this kind of logical structure, where yes-instances are easy to verify. An informal definition is as follows:
+
+  #+begin_quote
+  A decision problem is in NP if, whenever the answer for a particular instance is "yes", there is a simple proof of this fact.
+  #+end_quote
+
+  By "simple proof", of course, we mean a proof that we can check in poynomial time. For instance, we can check that a given path is Hamiltonian in essentially linear time as a function of the number of vertices.
+
+  It's important to realize that NP is a profoundly asymmetric notion. If I happen to know the path, it's easy to prove to you that a Hamiltonian graph is Hamiltonian - but how can I prove that a non-Hamiltonian graph has no such path?
+
+- *P Class*
+
+  If a problem is in P, it has a polynomial algorithm that is guaranteed to give the right answer. If the input is a yes-instance, the sequence of steps executed by this algorithm, which end with it returning "yes", constitutes a proof of that fact. Thus,
+
+  \[ P \subseteq NP \]
+
+  where here by P we mean the set of decision problems solvable in polynomial time. However *(!)*, we strongly believe that this inclusion is proper, i.e., that \( P \ne NP \) - that finding needles is harder than checking them.
+
+  Essentially, P is the subset of NP consisting of problems for which there is some mathematical insight that lets us avoid an exhaustive search. Such an insight might allow us to apply one of the algorithmic strategies explored in Chapter 3 [cite:moore-2011] :
+
+  - break the problem into smaller parts (\texttt{Fast Fourier Transform}),
+  - build the solution up from simpler subproblems (\texttt{Shortest Path}),
+  - grow a solution greedily (\texttt{Minimum Spanning Tree}),
+  - improve solutions until we reach the optimum (\texttt{Max Flow}), or
+  - reduce it to a problem we already know how to solve (\texttt{Max Bipartite Matching}).
+
+  In the absence of such an insight, it seems hard to avoid searching through the entire haystack, and this takes exponential time if the number of possible solutions is exponentially large.
+
+  On the other hand, as we saw in Chapter 2, it is hard to know whether we have found the best possible algorithm, and it is very hard to prove that /no/ polynomial-time algorithm works. So, while there are many problems in NP such as \texttt{Hamiltonian Path} for which we strongly believe that no polynomial algorithm exists, no one has been able to prove this.
+
+  The question of whether finding needles really is harder than distinguishing them from blades of hay - that is, whther or not \(P \ne NP\) - is considered one of the deepest and most profound questions, not just in computer science, but in all of mathematics.
+
+* Chapter 4 --- Needles in a Haystack: The Class NP
+
+** A Tour of NP
+
+  1. /Colorful Graphs/ \\
+
+     Suppose that each conference participant supplies the organizers with the list of talks they want to attend. Suppose futher that there is a plentiful supply of lecture rooms, but only /k/ time slots. Can we schedule the talks in such a way that makes everyone happy? That is, can we assign a time slot for each talk, so that no two talks take place simultaneously if someone wants to see them both? \\
+
+     We can formalize this as follows. Let /G/ be a graph whose vertices are the talks, and let two talks be adjacent (i.e., joined by an edge) if there is someone who wants to attend both of them. We want to assign one of the /k/ time slots to each vertex in such a way that adjacent vertices have different time slots. \\
+
+     Let's represent each time slot by a color. A \(k-coloring\) is an assignment of one of /k/ different colors to each vertex, and a coloring is /proper/ if no two adjacent vertices have the same color. Thus, we wish to solve the following kind of problem: \\
+
+     _\texttt{Graph k-Coloring}_ \\
+     Input: A graph /G/ \\
+     Question: Is there a proper \(k\)-coloring of /G/? \\
+
+     This type of problem arises naturally whenever one is trying to allocate resources in the presence of conflicts, as in our scheduling example. For isntance, suppose we are trying to assign frequencies to wireless communication devices. If two devices are too close, they need to use different frequencies to avoid interference. This is equivalent to \texttt{Graph k-Coloring} where each vertex is a device, /k/ is the number of frequencies, and there is an edge between two devices if they are close enough to interfere with each other. \\
+
+     \texttt{Graph k-Coloring} is in NP since it is easy *(!)* to check that a coloring is proper. As for \texttt{Hamiltonian Path}, however, this doesn't tell us /how/ to find a proper coloring in the haystack of \(k^{n}\) possible colorings. \\
+
+     A graph can be colored with one color if and only if it has no edges at all, so \texttt{Graph 1-Coloring} is trivially in P. \texttt{Graph 2-Coloring} is shown to be in P as well (see Exercise 4.1). \\
+
+     For three or more colors *(!)* however *(!)* no polynomial-time algorithm is known. As we will see in Chapter 5, we have good reason to believe that no such algorithm exists, and that \texttt{Graph 3-Coloring} takes exponential time to solve. \\
+
+     What happens if we restrict the type of graph we want to color? Let's consider /planar/ graphs, i.e., those that can be drawn in the plane without any edges crossing each other. These are famous because of their connection to the map coloring problem, in which we want to color territories so that no territories that share a border can have the same color. \\
+
+     The famous /Four Color Theorem/ tell sus that every map, and therefore every planar graph, can be colored using no more than 4 colors *(!)*. This gives us a very simple algorithm for \texttt{Planar Graph k-Coloring} whenever \(k \ge 4\): return "yes". \\
+
+     However, the /Four Color Theorem/ doesn't tell us which planar graphs are 3-colorable. How hard is \texttt{Planar Graph 3-Coloring}, the special case of \texttt{Graph 3-Coloring} where the graph is planar? \\
+
+     Recall from Section 3.8 that if we have two problems /A/ and /B/, we say that /A is reducible to B/, and write \(A \le B\), if there is a polynomial-time algorithm that translates instances of /A/ to instances of /B/. In that case, /B/ is at least as hard as /A/, since we can solve /B/ in polynomial time then we can solve /A/ as well. \\
+
+     An instance of \texttt{Planar Graph 3-Coloring} is already an instance of \texttt{Graph 3-Coloring}, so we have the trivial reduction
+
+     \[ \texttt{Planar Graph 3-Coloring} \le \texttt{Graph 3-Coloring}. \]
+
+     Thus if we can solve \texttt{Graph 3-Coloring} in general, we can certainly solve the planar case. On the other hand *(!)*, restricting a problem to a special case often makes it easier, and one might imagine that there are techniques for \texttt{Graph 3-Coloring} that work /only/ for planar graphs. Surprisingly, it turns out that
+
+     \[ \texttt{Graph 3-Coloring} \le \texttt{Planar Graph 3-Coloring}. \]
+
+     In other words, we can reduce the general problem to the planar case - we can transform an arbitrary graph /G/ to a planar graph \(G\prime\), such that \(G\prime\) is 3-colorable if and only if /G/ is. Thus \texttt{Planar Graph 3-Coloring} is just as hard as \texttt{Graph 3-Coloring} in general, and the two problems have the same complexity. \\
+
+     Next we turn to problems with a logical flavor - where variables are true or false, and constraints on them are built of \texttt{AND}s and \texttt{OR}s. \\
+
+  2. /Can't Get No Satisfaction/ \\
+
+     Consider the following conundrum. I have in my larder a bottle of an excellent Pommard, a fresh Quail, and some deilcious Roquefort. I wish to plan a dinner party for my favorite coauthor. However, there are some obvious constraints. Pommard pairs beautifully with Quail, so it would be crazy to serve the bird without the wine. However, such a light wine would be overwhelmed by the Roquefort, so I can't possible serve it and the Roquefort together. On the other hand, my friend likes both Quail and Roquefort, so I would like to serve at least one of them - and I simply must have at least the Pommard or the quail. \\
+
+     Let us represent our ingredients by three Boolean variables, /p/, /q/, and /r/, indicating whether or not I will serve them. We use the symbols \lor and \land for \texttt{OR} and \texttt{AND} respectively, and we represent the negation of a variable /x/ as \(\overline{x}\). Then our culinary constraints can be expressed as a Boolean formula,
+
+     \[ \phi(p,q,r) = (p \lor \overline{q}) \land (\overline{p} \lor \overline{r}) \land (q \lor r) \land (p \lor q). \]
+
+     If \( \phi(p,q,r) = \) \texttt{true} for a particular case assignment of truth values to the variables, we say that this assignment \(satisfies \; \phi \). \\
+
+     Unfortunately, my cat is very fond of Quail. If I serve it without some Roquefort to distract her, my guest will find his portion stolen away. This adds an additional constraint, giving a new formula,
+
+     \[ \phi\prime(p,q,r) = (p \lor \overline{q}) \land (\overline{p} \lor \overline{r}) \land (q \lor r) \land (p \lor q) \land (\overline{q} \lor r). \]
+
+     Both \phi and \phi\prime are Boolean formula with a special structure, called CNF for /conjunctive normal form/. This means that each one is the \texttt{AND} (conjunction) of a series of /clauses/, and each clause is the \texttt{OR} of a set of /literals/, where a literal is either a variable or its negation. Thus there are multiple ways to satisfy each clause, but we must satisfy every clause to satisfy the entire formula. \\
+
+     Let's say that \phi is /satisfiable/ if at least one satisfying assignment exists. Then we are wrestling with the following problem: \\
+
+     _\texttt{SAT}_ \\
+     Input: A CNF Boolean formula \phi(x_1, ..., x_n) \\
+     Question: Is \phi satistfiable? \\
+
+     It's easy to check whether a given truth assignment is satisfying: we just have to go through all of \phi's clauses, and make sure that at least one literal in each clause is true. This shows that \texttt{SAT} is in NP. On the other hand, with /n/ variables we have a haystack of \(2^{n}\) possible truth assignments to consider. \\
+
+     Just as each edge in \texttt{Graph Coloring} imposes the constraint that its two endpoints have different colors, each \texttt{SAT} clause demands that at least one of its variables take a particular value. Both of them are /constraint satisfaction/ problems, where we have a set of constraints and we want to know if we can satisfy all of them simultaneously. \\
+
+     However *(!)*, \texttt{SAT} is one of the most flexible such problems, since it is easy to express a wide variety of constraints in CNF form. This ability to express other problems makes \texttt{SAT} a very useful tool. \\
+
+     Our culinary examples above consisted of clauses with two variables each. Fixing the number of variables per clause gives important special cases of \texttt{SAT}: \\
+
+     _\texttt{k-SAT}_ \\
+     Input: A CNF Boolean formula \phi, where each clause contains /k/ variables  \\
+     Question: Is \phi satistfiable? \\
+
+     We will not insult the reader by pointing out that \texttt{1-SAT} is in P. On the other hand, \texttt{2-SAT} is also in P, and the corresponding algorithm might entertain even our smartest readers. \\
+
+     The key idea is to represent a \texttt{2-SAT} formula as a directed graph *(!)*. First note that if one literal of a \texttt{2-SAT} clause is \texttt{false}, the other one must be \texttt{true}. Therefore, a \texttt{2-SAT} clause is equivalent to a pair of implications,
+
+     \[ (l_{1} \lor l_{2}) \Leftrightarrow (\overline{l_{1}} \rightarrow l_{2}) \texttt{ AND } (\overline{l_{2}} \rightarrow l_{1}). \]
+
+     Now suppose \phi is a \texttt{2-SAT} formula with /n/ variables \(x_{1}, ..., x_{n}\). We define a graph \(G(\phi)\) with 2\(n\) vertices representing the 2\(n\) possible literals \(x_i \) and \( \overline{x_i}\), and with a pair of directed edges between these vertices for each clause. This construction can clearly be carried out in polynomial time. For instance, the formula \phi from our dinner party corresponds to the directed graph shown on page 103, and the gray edges correspond to the additional constraint imposed in \(\phi\prime\). \\
+
+     The following theorem shows that a \texttt{2-SAT} formula is satisfiable if and only if there are no contradictory loops in this graph. In the process of proving it, we will see an important phenomenon in \texttt{SAT}: clauses get shorter, and more demanding, when variables are given values they don't like. We use the notation \(x \rightsquigarrow y\) to mean that there is a path, i.e., a chain of implications, from the literal \(x\) to the literal \(y\). \\
+
+     *Theorem 4.1*
+
+     A \texttt{2-SAT} formula \phi is satisfiable if and only if there is no variable \(x\) with paths from \(x \rightsquigarrow \overline{x}\) and \(\overline{x} \rightsquigarrow x\) in \(G(\phi)\). \\
+
+     *Proof*
+
+     If such a pair of paths exist then \(x\) must be \texttt{true} if it is \texttt{false}, and vice versa. Then \phi is contradictory, and hence unsatisfiable. \\
+
+     Conversely, suppose that no such pair of paths exists. First note that a single one of these paths does *not* cause a contradiction. For instance, a path from \(x\) to \(\overline{x}\) simply forces \(x\) to be \texttt{false}. \\
+
+     Now suppose we set the value of some variable. One way to view the implications in (4.4) is that setting /x/ \texttt{true}, say, converts any clause of the form \((\overline{x} \lor y)\) into a one-variable clause \((y)\), which demands that /y/ be \texttt{true}. We call these one-variable clauses /unit/ clauses. Satisfying a unit clause might turn some \texttt{2-SAT} clauses into additional unit clauses, and so on. Each of these steps corresponds to following a directed edge in /G/, and following each one to its logical conclusion sets every literal reachable from /x/ to \texttt{true}. \\
+
+     This process is called /unit clause propagation/. It can lead to two (2) possible outcomes: either the cascade of unit clauses runs out, leaving us with a smaller \texttt{2-SAT} formula on the remaining unset variables, or we are forced to set both /y/ and \(\overline{y}\) \texttt{true} for some /y/, causing a contradiction. Our claims is that the latter never occurs if we use the algorithm in figure 4.6, unless *(!)* there is a contradictory pair of paths. \\
+
+     To see this, suppose we start the unit clause propagation process by setting /x/ \texttt{true}. Then a contradiction only occurs if there are paths \( x \rightsquigarrow y \) and \( x \rightsquigarrow \overline{y} \) for some variable /y/. But \( G(\phi) \) has the following symmetry: for any literals \( l_{1}, l_{2 }\), there is a path \( l_{1} \rightsquigarrow l_{2} \) if and only if there is a path \( \overline{l_{2}} \rightsquigarrow \overline{l1} \). Thus there are also paths \( y \squigarrow \overline{x} \) and \( \overline{y} \squigarrow \overline{x} \), and hence a path \( x \squigarrow \overline{x} \). But in that case, we would have set /x/ \texttt{false} instead. Similarly, if setting /x/ \texttt{false} leads to a contradiction, there is a path \( \overline{x} \rightsquigarrow x \), and we would have set /x/ \texttt{true}. \\
+
+     This shows that, as long as there is no contradictory loop, the algorithm of Figure 4.6 succeeds in finding a satisfying assignment for \phi - and therefore that \phi is satisfiable. \\
+
+     #+begin_export latex
+       \begin{algorithm}
+       \caption{A polynomial-time algorithm for \texttt{2-SAT}}\label{2-SAT}
+          \begin{algorithmic}
+             \While{there is an unset variable}
+                \State choose an unset variable $x$
+                \If{there is a path $x \rightsquigarrow \overline{x}$}
+                   \State set $x = \texttt{false}$
+                \ElsIf{there is a path $\overline{x} \rightsquigarrow x$}
+                   \State set $x = \texttt{true}$
+                \Else
+                   \State set $x$ to any value you like
+                \EndIf
+                \While{there is a unit clause}
+                   \State unit clause propagation
+                \EndWhile
+             \EndWhile
+          \end{algorithmic}
+       \end{algorithm}
+     #+end_export
+
+     /Theorem 4.1/ tells us that we can solve \texttt{2-SAT} by solving 2\(n\) instances of \texttt{Reachability}, checking to see if there are paths \( x \rightsquigarrow \overline{x} \) and \( \overline{x} \rightsquigarrow x \) for each variable /x/. We can think of this as a reduction
+
+     \[ \texttt{2-SAT} \le \texttt{Reachability}, \]
+
+     with the understanding that each instance of \texttt{2-SAT} corresponds to a polynomial number of instances of \texttt{Reachability}, rather than a single one as in the reduction from \texttt{Max Bipartite Matching} to \texttt{Max Flow}. Since \texttt{Reachability} is in P, this shows that \texttt{2-SAT} is in P as well. \\
+
+     Now that we know that \texttt{2-SAT} is in P, what about \texttt{3-SAT}? Unlike (4.4), there seems to be no way to treat a \texttt{3-SAT} clause as an implication of one literal by another. We can certainly write \( (x \lor y \lor z) \) as \( \overline{x} \Rightarrow (y \lor z) \), but we would need some kind of branching search process to decide which of /y/ or /z/ is true. \\
+
+     It turns out that \texttt{3-SAT} is just as hard as \texttt{SAT} in general. That is,
+
+     \[ \texttt{SAT} \le \texttt{3-SAT}. \]
+
+     In particular, for any /k/ we have
+
+     \[ \texttt{k-SAT} \le \texttt{3-SAT}. \]
+
+     That is, any \texttt{k-SAT} formula \phi can be converted to a \texttt{3-SAT} formula \( \phi\prime \) which is satisfiable if and only if \phi is. To prove this, we will show how to convert a \texttt{SAT} clause /c/ to a collection of \texttt{3-SAT} clauses which are satisfiable if and only if the original clause is. If /c/ has just one or two variables, we can add dummy variables, padding it out to a set of three-variable clauses:
+
+     \[ (x) \Leftrightarrow (x \lor z_{1} \lor z_{2}) \land (x \lor z_{1} \lor \overline{z_{2}}) \land (x \lor \overline{z_{1}} \lor z_{2}) \land (x \lor \overline{z_{1}} \lor \overline{z_{2}}) \]
+
+     \[ (x \lor y) \Leftrightarrow (x \lor y \lor z) \land (x \lor y \lor \overline{z}). \]
+
+     More interestingly, if \( k > 3 \) we can break a \texttt{k-SAT} clause into a chain of \texttt{3-SAT} clauses, using dummy variables as the chain links. For instance, we can break a \texttt{5-SAT} clause down like this:
+
+     \[ (x_{1} \lor x_{2} \lor x_{3} \lor x_{4} \lor x_{5}) \Leftrightarrow (x_{1} \lor x_{2} \lor z_{1}) \land (\overline{z_{1}} \lor x_{3} \lor z_{2}) \land (\overline{z_{2}} \lor x_{4} \lor x_{5}). \]
+
+     Similarly, a \texttt{k-SAT} clause becomes \( k - 2 \) \texttt{3-SAT} clauses, linked together by \( k - 3 \) dummy variables z_i. \\
+
+     This reduction sheds some light on the difference between \texttt{2-SAT} and \texttt{3-SAT}. Each clause in this chain except the first and last has to have three (3) literals: the original literal it represents, and two (2) to link it to the clauses on either side. If there were a way to break these clauses down even further, so that they have just two literals each, we would have \texttt{3-SAT} \le \texttt{2-SAT} and \texttt{3-SAT} would be in P. However, there is no simple way to do this. As far as we know, the computational complexity of \texttt{k-SAT}, like that of \texttt{Graph k-Coloring}, makes a huge jump upward when /k/ goes from two to three. \\
+
+  3. /Balancing Numbers/ \\
+
+  4. /Rival Academics and Cliquish Parties/ \\
+
+     I am planning a cocktail party for my academic acquaintances. However, there are a number of rivalries among them - pairs of people who will glare at each other, insult each others' work, and generally render the conversation quite tiresome. I would like to arrange a gathering that is as large as possible, but I want to make sure that I don't invite both members of any of these pairs. \\
+
+     Formally, given a graph \( G = (V, E) \), we say that a subset \( S \subseteq V \) is /independent/ if no two vertices in /S/ are adjacent. If vertices are people and edges are rivalries, I want to find the largest possible independent set in my social graph. \\
+
+     Fundamentally, this is an optimization problem *(!)*. The diligent reader has already met it, or rather its weighted version, in the Problems of Chapter 3. In order to formulate a decision problem, we will give a target size /k/ as part of the input, and ask the yes-or-no question of whether there is a set at least this large. \\
+
+     _\texttt{Independent Set}_ \\
+     Input: A graph /G/ and an integer /k/ \\
+     Question: Does /G/ have an independent set of size /k/ or more? \\
+
+     Now let's say that a subset \( S \subseteq V \) is a /vertex cover/ if for every edge \( e \in E \), at least one of \(e\)'s endpoints is in /S/. Asking for small vertex covers gives us another problem: \\
+
+     _\texttt{Vertex Cover}_ \\
+     Input: A graph /G/ and an integer /k/ \\
+     Question: Does /G/ have a vertex cover of size /k/ or less? \\
+
+     Also, we say that /S/ is a /clique/ if every vertex in /S/ is adjacent to every other, so that /S/ forms a complete graph *(!)*. Asking for large cliques gives us yet another problem: \\
+
+     _\texttt{Clique}_ \\
+     Input: A graph /G/ and an integer /k/ \\
+     Question: Does /G/ have a clique of size /k/ or more? \\
+
+     The following exercise shows that these three problems are equivalent *(!)* to each other. Indeed, the relationship between them is so simple that it hardly deserves to be called a reduction *(!)*. \\
+
+     *Exercise 4.13*: Given a graph \( G = (V, E) \) and a subset \( S \subseteq V \), show that the following three statements are equivalent:
+
+     1. /S/ is an independent set,
+     2. \( V - S \) is a vertex cover,
+     3. /S/ is a clique in the complemented graph \( \overline{G} = (V, \overline{E}) \), where two vertices are adjacent if and only if they are *not* adjacent in /G/. \\
+
+     Therefore, in a graph /G/ with /n/ vertices, there is an independent set of size /k/ or more if and only if there is a vertex cover of size \( n - k \) or less, and this is true if and only if there is a clique in \( \overline{G} \) of size /k/ or more. \\
+
+     In terms of my cocktail party, inviting an independent set means disinviting a vertex cover - in other words, making sure that for every rival pair, at least one of them is excluded. Edges in \( \overline{G} \) describe comparible pairs, who can eat and drink with each other in peace, and in this case the invitees form a clique. \\
+
+     It is worth noting that all of these problem are in P if /k/ is constant *(!)*. In that case, we can solve them by brute force, going through all \( n \choose k \) \( = O(n^{k}) \) possible sets of /k/ vertices, and seeing if any of them are independent, or if they form a vertex cover, or a clique. The problem is that /k/ is part of the input, so we *(!)* cannot *(!)* say that this algorithm runs in in time \( O(n^{c}) \) for a constant /c/. For that matter, if \( k = \alpha n \) for some \( 0 < \alpha < 1 \), then \( n \choose k \) grows exponentially as a function of /n/. \\
+
+     Let's pause for a moment to consider the relationship between these decision problems and the corresponding optimization problems. These decision problems are in NP - for instance, I can prove that there is an independent set of size at least /k/ by exhibiting one. On the other hand, consider the following slight variation: \\
+
+     _\texttt{Independent Set}__ (exact version) \\
+     Input: A graph \( G = (V, E) \) and an integer /k/ \\
+     Question: Does \( G \)'s largest independent set have size exactly /k/? \\
+
+     Is this problem in NP? If the answer is "yes", how can I prove that to you? Showing you an independent set of size /k/ is *not* enough - I also need to prove that *no* larger one exists. As we will discuss in the next section, this version of the problem has a more complex logical structure, and places it in a complexity class somewhat higher than NP. \\
+
+     Yet another version - which is presumably the one we really want to solve - is the search for the largest possible independent set: \\
+
+     _\texttt{Max Independent Set}_ \\
+     Input: A graph /G/ \\
+     Output: An independent set /S/ of maximal size \\
+
+** Search, Existence, and Nondeterminism
+
+  1. /NP, NTIME, and Exhaustive Search/ \\
+
+     Here is a formal definition of NP: \\
+
+     - NP is the class of problems /A/ of the following form: \\
+
+       /x/ is a yes-instance of /A/ if and only if there exists a /w/ such that \( (x, w) \) is a yes-instance of /B/, \\
+       where /B/ is a decision problem in P regarding pairs \( (x, w) \), and \( |w| = \text{poly}(|x|) \). \\
+
+     We call /w/ the /witness/ of the fact that /x/ is a yes-instance of /A/. It is also sometimes called a /certificate/. \\
+
+     This definition may seem a bit technical at first, but it is really just a careful way of saying that solving /A/ is like telling whether there is a needle in a haystack. Given an input /x/, we want to know whether a needle /w/ exists - a path, coloring, or a satisfying assignment - and /B/ is the problem of checking whether /w/ is a bona fide needle for /x/. For instance, if /A/ is \texttt{Hamiltonian Path}, then /x/ is a graph, /w/ is a path, and \( B(x, w) \) is the problem of checking whether /w/ is a valid Hamiltonian path for /x/. \\
+
+     Note that we require that the witness /w/ be described with a polynomial number of bits. This is usually obvious - for instance, if /x/ is a graph with /n/ vertices, the number of bits it takes to encode a Hamiltonian path /w/ is \( |w| = n\,log_{2}\,n = \text{poly}(|x|) \). Since \( B \)'s input \( (x, w) \) has total size \( |x| + |w| \) and /B/ is in P, this requirement ensures that \( B \)'s running time is \( \text{poly}(|x|+|w|) = \text{poly}(|x|) \). \\
+
+     How long does it take to solve such a problem deterministically? Since \( |w| = \text{poly}(n) \), there are \( 2^{\text{poly}(n) }\) possible witnesses. We can check them all by running /B/ on each one of them, so
+
+     \[ \text{NP} \subseteq \text{EXP}. \]
+
+     Here \( \text{EXP} = \text{TIME}( 2^{\text{poly}(n) )\), as defined in Section 2.4.3, is the class of problems that we can solve in exponential time. We believe that this is the best possible inclusion of NP in a deterministic time complexity *(!)* class - in other words, that the /only/ general method for solving problems in NP is exhaustive search. \\
+
+     To state this as strongly as possible, we believe that there is a constant \alpha > 0 such that, for any \( g(n) = o(2^{n^{\alpha}}) \), we have
+
+     \[ \text{NP} \nsubseteq \text{TIME}(g(n)). \]
+
+     Thus we believe that solving problems in NP generally takes exponential time, where "exponential" means exponential in \( n^{\alpha }\) for some \alpha. Note that this is much stronger *(!)* than the belief that P \ne NP. \\
+
+     More generally, we can define the complexity class of needle-in-a-haystack problems where needles can be checked in \( O(f(n)) \) time. This gives the following generalization of NP, analogous to the classes \( \text{TIME}(f(n)) \) we defined in Chapter 2: \\
+
+     - \( \text{NTIME}(f(n)) \) is the class of problems /A/ of the following form: \\
+
+       /x/ is a yes-instance of /A/ if and only if there exists a /w/ such that \( (x, w) \) is a yes-instance of /B/, \\
+       where /B/ is a decision problem in \( \text{TIME}(f(n)) \) regarding pairs \( (x, w) \), and \( |w| = O(f(n)) \). \\
+
+     For instance, \( \text{NEXP} = \text{NTIME}(2^{\text{poly}(n)}) \) is the rather large class of problems where we are given an exponential amount of time to check a given needle, and where each needle might need an exponential number of bits to describe it. Since there are \( 2^{\text{poly}(n)} \) possible witnesses, solving such problems with exhaustive search takes doubly-exponential time, giving
+
+     \[ \text{NEXP} \subseteq \text{EXPEXP}. \]
+
+     More generally, we have
+
+     \[ \text{NTIME}(f(n)) \subseteq \text{TIME}(2^{O(f(n))}). \]
+
+     Once again, we believe this is optimal - that at all levels of the complexity hierarchy, there is an exponential gap between the classes NTIME and TIME *(!)*. \\
+
+  2. /There Exists a Witness: The Logical Structure of NP/ \\
+
+     Another way to think about NP is as follows. We can associate a decision problem with /A/ with a property \( A(x) \), where \( A(x) \) is true if /x/ is a yes-instance of /A/. We can say that a property /B/ is in P if it can be checked in polynomial time. *Then NP properties are simply P properties with a "there exists" in front of them*: \( A(x) \) if there exists a /w/ such that \( B(x, w) \) is the property that /w/ is a valid witness for /x/. \\
+
+     This "there exists" is an /existential quantifier/, and we write it \exists. This gives us another definition of NP: \\
+
+     - NP is the class of properties /A/ of the form
+
+       \[ A(x) = \exists w : B(x, w) \]
+
+       where /B/ is in P, and where \( |w| = \text{poly}(|x|). \)
+
+     For instance, if /x/ is a graph and \( A(x) \) is the property that /x/ is Hamiltonian, then \( B(x, w) \) is the polynomial-time property that /w/ is a Hamiltonian path for /x/. \\
+
+     Algorithmically, the quantifier \exists represents the process of searching for the witness /w/ *(!)*. We can also think of it as a conversation, between a /Prover/ who claims that /x/ is a yes-instance, and a /Verifier/ who is yet to be convinced. The Prover, who has enormous computational power, provides a proof of her claim in the form of the witness /w/. Then the Verifier - who, like us, is limited to humble polynomial-time computation - checks the witness, and makes sure that it works. \\
+
+     This logical definition makes it easy to see why NP treats yes-instances and no-instances so differently *(!)*. The negation of a "there exists" statement is a "for all" statement: if there is no needle, everything in the haystack is hay. For instance, the claim that a graph is /not/ Hamiltonian looks like this:
+
+     \[ \overline{A(x)} = \overline{\exists w : B(x, w)} = \forall w : \overline{B(x, w)}. \]
+
+     Here \forall is a /universal quantifier/, which we read "for all." In other words, for all sequences /w/ of /n/ vertices, /w/ fails to be a Hamiltonian path. \\
+
+     What happens if we take a problem like \texttt{Hamiltonian Path}, and switch yes-instances and no-instances? \\
+
+     Consider the following problem: \\
+
+     _\texttt{No Hamiltonian Path}_ \\
+     Input: A graph /G/ \\
+     Question: Is it true that /G/ has no Hamiltonian Path? \\
+
+     This is a very different problem. Now there is a simple proof if the answer is "no," but it seems hard to prove that the answer is "yes" without an exhaustive search. Problems like this have a complexity class of their own, called coNP: the class of problems in which, if the input is a no-instance, there is a simple proof of that fact. \\
+
+     The complements of P properties are also in P, since we can just modify their polynomial-time algorithms to output "yes" instead of "no" and vice versa. So, coNP properties like "non-Hamiltonionness" take the form
+
+     \[  A(x) = \forall w : B(x, w), \]
+
+     where /B/ is in P. As we discussed in the Prologue, claims of this form do *not* seem to have simple proofs. But *(!)* they have simple /dis/-proofs, since it takes just one counterexample to disprove a "for all." Just as we believe that P \ne NP, we believe that these two (2) types of problems are fundamentally different, and that NP \ne coNP. \\
+
+     What about questions like the version of \texttt{Independent Set} defined at the end of the last section, which asks whether the largest independent set of a graph has size exactly /k/? Here the answer is "yes" if there exists an independent set of size /k/, and if all sets of size \( k + 1 \) or greater are *not* independent. Unless we can see a clever way to re-state this property in simpler terms, this requires us to use both \exists and \forall. \\
+
+* Chapter 5 --- Who is the Hardest One of All? NP-Completeness
+
+** When One Problem Captures Them All
+
+Consider the following audacious definition. \\
+
+  - A problem /B/ in NP is NP-/complete/ if, for any problem /A/ in NP, there is a polynomial-time reduction from /A/ to /B/. \\
+
+Writing this as an inequality, we see that /B/ is one of the hardest problems in NP: \\
+
+  - A problem /B/ \in NP is NP-complete if /A/ \le /B/ for all /A/ \in NP. \\
+
+How in the world couls a problem be NP-complete? It must be possible to translate instances of any problem /A/ \in NP into into instances of /B/, so that if we could solve /B/, we could solve /A/ as well. To put this differently, /B/ must be so general, capable of expressing so many different kinds of variables and constraints, that it somehow contains the structure of every other problem in NP as well as its own. \\
+
+Indeed, such problems do exists. At the risk of seeming tautological, consider the following problem: \\
+
+_\texttt{Witeness Existence}_ \\
+Input: A program \( \Pi(x, w) \), an input /x/, and an integer /t/ given in unary \\
+Question: Does there exist a /w/ of size \( |w| \le t \) such that \( \Pi(x, w) \) returns "yes" after /t/ or fewer steps? \\
+
+The problem is NP-complete because it repeats the very definition of NP. For instance, if we want to reduce \texttt{Hamiltonian Path} to \texttt{Witness Existence}, we let \Pi be the witness-checking program that takes a graph /x/ and a path /w/ and returns "yes" if /w/ is a Hamiltonian path in /x/. \\
+
+Why do we express /t/ in unary? This ensures that /t/ is less than or equal to the total size /n/ of \texttt{Witness Existence}'s input, so both \Pi's running time and the size of the witness /w/ are polynomial as functions of /n/. Thus we can check /w/ in \( \text{poly}(n) \) time by running \Pi for /t/ steps, and \texttt{Witness Existence} is in NP. \\
+
+It is nice to know that at least one NP-complete problem exists. However, \texttt{Witness Existence} is rather dry and abstract, and it is hard to imagine how it could be connected to any natural problem we actually care about. The astonishing fact *(!)* is that many of our favorite problems, including many of those introduced in Chapter 4, are NP-complete. Each of these problems is as hard as any problem in NP, and wrestling with any one of them means wrestling with the entire class. Before, when facing an individual problem like \texttt{Graph Coloring} or \texttt{SAT}, we might have imagined that there is a clever insight specific to that problem which would allow us to solve it in polynomial time. But NP-completeness raises the stakes *(!)*. If any of these problems possess a polynomial-time algorithm, the all do: \\
+
+  - If any NP-complete problem is in P, then P = NP. \\
+
+Most people would rejoice at this possibility, since ther are many practical problems we wish we could solve more efficiently. But as we will see, to a theorist this would be a complete and devastating shift in our world view *(!)*. Giants would walk on the earth, lions would lie down with lambs, and humans would have no role left to play in mathematical discovery. The consequences of P = NP would be so great that we regard NP-completeness as essentially a proof that a problem cannot be solved in polynomial time - that there is *no* way to avoid an exponential search through its haystack. We will discuss consequences that P = NP would have in Chapter 6. \\
+
+We should emphasize that when discussing NP-completeness, we restrict ourselves to reductions that map single instances of /A/ to single instances of /B/ *(!)*. This is different from the reduction from \texttt{2-SAT} to \texttt{Reachability} in Section 4.2.2 *(!)*, for example, in which we allowed ourselves to call a subroutine for \texttt{Reachability} polynomially many times. \\
+
+Moreover, we require our reduction to map yes-instances to yes-instances, and no-instances to no-instances *(!)*. Then if /x/ is a yes-instance of /A/, there is a witness for this fact: namely, the witness for the corresponding yes-instance \( f(x) \) of /B/. Such reductions preserve *(!)* the asymmetric nature of NP *(!)*. In particular, if /B/ is in NP and /A/ \le /B/, then /A/ is in NP as well. Thus for purposes of this chapter, \\
+
+  - A polynomial-time reduction from /A/ to /B/ is a function /f/, computable in polynomial time, such that if /x/ is an instance of /A/, then \( f(x) \) is an instance of /B/. Moreover, \( f(x) \) is a yes-instance of /B/ if and only if /x/ is a yes-instance of /A/. \\
+
+As we discussed in Section 3.8, the composition of two (2) polynomial-time reductions is a polynomial-time reduction. Thus the relation /A/ \le /B/ that /A/ can be reduced to /B/ is transitive: \\
+
+  - If /A/ \le /B/ and /B/ \le /C/, then /A/ \le /C/. \\
+
+Therefore, to prove that a given problem is NP-complete, it suffices to reduce to it from another problem which is already known to be NP-complete *(!)* *(!)* *(!)*. \\
+
+These reductions create a family tree of NP-complete problems. In the decades since NP-completeness was discovered, this tree has grown to include thousands of problems in graph theory, algebra, planning, optimization, physics, biology, recreational puzzles, and many other fields. Over the course of this chapter, we will watch this tree grow in its first few branches, starting with its root \texttt{Witness Existence}. \\
+
+** Circuits and Formulas
